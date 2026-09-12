@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#E7EDF3;-webkit-font-smoothing:antialiased}a{color:#0077B6;text-decoration:none}a:hover{color:#03045E}input,textarea{font:inherit;color:inherit}</style></helmet>
+
+<div style="font-family:'Source Sans 3',system-ui,sans-serif;color:#03045E;padding:clamp(10px,1.4vw,20px);display:grid;gap:clamp(10px,1.4vw,18px);background:#E7EDF3;{{ pageBg }}">
+
+  <header style="background:#fff;border-radius:28px;padding:14px 16px 14px 20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;{{ radL }}">
+    <a href="#hero" style="display:flex;align-items:center;gap:11px">
+      <span style="position:relative;flex:none;width:38px;height:38px;border-radius:12px;background:#03045E;display:grid;place-items:center;overflow:hidden">
+        <svg viewBox="0 0 38 38" style="position:absolute;inset:0;width:100%;height:100%"><path d="M-3 29 C 8 14, 21 35, 44 10" stroke="#00B4D8" stroke-width="3.6" fill="none" stroke-linecap="round"></path></svg>
+        <span style="position:relative;font:700 14px/1 Archivo,sans-serif;letter-spacing:-0.03em;color:#fff">CO</span>
+      </span>
+      <span style="font:600 10px/1.2 'Source Sans 3',sans-serif;letter-spacing:.18em;text-transform:uppercase">CO Gebäudeservice</span>
+    </a>
+    <nav style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+      <a href="#leistungen" style="border:1px solid #DCE6EF;border-radius:999px;padding:10px 18px;font:500 14px/1 'Source Sans 3',sans-serif;color:#4C6B85" style-hover="border-color:#00B4D8;color:#03045E">Leistungen</a>
+      <a href="#treppenhaus" style="border:1px solid #DCE6EF;border-radius:999px;padding:10px 18px;font:500 14px/1 'Source Sans 3',sans-serif;color:#4C6B85" style-hover="border-color:#00B4D8;color:#03045E">Treppenhaus</a>
+      <a href="#ablauf" style="border:1px solid #DCE6EF;border-radius:999px;padding:10px 18px;font:500 14px/1 'Source Sans 3',sans-serif;color:#4C6B85" style-hover="border-color:#00B4D8;color:#03045E">Ablauf</a>
+      <a href="#kontakt" style="background:#03045E;border:1px solid #03045E;border-radius:999px;padding:10px 18px;font:600 14px/1 'Source Sans 3',sans-serif;color:#fff" style-hover="background:#0077B6;border-color:#0077B6">Angebot anfordern</a>
+    </nav>
+  </header>
+
+  <section id="hero" data-screen-label="01 Hero" style="position:relative;overflow:hidden;background:#CAF0F8;border-radius:32px;min-height:clamp(380px,42vw,520px);display:flex;align-items:center;{{ radXL }}">
+    <div style="position:absolute;right:0;top:0;bottom:0;width:52%;color:#03045E"><image-slot id="r-hero" shape="rect" fit="cover" placeholder="Objektfoto — Fassade oder Treppenhaus, liegend"></image-slot></div>
+    <div aria-hidden="true" style="position:absolute;right:0;top:0;bottom:0;width:52%;pointer-events:none;background:linear-gradient(90deg,#CAF0F8 0%,rgba(202,240,248,.55) 34%,rgba(202,240,248,0) 66%)"></div>
+    <div style="position:relative;padding:clamp(32px,4.4vw,60px);max-width:620px">
+      <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);border-radius:999px;padding:9px 16px;margin-bottom:24px">
+        <span style="width:7px;height:7px;border-radius:99px;background:#0077B6"></span>
+        <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#03045E">Nagold und Umgebung</span>
+      </div>
+      <h1 style="margin:0 0 20px;font:700 clamp(32px,4.6vw,54px)/1.06 Archivo,sans-serif;letter-spacing:-0.035em;text-wrap:pretty">Gepflegte Objekte, zuverlässig und zum festen Turnus.</h1>
+      <p style="margin:0 0 30px;font:400 17px/1.55 'Source Sans 3',sans-serif;color:#0B4A6F;max-width:420px;text-wrap:pretty">Reinigung und Hausmeisterdienste für Hausverwaltungen, Eigentümergemeinschaften und Gewerbeobjekte.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <a href="#kontakt" style="background:#03045E;color:#fff;border-radius:999px;padding:15px 26px;font:600 15px/1 'Source Sans 3',sans-serif" style-hover="background:#0077B6">Angebot anfordern</a>
+        <a href="#leistungen" style="background:#fff;color:#03045E;border-radius:999px;padding:15px 26px;font:600 15px/1 'Source Sans 3',sans-serif" style-hover="background:rgba(255,255,255,.72)">Leistungen ansehen</a>
+      </div>
+    </div>
+  </section>
+
+  <div aria-hidden="true" style="position:relative;overflow:hidden;height:clamp(96px,11vw,150px);{{ ribbonShow }}">
+    <svg viewBox="0 0 1200 160" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+      <path id="coRibbon" d="M-60 122 C 200 18, 420 152, 660 58 C 880 -24, 1020 112, 1270 26" fill="none" stroke="#00B4D8" stroke-width="48" stroke-linecap="butt"></path>
+      <text dominant-baseline="middle" fill="#03045E" style="font-family:'Source Sans 3',sans-serif;font-size:19px;font-weight:600;letter-spacing:0.05em"><textPath href="#coRibbon" startOffset="4%">Treppenhausreinigung · Fensterreinigung · Hausmeisterdienst · Gartenpflege · Winterdienst</textPath></text>
+    </svg>
+  </div>
+
+  <section id="leistungen" data-screen-label="02 Leistungen" style="display:grid;gap:clamp(10px,1.4vw,18px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:clamp(10px,1.4vw,18px)">
+      <sc-for list="{{ services }}" as="s" hint-placeholder-count="3">
+        <article style="position:relative;overflow:hidden;border-radius:26px;min-height:clamp(300px,26vw,370px);display:flex;flex-direction:column;justify-content:space-between;background:#0077B6;color:#fff;{{ radL }}">
+          <div style="position:absolute;inset:0;color:#CAF0F8"><image-slot id="{{ s.slot }}" shape="rect" fit="cover" placeholder="{{ s.placeholder }}"></image-slot></div>
+          <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(3,4,94,.45) 0%,rgba(3,4,94,0) 34%,rgba(3,4,94,0) 52%,rgba(3,4,94,.78) 100%)"></div>
+          <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:16px">
+            <span style="background:#fff;color:#03045E;border-radius:999px;padding:9px 15px;font:600 12px/1 'Source Sans 3',sans-serif">{{ s.chip }}</span>
+            <a href="#kontakt" aria-label="Anfragen" style="flex:none;width:38px;height:38px;border-radius:999px;background:#fff;display:grid;place-items:center" style-hover="background:#00B4D8">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#03045E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"></path></svg>
+            </a>
+          </div>
+          <div style="position:relative;padding:18px 20px 22px">
+            <h3 style="margin:0 0 6px;font:600 clamp(19px,2.1vw,24px)/1.15 Archivo,sans-serif;letter-spacing:-0.025em;color:#fff;text-wrap:pretty">{{ s.title }}</h3>
+            <p style="margin:0;font:400 14px/1.45 'Source Sans 3',sans-serif;color:#CAF0F8;max-width:280px;text-wrap:pretty">{{ s.text }}</p>
+          </div>
+        </article>
+      </sc-for>
+      <article style="border-radius:26px;background:#03045E;color:#fff;min-height:clamp(300px,26vw,370px);padding:clamp(24px,2.6vw,32px);display:flex;flex-direction:column;justify-content:space-between;gap:22px;{{ radL }}">
+        <div>
+          <span style="display:inline-block;background:rgba(144,224,239,.16);border-radius:999px;padding:9px 15px;font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#90E0EF;margin-bottom:22px">Alles zusammen</span>
+          <h3 style="margin:0 0 10px;font:600 clamp(20px,2.2vw,26px)/1.18 Archivo,sans-serif;letter-spacing:-0.025em;text-wrap:pretty">Mehrere Objekte oder ein Sonderfall?</h3>
+          <p style="margin:0;font:400 15px/1.5 'Source Sans 3',sans-serif;color:#90E0EF;text-wrap:pretty">Wir sehen uns das Objekt an und kalkulieren einen Turnus zum Festpreis.</p>
+        </div>
+        <a href="#kontakt" style="align-self:flex-start;background:#00B4D8;color:#03045E;border-radius:999px;padding:14px 24px;font:600 15px/1 'Source Sans 3',sans-serif" style-hover="background:#90E0EF">Termin vereinbaren</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="treppenhaus" data-screen-label="03 Treppenhausreinigung" style="background:#fff;border-radius:32px;padding:clamp(28px,4vw,56px);{{ radXL }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(26px,4vw,56px);align-items:start">
+      <div>
+        <span style="display:inline-block;background:#F4F7FA;border-radius:999px;padding:9px 15px;font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#0077B6;margin-bottom:22px">Im Detail</span>
+        <h2 style="margin:0 0 20px;font:700 clamp(27px,3.4vw,38px)/1.1 Archivo,sans-serif;letter-spacing:-0.03em;text-wrap:pretty">Treppenhausreinigung nach festem Reinigungsplan</h2>
+        <p style="margin:0 0 16px;font:400 17px/1.6 'Source Sans 3',sans-serif;color:#4C6B85;text-wrap:pretty">Das Treppenhaus ist der erste Eindruck eines Objekts und gleichzeitig die Fläche, über die sich Mieter am häufigsten beschweren. Wir übernehmen die Unterhaltsreinigung im vereinbarten Turnus: Treppen und Podeste feucht wischen, Handläufe und Geländer reinigen, Aufzugskabine, Briefkastenanlage, Kellergänge und Eingangsbereich einschließlich Fußmatten.</p>
+        <p style="margin:0 0 16px;font:400 17px/1.6 'Source Sans 3',sans-serif;color:#4C6B85;text-wrap:pretty">Für jedes Objekt legen wir vorab schriftlich fest, was in welchem Intervall gereinigt wird. Wöchentlich, zweiwöchentlich oder nach Bedarf — inklusive der Arbeiten, die nur ein- bis zweimal im Jahr anfallen, etwa Fensterflächen im Treppenhaus, Lampen und Sockelleisten. Der Plan hängt im Objekt aus, damit Mieter und Verwaltung jederzeit nachvollziehen können, was geleistet wurde.</p>
+        <p style="margin:0 0 28px;font:400 17px/1.6 'Source Sans 3',sans-serif;color:#4C6B85;text-wrap:pretty">Wir arbeiten mit eigenem Personal und festen Objektbetreuern. Das heißt: dieselben Gesichter im Haus, ein direkter Ansprechpartner für die Verwaltung und eine Vertretungsregelung bei Urlaub und Krankheit.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <a href="#kontakt" style="background:#03045E;color:#fff;border-radius:999px;padding:15px 26px;font:600 15px/1 'Source Sans 3',sans-serif" style-hover="background:#0077B6">Angebot anfordern</a>
+          <a href="#leistungen" style="background:#F4F7FA;color:#03045E;border-radius:999px;padding:15px 26px;font:600 15px/1 'Source Sans 3',sans-serif" style-hover="background:#CAF0F8">Alle Leistungen</a>
+        </div>
+      </div>
+      <div style="display:grid;gap:clamp(10px,1.4vw,16px)">
+        <div style="position:relative;overflow:hidden;border-radius:24px;height:clamp(200px,20vw,260px);background:#CAF0F8;color:#03045E;{{ radL }}"><image-slot id="r-detail" shape="rect" fit="cover" placeholder="Treppenhaus nach der Reinigung"></image-slot></div>
+        <div style="background:#CAF0F8;border-radius:24px;padding:clamp(22px,2.6vw,30px);{{ radL }}">
+          <div style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#0077B6;margin-bottom:20px">Enthalten im Turnus</div>
+          <div style="display:grid;gap:11px">
+            <sc-for list="{{ turnus }}" as="t" hint-placeholder-count="5">
+              <div style="display:flex;gap:11px;align-items:flex-start">
+                <span style="flex:none;width:6px;height:6px;border-radius:99px;background:#0077B6;margin-top:9px"></span>
+                <span style="font:400 16px/1.45 'Source Sans 3',sans-serif">{{ t }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(3,4,94,.14);display:flex;flex-wrap:wrap;gap:18px">
+            <div>
+              <div style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0077B6;margin-bottom:5px">Turnus</div>
+              <div style="font:400 15px/1.4 'Source Sans 3',sans-serif">Wöchentlich oder 14-tägig</div>
+            </div>
+            <div>
+              <div style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0077B6;margin-bottom:5px">Gebiet</div>
+              <div style="font:400 15px/1.4 'Source Sans 3',sans-serif">Nagold, Kreis Calw</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ablauf" data-screen-label="04 Ablauf" style="background:#03045E;border-radius:32px;padding:clamp(28px,4vw,56px);color:#fff;{{ radXL }}">
+    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between;margin-bottom:clamp(24px,3vw,38px)">
+      <div style="max-width:560px">
+        <span style="display:inline-block;background:rgba(144,224,239,.16);border-radius:999px;padding:9px 15px;font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#90E0EF;margin-bottom:22px">Ablauf</span>
+        <h2 style="margin:0 0 12px;font:700 clamp(27px,3.4vw,38px)/1.1 Archivo,sans-serif;letter-spacing:-0.03em;text-wrap:pretty">Von der Anfrage zum festen Turnus in vier Schritten.</h2>
+        <p style="margin:0;font:400 17px/1.55 'Source Sans 3',sans-serif;color:#90E0EF;text-wrap:pretty">Kein Vertrag ohne Objektbesichtigung. So wissen beide Seiten, was vereinbart ist.</p>
+      </div>
+      <a href="#kontakt" style="background:#00B4D8;color:#03045E;border-radius:999px;padding:14px 24px;font:600 15px/1 'Source Sans 3',sans-serif" style-hover="background:#90E0EF">Anfrage starten</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:clamp(10px,1.4vw,16px)">
+      <sc-for list="{{ steps }}" as="p" hint-placeholder-count="4">
+        <div style="background:rgba(144,224,239,.1);border:1px solid rgba(144,224,239,.18);border-radius:22px;padding:clamp(22px,2.4vw,28px);{{ radM }}">
+          <div style="font:700 30px/1 Archivo,sans-serif;letter-spacing:-0.03em;color:#00B4D8;margin-bottom:18px">{{ p.num }}</div>
+          <div style="font:600 18px/1.25 Archivo,sans-serif;letter-spacing:-0.015em;margin-bottom:9px">{{ p.title }}</div>
+          <div style="font:400 15px/1.5 'Source Sans 3',sans-serif;color:#CAF0F8;text-wrap:pretty">{{ p.text }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="kontakt" data-screen-label="05 Kontakt" style="background:#fff;border-radius:32px;padding:clamp(28px,4vw,56px);{{ radXL }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(26px,4vw,56px);align-items:start">
+      <div>
+        <span style="display:inline-block;background:#F4F7FA;border-radius:999px;padding:9px 15px;font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#0077B6;margin-bottom:22px">Kontakt</span>
+        <h2 style="margin:0 0 16px;font:700 clamp(27px,3.4vw,38px)/1.1 Archivo,sans-serif;letter-spacing:-0.03em;text-wrap:pretty">Objekt ansehen, Angebot erhalten.</h2>
+        <p style="margin:0 0 28px;font:400 17px/1.6 'Source Sans 3',sans-serif;color:#4C6B85;max-width:420px;text-wrap:pretty">Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag. Für dringende Fälle, etwa Winterdienst, erreichen Sie uns telefonisch.</p>
+        <div style="display:grid;gap:10px">
+          <div style="background:#F4F7FA;border-radius:18px;padding:18px 22px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:baseline;{{ radM }}">
+            <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0077B6">Telefon</span>
+            <span style="font:400 17px/1.3 'Source Sans 3',sans-serif">07452 000000</span>
+          </div>
+          <div style="background:#F4F7FA;border-radius:18px;padding:18px 22px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:baseline;{{ radM }}">
+            <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0077B6">E-Mail</span>
+            <span style="font:400 17px/1.3 'Source Sans 3',sans-serif">info@co-gebaeudeservice.de</span>
+          </div>
+          <div style="background:#F4F7FA;border-radius:18px;padding:18px 22px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:baseline;{{ radM }}">
+            <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#0077B6">Anschrift</span>
+            <span style="font:400 17px/1.3 'Source Sans 3',sans-serif">Musterstraße 1 · 72202 Nagold</span>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit="{{ onSubmit }}" style="background:#F4F7FA;border-radius:26px;padding:clamp(24px,3vw,34px);display:grid;gap:16px;{{ radL }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px">
+          <label style="display:grid;gap:7px">
+            <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#4C6B85">Name</span>
+            <input type="text" placeholder="Vor- und Nachname" style="background:#fff;border:1px solid #DCE6EF;border-radius:14px;padding:13px 16px;font-size:16px;outline:none" style-focus="border-color:#00B4D8"></input>
+          </label>
+          <label style="display:grid;gap:7px">
+            <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#4C6B85">Firma / Verwaltung</span>
+            <input type="text" placeholder="Optional" style="background:#fff;border:1px solid #DCE6EF;border-radius:14px;padding:13px 16px;font-size:16px;outline:none" style-focus="border-color:#00B4D8"></input>
+          </label>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px">
+          <label style="display:grid;gap:7px">
+            <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#4C6B85">E-Mail</span>
+            <input type="email" placeholder="name@beispiel.de" style="background:#fff;border:1px solid #DCE6EF;border-radius:14px;padding:13px 16px;font-size:16px;outline:none" style-focus="border-color:#00B4D8"></input>
+          </label>
+          <label style="display:grid;gap:7px">
+            <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#4C6B85">Telefon</span>
+            <input type="tel" placeholder="Für Rückfragen" style="background:#fff;border:1px solid #DCE6EF;border-radius:14px;padding:13px 16px;font-size:16px;outline:none" style-focus="border-color:#00B4D8"></input>
+          </label>
+        </div>
+        <div style="display:grid;gap:9px">
+          <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#4C6B85">Gewünschte Leistungen</span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+              <button type="button" onClick="{{ c.toggle }}" style="{{ c.style }}">{{ c.title }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <label style="display:grid;gap:7px">
+          <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#4C6B85">Objekt und Nachricht</span>
+          <textarea rows="4" placeholder="Anschrift, Anzahl Wohneinheiten, gewünschter Turnus" style="background:#fff;border:1px solid #DCE6EF;border-radius:14px;padding:13px 16px;font-size:16px;line-height:1.5;resize:vertical;outline:none" style-focus="border-color:#00B4D8"></textarea>
+        </label>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">
+          <span style="font:400 13px/1.45 'Source Sans 3',sans-serif;color:#4C6B85;max-width:250px">Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zu.</span>
+          <button type="submit" style="background:#03045E;color:#fff;border:none;border-radius:999px;padding:15px 28px;font:600 15px/1 'Source Sans 3',sans-serif;cursor:pointer" style-hover="background:#0077B6">Anfrage senden</button>
+        </div>
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#CAF0F8;border-radius:14px;padding:14px 16px;font:500 15px/1.4 'Source Sans 3',sans-serif">Prototyp — die Anfrage wird nicht wirklich versendet.</div>
+        </sc-if>
+      </form>
+    </div>
+  </section>
+
+  <footer style="background:#03045E;border-radius:32px;padding:clamp(28px,3.4vw,44px);color:#fff;{{ radXL }}">
+    <div style="display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;align-items:flex-start;padding-bottom:28px;border-bottom:1px solid rgba(144,224,239,.22)">
+      <a href="#hero" style="display:flex;align-items:center;gap:11px">
+        <span style="position:relative;flex:none;width:42px;height:42px;border-radius:13px;background:#fff;display:grid;place-items:center;overflow:hidden">
+          <svg viewBox="0 0 42 42" style="position:absolute;inset:0;width:100%;height:100%"><path d="M-3 32 C 9 16, 23 38, 47 12" stroke="#90E0EF" stroke-width="4" fill="none" stroke-linecap="round"></path></svg>
+          <span style="position:relative;font:700 16px/1 Archivo,sans-serif;letter-spacing:-0.03em;color:#03045E">CO</span>
+        </span>
+        <span style="font:600 10px/1.2 'Source Sans 3',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#fff">CO Gebäudeservice</span>
+      </a>
+      <div style="font:400 16px/1.75 'Source Sans 3',sans-serif;color:#CAF0F8">Musterstraße 1 · 72202 Nagold<br>07452 000000<br><a href="#kontakt" style="color:#00B4D8">info@co-gebaeudeservice.de</a></div>
+    </div>
+    <div style="padding-top:22px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font:400 13px/1.5 'Source Sans 3',sans-serif;color:#90E0EF">
+      <span>Nagold und Umgebung · Kreis Calw</span>
+      <span>Prototyp · Impressum · Datenschutz</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;rundung&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Sanft&quot;,&quot;Rund&quot;,&quot;Extrarund&quot;],&quot;default&quot;:&quot;Rund&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Form&quot;,&quot;label&quot;:&quot;Rundung&quot;},&quot;grundflaeche&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Nebel&quot;,&quot;Eis&quot;,&quot;Weiß&quot;,&quot;Tief&quot;],&quot;default&quot;:&quot;Nebel&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Form&quot;,&quot;label&quot;:&quot;Grundfläche&quot;},&quot;schriftband&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Form&quot;,&quot;label&quot;:&quot;Schriftband im Hero&quot;}}">
+const SERVICES = [
+  { slot: "r-l1", chip: "Wöchentlich", title: "Treppenhausreinigung", text: "Treppen, Flure, Kellergänge und Eingangsbereiche.", placeholder: "Treppenhaus" },
+  { slot: "r-l2", chip: "2× im Jahr", title: "Fensterreinigung", text: "Glas, Rahmen und Rollladenkästen, innen und außen.", placeholder: "Fensterfront" },
+  { slot: "r-l3", chip: "Fester Betreuer", title: "Hausmeisterdienst", text: "Kontrollgänge, Kleinreparaturen, Müllmanagement.", placeholder: "Hausmeister vor Ort" },
+  { slot: "r-l4", chip: "März bis November", title: "Gartenpflege", text: "Rasen, Hecken, Beete und Grünschnittentsorgung.", placeholder: "Außenanlage" },
+  { slot: "r-l5", chip: "Mit Bereitschaft", title: "Winterdienst", text: "Räumen und Streuen nach Satzung, dokumentiert.", placeholder: "Winterdienst" }
+];
+const TURNUS = [
+  "Treppen, Podeste und Flure feucht wischen",
+  "Handläufe, Geländer und Lichtschalter",
+  "Eingangsbereich, Matten und Briefkastenanlage",
+  "Aufzugskabine und Kellergänge",
+  "Müllstandsplatz und Tonnenwechsel"
+];
+const STEPS = [
+  { num: "01", title: "Anfrage", text: "Kurz Objekt, Anschrift und gewünschte Leistungen nennen — telefonisch oder über das Formular." },
+  { num: "02", title: "Besichtigung", text: "Wir sehen uns Flächen, Zugänge und Besonderheiten vor Ort an. Dauert etwa eine halbe Stunde." },
+  { num: "03", title: "Reinigungsplan", text: "Angebot und Leistungsverzeichnis mit Turnus, Umfang und Festpreis pro Monat." },
+  { num: "04", title: "Betreuung", text: "Fester Objektbetreuer, ausgehängter Plan im Haus, ein Ansprechpartner für die Verwaltung." }
+];
+
+class Component extends DCLogic {
+  state = { chips: {}, sent: false };
+
+  renderVals() {
+    const r = this.props.rundung ?? "Rund";
+    const RAD = {
+      "Sanft":      { xl: 18, l: 16, m: 14 },
+      "Rund":       { xl: 32, l: 26, m: 20 },
+      "Extrarund":  { xl: 46, l: 38, m: 28 }
+    }[r] || { xl: 32, l: 26, m: 20 };
+
+    const grund = this.props.grundflaeche ?? "Nebel";
+    const BG = { "Nebel": "#E7EDF3", "Eis": "#DCEEF5", "Weiß": "#F7F9FB", "Tief": "#0B1230" }[grund] || "#E7EDF3";
+
+    const chipBase = "border-radius:999px;cursor:pointer;padding:11px 18px;font:500 14px/1 'Source Sans 3',sans-serif";
+    const chips = SERVICES.map((s) => {
+      const on = !!this.state.chips[s.title];
+      return {
+        title: s.title,
+        toggle: () => this.setState((st) => ({ chips: Object.assign({}, st.chips, { [s.title]: !st.chips[s.title] }) })),
+        style: chipBase + (on ? ";background:#03045E;border:1px solid #03045E;color:#fff" : ";background:#fff;border:1px solid #DCE6EF;color:#4C6B85")
+      };
+    });
+
+    return {
+      services: SERVICES,
+      turnus: TURNUS,
+      steps: STEPS,
+      chips,
+      sent: this.state.sent,
+      onSubmit: (e) => { e.preventDefault(); this.setState({ sent: true }); },
+      pageBg: "background:" + BG,
+      radXL: "border-radius:" + RAD.xl + "px",
+      radL: "border-radius:" + RAD.l + "px",
+      radM: "border-radius:" + RAD.m + "px",
+      ribbonShow: (this.props.schriftband ?? true) ? "" : "display:none"
+    };
+  }
+}
+</script>
+</body>
+</html>

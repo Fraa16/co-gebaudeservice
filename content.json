@@ -1,0 +1,116 @@
+{
+  "$comment": "All site copy, verbatim from the design. German, formal Sie. Do not rewrite. Placeholder values are marked.",
+  "company": {
+    "name": "CO Gebäudeservice",
+    "logoLabel": "CO Gebäudeservice",
+    "area": "Nagold und Umgebung",
+    "areaLong": "Nagold und Umgebung · Kreis Calw",
+    "address": "Musterstraße 1 · 72202 Nagold",
+    "phone": "07452 000000",
+    "email": "info@co-gebaeudeservice.de",
+    "$placeholder": ["address", "phone", "email"]
+  },
+  "nav": [
+    { "label": "Leistungen", "href": "#leistungen" },
+    { "label": "Treppenhaus", "href": "#treppenhaus" },
+    { "label": "Ablauf", "href": "#ablauf" },
+    { "label": "Angebot anfordern", "href": "#kontakt", "primary": true }
+  ],
+  "hero": {
+    "locationPill": "Nagold und Umgebung",
+    "h1": "Gepflegte Objekte, zuverlässig und zum festen Turnus.",
+    "sub": "Reinigung und Hausmeisterdienste für Hausverwaltungen, Eigentümergemeinschaften und Gewerbeobjekte.",
+    "primaryCta": { "label": "Angebot anfordern", "href": "#kontakt" },
+    "secondaryCta": { "label": "Leistungen ansehen", "href": "#leistungen" },
+    "photo": { "slot": "r-hero", "subject": "Fassade oder Treppenhaus", "orientation": "landscape" }
+  },
+  "marquee": "Treppenhausreinigung · Fensterreinigung · Hausmeisterdienst · Gartenpflege · Winterdienst",
+  "services": [
+    { "slot": "r-l1", "chip": "Wöchentlich", "title": "Treppenhausreinigung", "text": "Treppen, Flure, Kellergänge und Eingangsbereiche.", "photo": "Treppenhaus" },
+    { "slot": "r-l2", "chip": "2× im Jahr", "title": "Fensterreinigung", "text": "Glas, Rahmen und Rollladenkästen, innen und außen.", "photo": "Fensterfront" },
+    { "slot": "r-l3", "chip": "Fester Betreuer", "title": "Hausmeisterdienst", "text": "Kontrollgänge, Kleinreparaturen, Müllmanagement.", "photo": "Hausmeister vor Ort" },
+    { "slot": "r-l4", "chip": "März bis November", "title": "Gartenpflege", "text": "Rasen, Hecken, Beete und Grünschnittentsorgung.", "photo": "Außenanlage" },
+    { "slot": "r-l5", "chip": "Mit Bereitschaft", "title": "Winterdienst", "text": "Räumen und Streuen nach Satzung, dokumentiert.", "photo": "Winterdienst" }
+  ],
+  "servicesCta": {
+    "pill": "Alles zusammen",
+    "title": "Mehrere Objekte oder ein Sonderfall?",
+    "text": "Wir sehen uns das Objekt an und kalkulieren einen Turnus zum Festpreis.",
+    "cta": { "label": "Termin vereinbaren", "href": "#kontakt" }
+  },
+  "detail": {
+    "pill": "Im Detail",
+    "h2": "Treppenhausreinigung nach festem Reinigungsplan",
+    "paragraphs": [
+      "Das Treppenhaus ist der erste Eindruck eines Objekts und gleichzeitig die Fläche, über die sich Mieter am häufigsten beschweren. Wir übernehmen die Unterhaltsreinigung im vereinbarten Turnus: Treppen und Podeste feucht wischen, Handläufe und Geländer reinigen, Aufzugskabine, Briefkastenanlage, Kellergänge und Eingangsbereich einschließlich Fußmatten.",
+      "Für jedes Objekt legen wir vorab schriftlich fest, was in welchem Intervall gereinigt wird. Wöchentlich, zweiwöchentlich oder nach Bedarf — inklusive der Arbeiten, die nur ein- bis zweimal im Jahr anfallen, etwa Fensterflächen im Treppenhaus, Lampen und Sockelleisten. Der Plan hängt im Objekt aus, damit Mieter und Verwaltung jederzeit nachvollziehen können, was geleistet wurde.",
+      "Wir arbeiten mit eigenem Personal und festen Objektbetreuern. Das heißt: dieselben Gesichter im Haus, ein direkter Ansprechpartner für die Verwaltung und eine Vertretungsregelung bei Urlaub und Krankheit."
+    ],
+    "ctas": [
+      { "label": "Angebot anfordern", "href": "#kontakt", "style": "primary" },
+      { "label": "Alle Leistungen", "href": "#leistungen", "style": "quiet" }
+    ],
+    "photo": { "slot": "r-detail", "subject": "Treppenhaus nach der Reinigung", "orientation": "landscape ~2:1" },
+    "infoCard": {
+      "label": "Enthalten im Turnus",
+      "items": [
+        "Treppen, Podeste und Flure feucht wischen",
+        "Handläufe, Geländer und Lichtschalter",
+        "Eingangsbereich, Matten und Briefkastenanlage",
+        "Aufzugskabine und Kellergänge",
+        "Müllstandsplatz und Tonnenwechsel"
+      ],
+      "facts": [
+        { "label": "Turnus", "value": "Wöchentlich oder 14-tägig" },
+        { "label": "Gebiet", "value": "Nagold, Kreis Calw" }
+      ]
+    }
+  },
+  "process": {
+    "pill": "Ablauf",
+    "h2": "Von der Anfrage zum festen Turnus in vier Schritten.",
+    "lead": "Kein Vertrag ohne Objektbesichtigung. So wissen beide Seiten, was vereinbart ist.",
+    "cta": { "label": "Anfrage starten", "href": "#kontakt" },
+    "steps": [
+      { "num": "01", "title": "Anfrage", "text": "Kurz Objekt, Anschrift und gewünschte Leistungen nennen — telefonisch oder über das Formular." },
+      { "num": "02", "title": "Besichtigung", "text": "Wir sehen uns Flächen, Zugänge und Besonderheiten vor Ort an. Dauert etwa eine halbe Stunde." },
+      { "num": "03", "title": "Reinigungsplan", "text": "Angebot und Leistungsverzeichnis mit Turnus, Umfang und Festpreis pro Monat." },
+      { "num": "04", "title": "Betreuung", "text": "Fester Objektbetreuer, ausgehängter Plan im Haus, ein Ansprechpartner für die Verwaltung." }
+    ]
+  },
+  "contact": {
+    "pill": "Kontakt",
+    "h2": "Objekt ansehen, Angebot erhalten.",
+    "text": "Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag. Für dringende Fälle, etwa Winterdienst, erreichen Sie uns telefonisch.",
+    "rows": [
+      { "label": "Telefon", "value": "07452 000000" },
+      { "label": "E-Mail", "value": "info@co-gebaeudeservice.de" },
+      { "label": "Anschrift", "value": "Musterstraße 1 · 72202 Nagold" }
+    ],
+    "form": {
+      "fields": [
+        { "name": "name", "label": "Name", "type": "text", "placeholder": "Vor- und Nachname", "required": true },
+        { "name": "company", "label": "Firma / Verwaltung", "type": "text", "placeholder": "Optional", "required": false },
+        { "name": "email", "label": "E-Mail", "type": "email", "placeholder": "name@beispiel.de", "required": true },
+        { "name": "phone", "label": "Telefon", "type": "tel", "placeholder": "Für Rückfragen", "required": false },
+        { "name": "services", "label": "Gewünschte Leistungen", "type": "chips-multi", "options": ["Treppenhausreinigung", "Fensterreinigung", "Hausmeisterdienst", "Gartenpflege", "Winterdienst"], "required": false },
+        { "name": "message", "label": "Objekt und Nachricht", "type": "textarea", "rows": 4, "placeholder": "Anschrift, Anzahl Wohneinheiten, gewünschter Turnus", "required": true }
+      ],
+      "consentNote": "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zu.",
+      "submitLabel": "Anfrage senden",
+      "successMessage": "Danke — wir melden uns innerhalb von zwei Werktagen.",
+      "$note": "The prototype's success text is a prototype notice; use successMessage above in production."
+    }
+  },
+  "footer": {
+    "meta": "Nagold und Umgebung · Kreis Calw",
+    "links": ["Impressum", "Datenschutz"],
+    "$note": "Impressum and Datenschutzerklärung are legally required in Germany — real pages needed."
+  },
+  "tone": [
+    "German throughout, formal Sie.",
+    "Name services, do not advertise them. No superlatives, no exclamation marks.",
+    "Always state Turnus, Erreichbarkeit and Einsatzgebiet.",
+    "Keep existing copy verbatim unless the client changes it."
+  ]
+}

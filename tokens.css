@@ -1,0 +1,197 @@
+/* CO Gebäudeservice — design tokens
+   Drop-in starting point. Mirrors tokens.json.
+   Radius tier = "Rund", page ground = "Nebel" (the shipping combination). */
+
+:root {
+  /* Color */
+  --co-ink: #03045E;
+  --co-blue: #0077B6;
+  --co-cyan: #00B4D8;
+  --co-ice: #90E0EF;
+  --co-pale: #CAF0F8;
+  --co-mist: #F4F7FA;
+  --co-page: #E7EDF3;
+  --co-line: #DCE6EF;
+  --co-muted: #4C6B85;
+  --co-deep-text: #0B4A6F;
+  --co-white: #FFFFFF;
+
+  /* Color — on dark grounds */
+  --co-on-dark-card-bg: rgba(144, 224, 239, 0.10);
+  --co-on-dark-card-border: rgba(144, 224, 239, 0.18);
+  --co-on-dark-pill-bg: rgba(144, 224, 239, 0.16);
+  --co-on-dark-divider: rgba(144, 224, 239, 0.22);
+  --co-info-divider: rgba(3, 4, 94, 0.14);
+
+  /* Overlays */
+  --co-hero-photo-fade: linear-gradient(90deg, #CAF0F8 0%, rgba(202,240,248,.55) 34%, rgba(202,240,248,0) 66%);
+  --co-card-scrim: linear-gradient(180deg, rgba(3,4,94,.45) 0%, rgba(3,4,94,0) 34%, rgba(3,4,94,0) 52%, rgba(3,4,94,.78) 100%);
+
+  /* Type */
+  --co-font-heading: Archivo, sans-serif;
+  --co-font-body: "Source Sans 3", system-ui, sans-serif;
+
+  --co-h1-size: clamp(32px, 4.6vw, 54px);
+  --co-h2-size: clamp(27px, 3.4vw, 38px);
+  --co-h3-card-size: clamp(19px, 2.1vw, 24px);
+  --co-h1-tracking: -0.035em;
+  --co-h2-tracking: -0.03em;
+  --co-h3-tracking: -0.025em;
+
+  --co-body-size: 17px;
+  --co-body-lh: 1.6;
+  --co-lead-lh: 1.55;
+  --co-card-body-size: 14px;
+  --co-label-tracking: 0.16em;
+  --co-logo-tracking: 0.18em;
+
+  /* Radius */
+  --co-radius-xl: 32px;
+  --co-radius-l: 26px;
+  --co-radius-m: 20px;
+  --co-radius-step: 22px;
+  --co-radius-photo: 24px;
+  --co-radius-contact-row: 18px;
+  --co-radius-input: 14px;
+  --co-radius-logo: 12px;
+  --co-radius-pill: 999px;
+
+  /* Space */
+  --co-page-padding: clamp(10px, 1.4vw, 20px);
+  --co-card-gap: clamp(10px, 1.4vw, 18px);
+  --co-grid-gap: clamp(10px, 1.4vw, 16px);
+  --co-section-padding: clamp(28px, 4vw, 56px);
+  --co-hero-padding: clamp(32px, 4.4vw, 60px);
+  --co-small-card-padding: clamp(22px, 2.6vw, 32px);
+  --co-form-padding: clamp(24px, 3vw, 34px);
+  --co-two-col-gap: clamp(26px, 4vw, 56px);
+
+  /* Controls */
+  --co-button-padding: 15px 26px;
+  --co-button-dark-padding: 14px 24px;
+  --co-nav-pill-padding: 10px 18px;
+  --co-chip-padding: 11px 18px;
+  --co-label-pill-padding: 9px 15px;
+  --co-input-padding: 13px 16px;
+
+  /* Grids */
+  --co-grid-services: repeat(auto-fit, minmax(230px, 1fr));
+  --co-grid-two-col: repeat(auto-fit, minmax(290px, 1fr));
+  --co-grid-steps: repeat(auto-fit, minmax(215px, 1fr));
+  --co-grid-field-pair: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+/* Base ---------------------------------------------------------------- */
+
+body {
+  margin: 0;
+  background: var(--co-page);
+  color: var(--co-ink);
+  font-family: var(--co-font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--co-font-heading); text-wrap: pretty; margin: 0; }
+p { text-wrap: pretty; margin: 0; }
+
+a { color: var(--co-blue); text-decoration: none; }
+a:hover { color: var(--co-ink); }
+
+:focus-visible {
+  outline: 2px solid var(--co-cyan);
+  outline-offset: 2px;
+}
+
+/* Page shell: cards on a ground, one gutter between them --------------- */
+
+.co-page {
+  display: grid;
+  gap: var(--co-card-gap);
+  padding: var(--co-page-padding);
+}
+
+/* Cards --------------------------------------------------------------- */
+
+.co-card        { border-radius: var(--co-radius-xl); padding: var(--co-section-padding); }
+.co-card--white { background: var(--co-white); }
+.co-card--ink   { background: var(--co-ink); color: var(--co-white); }
+.co-card--pale  { background: var(--co-pale); }
+.co-card--l     { border-radius: var(--co-radius-l); }
+
+/* Pills and buttons --------------------------------------------------- */
+
+.co-pill-label {
+  display: inline-block;
+  border-radius: var(--co-radius-pill);
+  padding: var(--co-label-pill-padding);
+  font: 600 11px/1 var(--co-font-body);
+  letter-spacing: var(--co-label-tracking);
+  text-transform: uppercase;
+  background: var(--co-mist);
+  color: var(--co-blue);
+}
+.co-card--ink .co-pill-label {
+  background: var(--co-on-dark-pill-bg);
+  color: var(--co-ice);
+}
+
+.co-btn {
+  display: inline-block;
+  border: none;
+  border-radius: var(--co-radius-pill);
+  padding: var(--co-button-padding);
+  font: 600 15px/1 var(--co-font-body);
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.co-btn--primary   { background: var(--co-ink); color: var(--co-white); }
+.co-btn--primary:hover { background: var(--co-blue); color: var(--co-white); }
+.co-btn--onPale    { background: var(--co-white); color: var(--co-ink); }
+.co-btn--onPale:hover { background: rgba(255, 255, 255, 0.72); }
+.co-btn--onInk     { background: var(--co-cyan); color: var(--co-ink); padding: var(--co-button-dark-padding); }
+.co-btn--onInk:hover { background: var(--co-ice); }
+.co-btn--quiet     { background: var(--co-mist); color: var(--co-ink); }
+.co-btn--quiet:hover { background: var(--co-pale); }
+
+.co-nav-pill {
+  border: 1px solid var(--co-line);
+  border-radius: var(--co-radius-pill);
+  padding: var(--co-nav-pill-padding);
+  font: 500 14px/1 var(--co-font-body);
+  color: var(--co-muted);
+  transition: border-color 150ms ease, color 150ms ease;
+}
+.co-nav-pill:hover { border-color: var(--co-cyan); color: var(--co-ink); }
+
+.co-chip {
+  border-radius: var(--co-radius-pill);
+  padding: var(--co-chip-padding);
+  font: 500 14px/1 var(--co-font-body);
+  background: var(--co-white);
+  border: 1px solid var(--co-line);
+  color: var(--co-muted);
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.co-chip[aria-pressed="true"],
+.co-chip.is-on {
+  background: var(--co-ink);
+  border-color: var(--co-ink);
+  color: var(--co-white);
+}
+
+/* Form fields --------------------------------------------------------- */
+
+.co-field {
+  background: var(--co-white);
+  border: 1px solid var(--co-line);
+  border-radius: var(--co-radius-input);
+  padding: var(--co-input-padding);
+  font: 400 16px/1.5 var(--co-font-body);
+  color: var(--co-ink);
+}
+.co-field:focus { border-color: var(--co-cyan); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0s !important; }
+}
