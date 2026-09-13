@@ -81,10 +81,17 @@ kickers, roughly 8:1.
    **ink on light grounds and cyan on dark**: the token's cyan measures 2.46:1 on white,
    below the 3:1 WCAG 1.4.11 requires. For the same reason small labels on the pale
    ground use `--co-deep-text`, not `--co-blue` (4.02:1, under AA).
-9. **Colour and radius live in tokens, never as literals in a component style block.**
+9. **Content must never depend on JavaScript to be visible.** Scroll reveals are
+   CSS-only (`animation-timeline: view()` behind an `@supports` guard) precisely
+   because the earlier JS version blanked the whole site in production: Astro inlined
+   the script and `vercel.json`'s `script-src 'self'` blocked it. `astro preview`
+   applies no headers, so nothing local caught it — `tests/csp.spec.ts` now
+   reproduces the deployed CSP and asserts the page still paints with JS disabled.
+   Keep `assetsInlineLimit: 0` so Astro never inlines a script back into the HTML.
+10. **Colour and radius live in tokens, never as literals in a component style block.**
    `npm run lint:styles` fails the build on a hex colour, an `rgb()` literal or a
    numeric `border-radius` anywhere in `src/`.
-10. **No `LocalBusiness` markup and no linked `tel:`/`mailto:` while contact details are
+11. **No `LocalBusiness` markup and no linked `tel:`/`mailto:` while contact details are
    placeholders.** `src/data/company.ts` gates each field; a fake NAP in structured data
    is worse than none.
 

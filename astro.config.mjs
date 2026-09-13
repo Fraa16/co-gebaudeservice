@@ -20,4 +20,14 @@ export default defineConfig({
     }),
   ],
   image: { responsiveStyles: true },
+
+  vite: {
+    build: {
+      // Astro inlines small hoisted scripts into the HTML. vercel.json sets
+      // script-src 'self' with no 'unsafe-inline', so an inlined script is blocked
+      // in production while working fine under `astro preview`, which applies no
+      // headers. Keep every script external so the strict CSP holds.
+      assetsInlineLimit: 0,
+    },
+  },
 });

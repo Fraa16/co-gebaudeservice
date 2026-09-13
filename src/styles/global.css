@@ -222,7 +222,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
   font: 600 11px/1 var(--co-font-body);
   letter-spacing: var(--co-label-tracking);
   text-transform: uppercase;
-  color: var(--co-blue);
+  /* --co-deep-text, not --co-blue: a kicker can sit on white (4.87:1), mist (4.53:1)
+     or the page ground (4.13:1 — fails AA). Deep text clears all three at 8:1. */
+  color: var(--co-deep-text);
 }
 .co-kicker::after {
   content: '';
@@ -314,18 +316,33 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 /* Motion ---------------------------------------------------------------- */
 
-@media (prefers-reduced-motion: no-preference) {
-  .co-reveal {
+/* Scroll reveals, CSS-only.
+ *
+ *  This was a JS IntersectionObserver that set .is-in, with the CSS hiding
+ *  .co-reveal by default. That put every section's visibility behind a script —
+ *  and in production the script was inlined by Astro and then blocked by the CSP,
+ *  so the whole page rendered blank. Content must never depend on JS to be seen.
+ *
+ *  Scroll-driven animation has no such dependency: browsers without support simply
+ *  show the content, which is the correct fallback. */
+@keyframes co-reveal-in {
+  from {
     opacity: 0;
     transform: translateY(14px);
-    transition:
-      opacity 620ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      transform 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
-    transition-delay: calc(var(--co-reveal-index, 0) * 70ms);
   }
-  .co-reveal.is-in {
+  to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .co-reveal {
+      animation: co-reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 20%;
+    }
   }
 }
 
