@@ -5,7 +5,9 @@ import { footer } from '../data/content';
 import { legalNav } from '../data/nav';
 ---
 
-<footer class="co-card co-card--ink site-footer">
+<footer class="co-card co-card--ink co-grain site-footer">
+  <p class="site-footer__wordmark" aria-hidden="true">CO Gebäudeservice</p>
+
   <div class="site-footer__top">
     <Logo href="/" tone="onDark" size={42} />
 
@@ -38,8 +40,23 @@ import { legalNav } from '../data/nav';
 
 <style>
   .site-footer {
+    position: relative;
+    overflow: hidden;
     padding: clamp(28px, 3.4vw, 44px);
   }
+  /* Oversized wordmark as a ground, as both references close with. */
+  .site-footer__wordmark {
+    font: 700 clamp(38px, 8.4vw, 130px) / 0.9 var(--co-font-heading);
+    letter-spacing: -0.05em;
+    color: var(--co-ice);
+    opacity: 0.11;
+    margin-bottom: clamp(20px, 3vw, 42px);
+    pointer-events: none;
+    user-select: none;
+    text-wrap: nowrap;
+  }
+  .site-footer__top,
+  .site-footer__bottom { position: relative; }
   .site-footer__top {
     display: flex;
     flex-wrap: wrap;

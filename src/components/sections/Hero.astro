@@ -1,27 +1,38 @@
 ---
 import Button from '../ui/Button.astro';
 import Photo from '../ui/Photo.astro';
-import { hero } from '../../data/content';
+import { hero, detail } from '../../data/content';
+import { company } from '../../data/company';
 import { resolveHref } from '../../data/routes';
+
+/** Full-bleed photography inside the rounded container, display type held on the
+ *  left by a scrim, and two panels floating over the bottom corners — the
+ *  composition both reference heroes use. */
+const facts = [
+  { label: 'Einsatzgebiet', value: company.areaLong },
+  { label: 'Turnus', value: detail.infoCard.facts[0]?.value ?? '' },
+];
 ---
 
-<section class="co-card co-card--pale hero" id="hero">
+<section class="co-card--xl co-grain hero" id="hero">
   <div class="hero__media">
-    <Photo slot="r-hero" priority sizes="(max-width: 900px) 100vw, 52vw" />
-    <div class="hero__fade" aria-hidden="true"></div>
+    <Photo slot="r-hero" priority sizes="100vw" />
   </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="hero__scrim-v" aria-hidden="true"></div>
 
   <div class="hero__body">
-    <p class="co-glass-pill">
+    <p class="hero__pill co-reveal">
       <span class="hero__dot" aria-hidden="true"></span>
       <span class="hero__pill-text">{hero.locationPill}</span>
     </p>
 
-    <h1 class="hero__title">{hero.h1}</h1>
-    <p class="hero__sub">{hero.sub}</p>
+    <h1 class="co-display hero__title co-reveal">{hero.h1}</h1>
 
-    <div class="hero__actions">
-      <Button href={resolveHref(hero.primaryCta.href)} variant="primary">
+    <p class="hero__sub co-reveal">{hero.sub}</p>
+
+    <div class="hero__actions co-reveal">
+      <Button href={resolveHref(hero.primaryCta.href)} variant="primary" arrow>
         {hero.primaryCta.label}
       </Button>
       <Button href={resolveHref(hero.secondaryCta.href)} variant="onPale">
@@ -29,37 +40,74 @@ import { resolveHref } from '../../data/routes';
       </Button>
     </div>
   </div>
+
+  <div class="hero__float hero__float--left co-reveal">
+    {
+      facts.map((fact) => (
+        <div class="hero__fact">
+          <span class="hero__fact-label">{fact.label}</span>
+          <span class="hero__fact-value">{fact.value}</span>
+        </div>
+      ))
+    }
+  </div>
+
+  <a class="hero__float hero__float--right co-reveal" href="/leistungen">
+    <span class="hero__float-arrow" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 17 17 7M9 7h8v8"></path>
+      </svg>
+    </span>
+    <span class="hero__float-text">
+      <span class="hero__float-title">Acht Leistungen</span>
+      <span class="hero__float-meta">Alles ansehen</span>
+    </span>
+  </a>
 </section>
 
 <style>
   .hero {
     position: relative;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    min-height: clamp(380px, 42vw, 520px);
-    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    min-height: clamp(500px, 66vh, 720px);
+    background: var(--co-pale);
   }
   .hero__media {
     position: absolute;
-    inset: 0 0 0 auto;
-    width: 52%;
+    inset: 0;
   }
-  .hero__fade {
+  .hero__scrim,
+  .hero__scrim-v {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: var(--co-hero-photo-fade);
   }
+  .hero__scrim { background: var(--co-hero-scrim); }
+  .hero__scrim-v { background: var(--co-hero-scrim-v); }
+
   .hero__body {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
-    padding: var(--co-hero-padding);
-    /* The prototype's 620px was a content-box width; our reset is border-box. */
-    max-width: calc(620px + 2 * var(--co-hero-padding));
+    gap: 22px;
+    padding: clamp(28px, 5vw, 76px);
+    padding-bottom: clamp(120px, 14vw, 180px);
+    max-width: min(100%, 900px);
+  }
+  .hero__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: var(--co-glass-bg);
+    border: 1px solid var(--co-glass-border);
+    backdrop-filter: var(--co-glass-blur);
+    border-radius: var(--co-radius-pill);
+    padding: 9px 16px;
   }
   .hero__dot {
     flex: none;
@@ -74,19 +122,83 @@ import { resolveHref } from '../../data/routes';
     text-transform: uppercase;
     color: var(--co-ink);
   }
-  .hero__title {
-    font: 700 var(--co-h1-size) / 1.06 var(--co-font-heading);
-    letter-spacing: var(--co-h1-tracking);
-  }
+  .hero__title { max-width: 20ch; }
   .hero__sub {
-    font: 400 var(--co-body-size) / var(--co-lead-lh) var(--co-font-body);
+    font: 400 clamp(17px, 1.5vw, 20px) / var(--co-lead-lh) var(--co-font-body);
     color: var(--co-deep-text);
-    max-width: 420px;
+    max-width: 46ch;
   }
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 8px;
+  }
+
+  /* Panels floating over the bottom corners of the container. */
+  .hero__float {
+    position: absolute;
+    bottom: clamp(16px, 2vw, 28px);
+    z-index: 1;
+    background: var(--co-glass-bg);
+    border: 1px solid var(--co-glass-border);
+    backdrop-filter: var(--co-glass-blur);
+    border-radius: var(--co-radius-l);
+    box-shadow: var(--co-shadow-card);
+  }
+  .hero__float--left {
+    left: clamp(16px, 2vw, 28px);
+    display: flex;
+    flex-wrap: wrap;
+    padding: clamp(16px, 1.6vw, 22px) clamp(18px, 2vw, 26px);
+    gap: clamp(16px, 2vw, 30px);
+  }
+  .hero__fact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+  .hero__fact-label {
+    font: 600 10px/1 var(--co-font-body);
+    letter-spacing: var(--co-label-tracking);
+    text-transform: uppercase;
+    color: var(--co-blue);
+  }
+  .hero__fact-value {
+    font: 600 clamp(14px, 1.3vw, 17px) / 1.25 var(--co-font-body);
+    color: var(--co-ink);
+  }
+
+  .hero__float--right {
+    right: clamp(16px, 2vw, 28px);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: clamp(14px, 1.4vw, 18px) clamp(18px, 2vw, 24px);
+    transition: box-shadow 220ms ease, transform 220ms ease;
+  }
+  .hero__float--right:hover {
+    box-shadow: var(--co-shadow-lift);
+    transform: translateY(-2px);
+  }
+  .hero__float-arrow {
+    flex: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--co-radius-pill);
+    background: var(--co-ink);
+    color: var(--co-white);
+  }
+  .hero__float-text { display: grid; gap: 3px; }
+  .hero__float-title {
+    font: 600 15px/1.2 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  .hero__float-meta {
+    font: 400 12px/1 var(--co-font-body);
+    color: var(--co-muted);
   }
 </style>

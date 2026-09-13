@@ -1,104 +1,170 @@
 ---
+/** One tile of the bento mosaic. `size` drives both the grid span and the internal
+ *  treatment: feature tiles carry a photograph, standard tiles are flat brand
+ *  grounds with a watermark, so the grid reads as varied rather than repeated. */
 import Photo from '../ui/Photo.astro';
 import type { Service } from '../../data/services';
 
 interface Props {
   service: Service;
-  /** Where the whole card links. Omitted for draft services, which render as tiles. */
   href?: string;
+  size?: 'feature' | 'tall' | 'standard';
+  tone?: 'photo' | 'ink' | 'pale' | 'blue';
+  index?: number;
 }
-const { service, href } = Astro.props;
+const { service, href, size = 'standard', tone = 'blue', index = 0 } = Astro.props;
+const num = String(index + 1).padStart(2, '0');
 ---
 
-<article class:list={['co-card--l co-card--blue service-card', href && 'is-linked']} id={service.slug}>
-  <Photo slot={service.photoSlot} sizes="(max-width: 700px) 100vw, 33vw" />
-  <!-- Not decoration: card text on the flat blue ground measures 4.02:1, under AA.
-       Over the scrim it is 12.2:1. Never render this card without it. -->
-  <div class="co-scrim" aria-hidden="true"></div>
+<article
+  class:list={[
+    'co-card--l co-grain tile',
+    `tile--${size}`,
+    `tile--${tone}`,
+    href && 'is-linked',
+  ]}
+  id={service.slug}
+>
+  {tone === 'photo' && <Photo slot={service.photoSlot} sizes="(max-width: 760px) 100vw, 55vw" />}
+  {tone === 'photo' && <div class="co-scrim" aria-hidden="true"></div>}
 
-  <div class="service-card__top">
-    <span class="service-card__chip">{service.chip}</span>
-    <span class="service-card__arrow" aria-hidden="true">
+  {tone !== 'photo' && (
+    <svg class="tile__watermark" viewBox="0 0 200 200" aria-hidden="true" preserveAspectRatio="xMaxYMax slice">
+      <path d="M-20 150 C 40 60, 110 190, 230 70" fill="none" stroke="currentColor"
+        stroke-width="34" stroke-linecap="round" opacity="0.13"></path>
+    </svg>
+  )}
+
+  <div class="tile__top">
+    <span class="tile__num">{num}</span>
+    <span class="tile__chip">{service.chip}</span>
+  </div>
+
+  <div class="tile__body">
+    <h3 class="tile__title">
+      {href ? <a href={href}>{service.title}</a> : service.title}
+    </h3>
+    <p class="tile__text">{service.text}</p>
+  </div>
+
+  {href && (
+    <span class="tile__arrow" aria-hidden="true">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M7 17 17 7M9 7h8v8"></path>
       </svg>
     </span>
-  </div>
-
-  <div class="service-card__body">
-    <h3 class="service-card__title">
-      {href ? <a href={href}>{service.title}</a> : service.title}
-    </h3>
-    <p class="service-card__text">{service.text}</p>
-  </div>
+  )}
 </article>
 
 <style>
-  .service-card {
+  .tile {
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    /* Heading top, body bottom with the gap pushed between them — the vertical
+       spread both references use inside cards. */
     justify-content: space-between;
-    min-height: clamp(300px, 26vw, 370px);
+    gap: clamp(40px, 8vw, 90px);
+    padding: clamp(22px, 2.4vw, 32px);
+    min-height: clamp(260px, 24vw, 330px);
+    transition: box-shadow 300ms ease, transform 300ms ease;
   }
-  .service-card__top {
+  .tile--feature { min-height: clamp(320px, 34vw, 460px); }
+  .tile--tall { min-height: clamp(300px, 30vw, 420px); }
+
+  .tile--blue { background: var(--co-blue); color: var(--co-white); }
+  .tile--ink { background: var(--co-ink-gradient); color: var(--co-white); }
+  .tile--pale { background: var(--co-pale-gradient); color: var(--co-ink); }
+  .tile--photo { background: var(--co-blue); color: var(--co-white); }
+
+  .tile.is-linked:hover {
+    box-shadow: var(--co-shadow-lift);
+    transform: translateY(-3px);
+  }
+
+  /* Quiet brand mark, bottom-right. At 78% it read as a random blob rather than
+     the logo swoosh. */
+  .tile__watermark {
+    position: absolute;
+    right: -6%;
+    bottom: -8%;
+    width: 42%;
+    height: auto;
+    aspect-ratio: 1;
+    color: var(--co-white);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .tile--pale .tile__watermark { color: var(--co-blue); opacity: 0.4; }
+
+  .tile__top {
     position: relative;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 16px;
+    align-items: center;
+    gap: 12px;
   }
-  .service-card__chip {
-    background: var(--co-white);
-    color: var(--co-ink);
+  .tile__num {
+    font: 600 11px/1 var(--co-font-body);
+    letter-spacing: var(--co-label-tracking);
+    font-variant-numeric: tabular-nums;
+    opacity: 0.72;
+  }
+  .tile__chip {
     border-radius: var(--co-radius-pill);
     padding: var(--co-label-pill-padding);
-    font: 600 12px/1 var(--co-font-body);
+    font: 600 11px/1 var(--co-font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--co-on-dark-pill-bg);
+    color: var(--co-white);
   }
-  .service-card__arrow {
-    flex: none;
+  .tile--pale .tile__chip {
+    background: var(--co-white);
+    color: var(--co-blue);
+  }
+
+  .tile__body {
+    position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    max-width: 34ch;
+  }
+  .tile__title {
+    font: 600 var(--co-h3-card-size) / 1.12 var(--co-font-heading);
+    letter-spacing: var(--co-h3-tracking);
+  }
+  .tile--feature .tile__title { font-size: clamp(26px, 3vw, 40px); }
+  .tile__title a { color: inherit; }
+  .tile__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .tile__text {
+    font: 400 15px/1.45 var(--co-font-body);
+    color: var(--co-pale);
+  }
+  .tile--pale .tile__text { color: var(--co-deep-text); }
+
+  .tile__arrow {
+    position: absolute;
+    top: clamp(22px, 2.4vw, 32px);
+    right: clamp(22px, 2.4vw, 32px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
     width: 38px;
     height: 38px;
     border-radius: var(--co-radius-pill);
     background: var(--co-white);
     color: var(--co-ink);
-    transition: background-color 150ms ease;
+    transition: background-color 220ms ease, transform 260ms ease;
   }
-  .service-card.is-linked:hover .service-card__arrow {
+  .tile.is-linked:hover .tile__arrow {
     background: var(--co-cyan);
-  }
-  .service-card__body {
-    position: relative;
-    display: grid;
-    gap: 6px;
-    padding: 18px 20px 22px;
-  }
-  .service-card__title {
-    font: 600 var(--co-h3-card-size) / 1.15 var(--co-font-heading);
-    letter-spacing: var(--co-h3-tracking);
-    color: var(--co-white);
-  }
-  /* One link per card, stretched over the whole tile: a full-size hit target with a
-     meaningful accessible name, instead of five identical tiny "Anfragen" arrows. */
-  .service-card__title a {
-    color: inherit;
-  }
-  .service-card__title a::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-  }
-  .service-card__title a:hover {
-    color: var(--co-ice);
-  }
-  .service-card__text {
-    font: 400 var(--co-card-body-size) / 1.45 var(--co-font-body);
-    color: var(--co-pale);
-    max-width: 280px;
+    transform: translate(2px, -2px);
   }
 </style>

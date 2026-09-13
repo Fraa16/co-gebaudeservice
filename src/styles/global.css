@@ -83,6 +83,10 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 .co-card--header { border-radius: var(--co-radius-header); }
 
+/* Radius-only variants, for sections that set their own padding. */
+.co-card--xl { border-radius: var(--co-radius-xl); box-shadow: var(--co-shadow-card); }
+.co-card--m { border-radius: var(--co-radius-m); }
+
 /* Text-heavy service sections need a wider column than the photo cards. The min()
    keeps the track from exceeding the viewport on a 320px screen. */
 :root { --co-grid-service-sections: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
@@ -168,3 +172,198 @@ button, input, textarea, select { font: inherit; color: inherit; }
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* ==========================================================================
+   Art direction layer
+
+   The original system had one section archetype — a rounded card with one of
+   three fills — repeated eleven times, a 3.2:1 type ratio and no depth. These
+   are the primitives that turn that into a composition: a display tier, real
+   elevation, hairline/kicker/numeral editorial detail, fluid asymmetry, and
+   scroll reveals. Everything here is tokenised so lint:styles still holds.
+   ========================================================================== */
+
+/* Depth ---------------------------------------------------------------- */
+
+.co-card,
+.co-card--l {
+  box-shadow: var(--co-shadow-card);
+}
+
+.co-card--ink {
+  background: var(--co-ink-gradient);
+}
+
+.co-card--pale {
+  background: var(--co-pale-gradient);
+}
+
+/* Grain sits above the fill and below the content. Any card using it needs
+   position:relative and its own stacking for children. */
+.co-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--co-grain);
+  background-size: 140px 140px;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+}
+.co-card--ink.co-grain::before { opacity: 0.06; }
+
+/* Editorial primitives -------------------------------------------------- */
+
+/* Kicker: "01 — Leistungen". The 11px against a 132px display is the contrast. */
+.co-kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 600 11px/1 var(--co-font-body);
+  letter-spacing: var(--co-label-tracking);
+  text-transform: uppercase;
+  color: var(--co-blue);
+}
+.co-kicker::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--co-line);
+  max-width: 120px;
+}
+.co-card--ink .co-kicker { color: var(--co-ice); }
+.co-card--ink .co-kicker::after { background: var(--co-on-dark-divider); }
+
+.co-kicker__num {
+  font-variant-numeric: tabular-nums;
+  /* Cyan measures 2.46:1 on white — below the 4.5:1 AA needs at 11px. Ink on light,
+     cyan only on the ink grounds where it reaches 7.2:1. */
+  color: var(--co-ink);
+}
+.co-card--ink .co-kicker__num { color: var(--co-cyan); }
+
+/* Display type */
+.co-display {
+  font-family: var(--co-font-heading);
+  font-weight: 700;
+  font-size: var(--co-display-size);
+  line-height: var(--co-display-lh);
+  letter-spacing: var(--co-display-tracking);
+  text-wrap: pretty;
+  max-width: 100%;
+}
+
+/* Oversized ghost numeral behind content */
+.co-numeral {
+  font: 700 var(--co-numeral-size) / 0.78 var(--co-font-heading);
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  user-select: none;
+}
+
+.co-rule-x {
+  height: 1px;
+  background: var(--co-line);
+  border: 0;
+}
+.co-card--ink .co-rule-x { background: var(--co-on-dark-divider); }
+
+/* A comfortable reading measure — long-form text should never run the full card. */
+.co-measure { max-width: 62ch; }
+
+/* Meta row: small-caps facts separated by hairlines. */
+.co-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0;
+}
+.co-meta__item {
+  display: grid;
+  gap: 6px;
+  padding: 0 clamp(16px, 2vw, 28px);
+  border-left: var(--co-rule);
+}
+.co-meta__item:first-child { padding-left: 0; border-left: 0; }
+.co-meta__label {
+  font: 600 10px/1 var(--co-font-body);
+  letter-spacing: var(--co-label-tracking);
+  text-transform: uppercase;
+  color: var(--co-blue);
+}
+.co-meta__value {
+  font: 500 15px/1.3 var(--co-font-body);
+  color: var(--co-ink);
+}
+
+/* Fluid asymmetry ------------------------------------------------------- */
+
+/* Percentage flex-basis with wrap gives 7/5 and 8/4 splits that collapse on
+   their own — asymmetry without a single breakpoint (CLAUDE.md "fully fluid"). */
+.co-split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--co-two-col-gap);
+  align-items: flex-start;
+}
+.co-split > .co-split__major { flex: 2 1 min(520px, 100%); min-width: 0; }
+.co-split > .co-split__minor { flex: 1 1 min(300px, 100%); min-width: 0; }
+.co-split--wide > .co-split__major { flex: 3 1 min(600px, 100%); }
+.co-split--wide > .co-split__minor { flex: 1 1 min(280px, 100%); }
+
+/* Motion ---------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .co-reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 620ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition-delay: calc(var(--co-reveal-index, 0) * 70ms);
+  }
+  .co-reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* An underline that sweeps in, rather than a colour swap. */
+.co-link-sweep {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.co-link-sweep:hover,
+.co-link-sweep:focus-visible { background-size: 100% 1px; }
+
+/* Pill CTA with a circular arrow inside it, as on both reference heroes. */
+.co-btn--arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 8px;
+}
+.co-btn__arrow {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--co-radius-pill);
+  background: var(--co-white);
+  color: var(--co-ink);
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.co-btn--onPale .co-btn__arrow,
+.co-btn--quiet .co-btn__arrow {
+  background: var(--co-ink);
+  color: var(--co-white);
+}
+.co-btn--onInk .co-btn__arrow {
+  background: var(--co-ink);
+  color: var(--co-cyan);
+}
+.co-btn--arrow:hover .co-btn__arrow { transform: translateX(3px); }

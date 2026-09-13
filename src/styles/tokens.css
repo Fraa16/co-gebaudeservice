@@ -25,6 +25,36 @@
   --co-glass-pill-bg: rgba(255, 255, 255, 0.75);
   --co-glass-pill-border: rgba(255, 255, 255, 0.90);
 
+  /* Depth. CLAUDE.md rule 2 originally forbade shadows and gradients entirely, which
+     is a large part of why the flat fills read as 2018 flat-design. Relaxed
+     deliberately — kept wide, soft and low-opacity so cards sit above the ground
+     rather than announcing a shadow. */
+  --co-shadow-card: 0 2px 4px rgba(3, 4, 94, 0.03), 0 12px 28px rgba(3, 4, 94, 0.05);
+  --co-shadow-lift: 0 4px 10px rgba(3, 4, 94, 0.05), 0 24px 54px rgba(3, 4, 94, 0.11);
+  --co-shadow-inset-photo: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  /* A tonal shift across ink sections so navy is not a dead slab. */
+  --co-ink-gradient: linear-gradient(157deg, #0A0C6B 0%, #03045E 46%, #02033F 100%);
+  --co-pale-gradient: linear-gradient(152deg, #D9F4FB 0%, #CAF0F8 58%, #BCE9F5 100%);
+
+  /* Fine film grain. Kills the plastic flatness of large solid fills without
+     reading as a texture. Inline SVG so it costs no request. */
+  --co-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+
+  /* Hairlines and editorial rules */
+  --co-rule: 1px solid var(--co-line);
+  --co-rule-ink: 1px solid var(--co-on-dark-divider);
+
+  /* Hero scrim for full-bleed photography: holds the text column legible on the
+     left while the photograph runs clean to the right edge. */
+  --co-hero-scrim: linear-gradient(96deg, rgba(202,240,248,0.97) 0%, rgba(202,240,248,0.92) 26%, rgba(202,240,248,0.55) 48%, rgba(202,240,248,0.08) 72%, rgba(202,240,248,0) 100%);
+  --co-hero-scrim-v: linear-gradient(180deg, rgba(3,4,94,0) 40%, rgba(3,4,94,0.10) 100%);
+
+  /* Glass panels floating over photography, as on the reference heroes. */
+  --co-glass-bg: rgba(255, 255, 255, 0.82);
+  --co-glass-border: rgba(255, 255, 255, 0.94);
+  --co-glass-blur: saturate(150%) blur(14px);
+
   /* Overlays */
   --co-hero-photo-fade: linear-gradient(90deg, #CAF0F8 0%, rgba(202,240,248,.55) 34%, rgba(202,240,248,0) 66%);
   --co-card-scrim: linear-gradient(180deg, rgba(3,4,94,.45) 0%, rgba(3,4,94,0) 34%, rgba(3,4,94,0) 52%, rgba(3,4,94,.78) 100%);
@@ -33,12 +63,21 @@
   --co-font-heading: 'Archivo Variable', Archivo, system-ui, sans-serif;
   --co-font-body: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif;
 
-  --co-h1-size: clamp(32px, 4.6vw, 54px);
-  --co-h2-size: clamp(27px, 3.4vw, 38px);
+  /* Scale contrast is the voice. The original topped out at 54px against 17px body
+     — a ratio of 3.2:1, which reads as a template. This runs ~8:1. */
+  --co-display-size: clamp(38px, 5.4vw, 80px);
+  --co-display-lh: 0.96;
+  --co-display-tracking: -0.04em;
+
+  --co-h1-size: clamp(34px, 4.6vw, 62px);
+  --co-h2-size: clamp(28px, 3.6vw, 46px);
   --co-h3-card-size: clamp(19px, 2.1vw, 24px);
-  --co-h1-tracking: -0.035em;
-  --co-h2-tracking: -0.03em;
+  --co-h1-tracking: -0.04em;
+  --co-h2-tracking: -0.035em;
   --co-h3-tracking: -0.025em;
+
+  /* Oversized index numerals sitting behind content. */
+  --co-numeral-size: clamp(72px, 12vw, 190px);
 
   --co-body-size: 17px;
   --co-body-lh: 1.6;

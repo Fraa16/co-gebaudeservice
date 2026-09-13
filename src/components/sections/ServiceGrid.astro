@@ -1,27 +1,107 @@
 ---
+/** A bento mosaic, not an even grid: the first service is a feature tile carrying
+ *  the photograph and spanning two columns, the rest vary in tone and height. This
+ *  is the single biggest difference between the reference sites and a template. */
 import ServiceCard from './ServiceCard.astro';
 import ServicesCtaCard from './ServicesCtaCard.astro';
+import Button from '../ui/Button.astro';
 import type { Service } from '../../data/services';
+
+type LinkResolver = (service: Service) => string | undefined;
 
 interface Props {
   services: Service[];
-  showCta?: boolean;
-  /** Draft services render as unlinked tiles until their copy is approved. */
-  linkTo?: (service: Service) => string | undefined;
+  linkTo?: LinkResolver;
 }
+const { services, linkTo } = Astro.props;
 
-const { services, showCta = true, linkTo } = Astro.props;
+/** Tile recipe by position. Varied deliberately — never a repeating pattern. */
+const RECIPE = [
+  { size: 'feature', tone: 'photo', span: 'wide' },
+  { size: 'standard', tone: 'ink', span: 'narrow' },
+  { size: 'standard', tone: 'blue', span: 'narrow' },
+  { size: 'tall', tone: 'pale', span: 'narrow' },
+  { size: 'standard', tone: 'blue', span: 'wide' },
+] as const;
 ---
 
-<section class="service-grid" id="leistungen">
-  {services.map((service) => <ServiceCard service={service} href={linkTo?.(service)} />)}
-  {showCta && <ServicesCtaCard />}
+<section class="leistungen" id="leistungen">
+  <header class="leistungen__head">
+    <div class="leistungen__head-text co-reveal">
+      <p class="co-kicker"><span class="co-kicker__num">01</span> Leistungen</p>
+      <h2 class="leistungen__title">Alles rund ums Objekt, aus einer Hand.</h2>
+    </div>
+    <Button href="/leistungen" variant="quiet" arrow class="co-reveal">Alle acht Leistungen</Button>
+  </header>
+
+  <div class="leistungen__grid">
+    {
+      services.map((service: Service, i: number) => {
+        const recipe = RECIPE[i % RECIPE.length]!;
+        return (
+          <div class:list={['leistungen__cell', `is-${recipe.span}`, 'co-reveal']}>
+            <ServiceCard
+              service={service}
+              href={linkTo?.(service)}
+              size={recipe.size}
+              tone={recipe.tone}
+              index={i}
+            />
+          </div>
+        );
+      })
+    }
+    <div class="leistungen__cell is-narrow co-reveal">
+      <ServicesCtaCard />
+    </div>
+  </div>
 </section>
 
 <style>
-  .service-grid {
+  .leistungen {
     display: grid;
-    grid-template-columns: var(--co-grid-services);
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(22px, 3vw, 40px);
+  }
+  /* Heading left, CTA right on one baseline. */
+  .leistungen__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 clamp(4px, 1vw, 12px);
+  }
+  .leistungen__head-text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    flex: 1 1 min(520px, 100%);
+    min-width: 0;
+    max-width: min(46ch, 100%);
+  }
+  .leistungen__title {
+    font: 700 var(--co-h2-size) / 1.02 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+  }
+
+  /* Fluid mosaic: cells claim different widths but still wrap on their own, so
+     the asymmetry needs no breakpoint. */
+  .leistungen__grid {
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--co-card-gap);
   }
+  .leistungen__cell {
+    display: flex;
+    min-width: 0;
+    /* The cell must carry the height itself: a min-height on the tile alone is
+       resolved against the flex line and collapses to the row height. */
+    align-items: stretch;
+  }
+  .is-wide { min-height: clamp(340px, 32vw, 470px); }
+  .is-narrow { min-height: clamp(260px, 24vw, 330px); }
+  .leistungen__cell > :global(*) { flex: 1 1 auto; }
+  .is-wide { flex: 2 1 min(620px, 100%); }
+  .is-narrow { flex: 1 1 min(310px, 100%); }
 </style>

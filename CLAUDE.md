@@ -45,10 +45,22 @@ weight, cyan `#00B4D8` is the accent, pale `#CAF0F8` is the light ground. Archiv
 headings with tight negative tracking, Source Sans 3 for everything else. Fully fluid: no
 media queries, no max-width container — `auto-fit` grids and `clamp()` do the work.
 
+Sections are **not** one repeated card. The page alternates archetypes: a full-bleed
+photographic hero with panels floating over its corners, a stat band divided by
+hairlines, a bento mosaic of differently-sized tiles, editorial splits with the heading
+in one column and running text in the other, and an ink section with oversized ghost
+numerals. Scale contrast carries the voice — display type runs to 80px against 11px
+kickers, roughly 8:1.
+
 ## Rules
 
 1. **Radii are the identity.** Use the token tiers. Never mix in a stray 8px or 4px radius.
-2. **No shadows, no gradients** except the two photo overlays defined in `tokens.css`.
+2. **Depth is tokenised, never literal.** Shadows and gradients were originally
+   forbidden outright; that flatness was a large part of why the site read as a
+   template, so the rule was relaxed in September 2026. Use only
+   `--co-shadow-card` / `--co-shadow-lift`, `--co-ink-gradient` / `--co-pale-gradient`,
+   `--co-grain` and the photo overlays. Never a literal shadow or gradient in a
+   component — `npm run lint:styles` fails the build on one.
 3. **Full-opacity type only.** Body copy is `#4C6B85` on light, `#CAF0F8`/`#FFFFFF` on dark,
    `#0B4A6F` on the pale hero ground. Never alpha-fade text to make it "softer".
 4. **Copy flows from data, never from markup.** `src/data/content.json` is the baseline
@@ -57,6 +69,11 @@ media queries, no max-width container — `auto-fit` grids and `clamp()` do the 
    listed in `CONTENT-REVIEW.md` for sign-off. The tonality rule holds regardless: no
    added marketing language, no superlatives, no exclamation marks, no emoji.
 5. **Flex/grid with `gap`** for every group of siblings — never margin-spaced inline elements.
+   Two rules that keep this fluid without breakpoints, both learned the hard way:
+   a flex-basis must be `min(<px>, 100%)`, never a percentage (a percentage collapses
+   on narrow screens and children punch out of the page); and every `display: grid`
+   holding text needs `grid-template-columns: minmax(0, 1fr)`, because an `auto` track
+   floors at min-content and one German compound then widens the whole page.
 6. **Keep `text-wrap: pretty`** on headings and paragraphs.
 7. **Form inputs stay at 16px** font-size (prevents iOS zoom-on-focus).
 8. Visible `:focus-visible` ring on every interactive element (the prototype sets

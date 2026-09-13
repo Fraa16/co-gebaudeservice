@@ -1,41 +1,93 @@
 ---
-import SectionHeader from '../ui/SectionHeader.astro';
+import Button from '../ui/Button.astro';
 import StepCard from './StepCard.astro';
 import { processContent } from '../../data/content';
 import { resolveHref } from '../../data/routes';
 
 interface Props {
   currentPath?: string;
+  kicker?: string;
 }
-const { currentPath = '' } = Astro.props;
+const { currentPath = '', kicker = '03' } = Astro.props;
 ---
 
-<section class="co-card co-card--ink process" id="ablauf">
-  <SectionHeader
-    pill={processContent.pill}
-    heading={processContent.h2}
-    lead={processContent.lead}
-    layout="split"
-    cta={{
-      label: processContent.cta.label,
-      href: resolveHref(processContent.cta.href, currentPath),
-      variant: 'onInk',
-    }}
-    class="process__header"
-  />
+<section class="co-card co-card--ink co-grain process" id="ablauf">
+  <header class="process__head">
+    <div class="process__head-text co-reveal">
+      <p class="co-kicker"><span class="co-kicker__num">{kicker}</span> {processContent.pill}</p>
+      <h2 class="process__title">{processContent.h2}</h2>
+    </div>
+    <div class="process__head-aside co-reveal">
+      <p class="process__lead">{processContent.lead}</p>
+      <Button
+        href={resolveHref(processContent.cta.href, currentPath)}
+        variant="onInk"
+        arrow
+      >
+        {processContent.cta.label}
+      </Button>
+    </div>
+  </header>
 
   <div class="process__steps">
-    {processContent.steps.map((step) => <StepCard {...step} />)}
+    {
+      processContent.steps.map((step, i) => (
+        <div class="process__step co-reveal">
+          <StepCard {...step} offset={i % 2 === 1} />
+        </div>
+      ))
+    }
   </div>
 </section>
 
 <style>
-  .process__header {
-    margin-bottom: clamp(24px, 3vw, 38px);
+  .process {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(32px, 4vw, 56px);
+    padding-bottom: clamp(56px, 6vw, 92px);
+  }
+  /* Big heading left, running text + CTA right — the reference "Meet USD Halo."
+     two-column split. */
+  .process__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .process__head-text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    flex: 1 1 min(520px, 100%);
+    min-width: 0;
+  }
+  .process__title {
+    font: 700 var(--co-h2-size) / 1.02 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+  }
+  .process__head-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    flex: 1 1 min(340px, 100%);
+    min-width: 0;
+  }
+  .process__lead {
+    font: 400 clamp(16px, 1.4vw, 19px) / 1.55 var(--co-font-body);
+    color: var(--co-ice);
   }
   .process__steps {
-    display: grid;
-    grid-template-columns: var(--co-grid-steps);
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--co-grid-gap);
   }
+  .process__step {
+    flex: 1 1 min(230px, 100%);
+    min-width: 0;
+    display: flex;
+  }
+  .process__step > :global(*) { flex: 1 1 auto; }
 </style>

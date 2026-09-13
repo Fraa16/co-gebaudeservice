@@ -61,3 +61,37 @@ Do not "fix" these — each is a decision with a reason.
    measures 4.02:1 there — under AA.
 8. **The consent line has a checkbox.** A notice sentence is not consent under
    Art. 4 Nr. 11 DSGVO.
+
+## Art direction, September 2026
+
+The first production build was faithful to the original tokens and read as a bought
+template: eleven sections, one archetype (`.co-card` with three fills), a 3.2:1 type
+ratio, perfect `1fr 1fr` symmetry, no depth, no motion. The client's references
+(Hirael "RIVR" and "USD Halo") share a skeleton this design already had — rounded
+containers inset from the viewport edge on a light ground — but fill it with varied
+section archetypes rather than one repeated card.
+
+What changed, and the original values:
+
+| | was | now |
+|---|---|---|
+| display tier | none | `clamp(38px, 5.4vw, 80px)` |
+| `h1` | `clamp(32px, 4.6vw, 54px)` | `clamp(34px, 4.6vw, 62px)` |
+| `h2` | `clamp(27px, 3.4vw, 38px)` | `clamp(28px, 3.6vw, 46px)` |
+| shadows / gradients | forbidden (rule 2) | tokenised depth, ink and pale gradients, film grain |
+| sections | one card archetype | hero, stat band, bento mosaic, editorial splits, ghost-numeral steps |
+| motion | none | scroll reveals, sticky glass header, ~1 kB |
+
+Devices taken from the references: full-bleed photography inside the container, panels
+floating over the hero's bottom corners, a stat band with hairline dividers, a bento
+mosaic mixing light and dark tiles at different sizes, pill CTAs with a circular arrow,
+card content pushed apart (heading top, body bottom), and heading-left / CTA-right on a
+shared baseline.
+
+Two layout rules came out of this pass and are now in CLAUDE.md rule 5, because both
+broke the page at 320px before they were understood: flex-basis must be `min(<px>, 100%)`
+rather than a percentage, and every text-bearing `display: grid` needs
+`grid-template-columns: minmax(0, 1fr)`.
+
+**Still outstanding:** six of the seven photographs. The bento's feature tile is built to
+carry one and currently falls back to a brand panel, so the mosaic's centrepiece is empty.

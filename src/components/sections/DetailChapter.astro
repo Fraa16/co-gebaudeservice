@@ -19,12 +19,19 @@ const Heading = level === 1 ? 'h1' : 'h2';
 ---
 
 <section class="co-card co-card--white detail" id={id}>
-  <div class="detail__grid">
-    <div class="detail__text">
-      <PillLabel text={detail.pill} />
+  <!-- Heading large in a left column, running text right — the references' "Meet USD
+       Halo." split, instead of a symmetric 1fr 1fr. -->
+  <div class="detail__head">
+    <div class="detail__head-main">
+      <p class="co-kicker"><span class="co-kicker__num">02</span> {detail.pill}</p>
       <Heading class:list={['detail__heading', level === 1 && 'is-h1']}>{detail.h2}</Heading>
+    </div>
+    <p class="detail__lede">{paragraphs[0]}</p>
+  </div>
 
-      {paragraphs.map((p) => <p class="detail__para">{p}</p>)}
+  <div class:list={['detail__grid', condensed && 'is-condensed']}>
+    <div class="detail__text">
+      {paragraphs.slice(1).map((p) => <p class="detail__para">{p}</p>)}
 
       <div class="detail__actions">
         {
@@ -58,18 +65,52 @@ const Heading = level === 1 ? 'h1' : 'h2';
 </section>
 
 <style>
-  .detail__grid {
+  .detail {
     display: grid;
-    grid-template-columns: var(--co-grid-two-col);
-    gap: var(--co-two-col-gap);
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(30px, 4vw, 54px);
   }
+  .detail__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: flex-end;
+  }
+  .detail__head-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    flex: 1 1 min(520px, 100%);
+    min-width: 0;
+  }
+  .detail__lede {
+    flex: 1 1 min(400px, 100%);
+    min-width: 0;
+    font: 400 clamp(16px, 1.35vw, 19px) / 1.55 var(--co-font-body);
+    color: var(--co-muted);
+  }
+  .detail__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--co-two-col-gap);
+    align-items: flex-start;
+  }
+  .detail__text { flex: 1 1 min(460px, 100%); min-width: 0; }
+  .detail__aside { flex: 1 1 min(440px, 100%); min-width: 0; }
+
+  /* Condensed (home): the body paragraphs live in the lede above, so the text column
+     holds only the CTAs. Let it sit on one row with the photo taking the rest, rather
+     than reserving a half-width column that renders as a void. */
+  .is-condensed { align-items: center; }
+  .is-condensed .detail__text { flex: 0 1 auto; }
+  .is-condensed .detail__aside { flex: 1 1 min(560px, 100%); }
   .detail__text {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
+  .detail__para:first-of-type { margin-top: 0; }
   .detail__heading {
     font: 700 var(--co-h2-size) / 1.1 var(--co-font-heading);
     letter-spacing: var(--co-h2-tracking);
@@ -90,14 +131,12 @@ const Heading = level === 1 ? 'h1' : 'h2';
     gap: 10px;
     margin-top: 12px;
   }
-  .detail__aside {
-    display: grid;
-    gap: var(--co-grid-gap);
-  }
+  .detail__aside { display: grid; gap: var(--co-grid-gap); }
   .detail__photo {
     position: relative;
     overflow: hidden;
-    height: clamp(200px, 20vw, 260px);
+    height: clamp(240px, 26vw, 360px);
     border-radius: var(--co-radius-photo);
+    box-shadow: var(--co-shadow-card);
   }
 </style>
