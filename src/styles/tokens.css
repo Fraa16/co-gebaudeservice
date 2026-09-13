@@ -22,6 +22,8 @@
   --co-on-dark-pill-bg: rgba(144, 224, 239, 0.16);
   --co-on-dark-divider: rgba(144, 224, 239, 0.22);
   --co-info-divider: rgba(3, 4, 94, 0.14);
+  --co-glass-pill-bg: rgba(255, 255, 255, 0.75);
+  --co-glass-pill-border: rgba(255, 255, 255, 0.90);
 
   /* Overlays */
   --co-hero-photo-fade: linear-gradient(90deg, #CAF0F8 0%, rgba(202,240,248,.55) 34%, rgba(202,240,248,0) 66%);

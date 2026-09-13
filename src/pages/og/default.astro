@@ -1,0 +1,71 @@
+---
+/** Source for public/og/default.png. Rendered once with the real components, fonts and
+ *  tokens, then screenshotted and committed. Kept in the repo as the regeneration
+ *  source; excluded from the sitemap and noindex. */
+import Logo from '../../components/ui/Logo.astro';
+import { hero } from '../../data/content';
+import { company } from '../../data/company';
+import '../../styles/global.css';
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>OG</title>
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <div class="og">
+      <svg class="og__swoosh" viewBox="0 0 1200 300" aria-hidden="true" preserveAspectRatio="none">
+        <path
+          d="M-60 240 C 260 90, 560 300, 900 120 C 1050 40, 1120 110, 1260 60"
+          fill="none"
+          stroke="var(--co-cyan)"
+          stroke-width="46"
+          stroke-linecap="round"></path>
+      </svg>
+      <Logo size={64} />
+      <h1 class="og__title">{hero.h1}</h1>
+      <p class="og__meta">{company.areaLong}</p>
+    </div>
+  </body>
+</html>
+
+<style>
+  .og {
+    position: relative;
+    overflow: hidden;
+    width: 1200px;
+    height: 630px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 26px;
+    padding: 84px;
+    background: var(--co-pale);
+  }
+  .og__title {
+    position: relative;
+    font: 700 72px/1.04 var(--co-font-heading);
+    letter-spacing: var(--co-h1-tracking);
+    color: var(--co-ink);
+    max-width: 900px;
+  }
+  .og__meta {
+    position: relative;
+    font: 600 22px/1 var(--co-font-body);
+    letter-spacing: var(--co-label-tracking);
+    text-transform: uppercase;
+    color: var(--co-blue);
+  }
+  .og__swoosh {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -40px;
+    width: 100%;
+    height: 300px;
+    opacity: 0.22;
+  }
+</style>

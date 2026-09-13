@@ -1,0 +1,57 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import DraftNote from '../components/ui/DraftNote.astro';
+import { buildGraph } from '../lib/jsonld';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    pill: string;
+    heading: string;
+    path: string;
+    updated: string;
+  };
+}
+
+const { title, description, pill, heading, path, updated } = Astro.props.frontmatter;
+
+const jsonLd = buildGraph({
+  path,
+  title,
+  description,
+  breadcrumbs: [
+    { name: 'Start', path: '/' },
+    { name: heading, path },
+  ],
+});
+---
+
+<BaseLayout title={title} description={description} path={path} jsonLd={jsonLd} noindex>
+  <PageHero pill={pill} heading={heading} />
+
+  <section class="co-card co-card--white legal">
+    <DraftNote what="diese Seite ist ein Entwurf und muss juristisch geprüft werden" />
+    <div class="co-prose legal__body">
+      <slot />
+    </div>
+    <p class="legal__updated">Stand: {updated}</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    display: grid;
+    gap: 24px;
+  }
+  .legal__body {
+    max-width: 760px;
+  }
+  .legal__updated {
+    font: 400 13px/1.45 var(--co-font-body);
+    color: var(--co-muted);
+    border-top: 1px solid var(--co-line);
+    padding-top: 16px;
+  }
+</style>
