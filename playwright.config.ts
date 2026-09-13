@@ -15,9 +15,17 @@ export default defineConfig({
   webServer: process.env.BASE_URL
     ? undefined
     : {
+        // `astro preview` serves dist/ with the same routing as production.
+        //
+        // In an agent sandbox Astro auto-detects the environment and daemonises the
+        // preview server, so the foreground process exits at once and Playwright
+        // reports "webServer exited early". reuseExistingServer is therefore always
+        // on: start the server yourself there
+        // (`npx astro preview --port 4321 --background`) and this picks it up. A CI
+        // runner has nothing to reuse, so it still starts its own.
         command: 'npx astro preview --port 4321',
         url: 'http://localhost:4321',
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: true,
         timeout: 60_000,
       },
   projects: [
