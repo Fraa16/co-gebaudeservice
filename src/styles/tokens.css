@@ -28,8 +28,8 @@
   --co-card-scrim: linear-gradient(180deg, rgba(3,4,94,.45) 0%, rgba(3,4,94,0) 34%, rgba(3,4,94,0) 52%, rgba(3,4,94,.78) 100%);
 
   /* Type */
-  --co-font-heading: Archivo, sans-serif;
-  --co-font-body: "Source Sans 3", system-ui, sans-serif;
+  --co-font-heading: 'Archivo Variable', Archivo, system-ui, sans-serif;
+  --co-font-body: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif;
 
   --co-h1-size: clamp(32px, 4.6vw, 54px);
   --co-h2-size: clamp(27px, 3.4vw, 38px);
@@ -54,6 +54,7 @@
   --co-radius-contact-row: 18px;
   --co-radius-input: 14px;
   --co-radius-logo: 12px;
+  --co-radius-header: 26px; /* = radius-l; the prototype's 28px is tweak-layer dead CSS */
   --co-radius-pill: 999px;
 
   /* Space */
@@ -97,9 +98,16 @@ p { text-wrap: pretty; margin: 0; }
 a { color: var(--co-blue); text-decoration: none; }
 a:hover { color: var(--co-ink); }
 
+/* Focus ring. Cyan on white measures 2.46:1 — below the 3:1 SC 1.4.11 requires for
+   non-text UI — so light grounds get the ink ring (17.75:1) and dark grounds keep
+   cyan (7.2:1). See CLAUDE.md rule 8. */
 :focus-visible {
-  outline: 2px solid var(--co-cyan);
+  outline: 2px solid var(--co-ink);
   outline-offset: 2px;
+}
+.co-card--ink :focus-visible,
+.co-card--blue :focus-visible {
+  outline-color: var(--co-cyan);
 }
 
 /* Page shell: cards on a ground, one gutter between them --------------- */
