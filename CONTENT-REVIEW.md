@@ -90,16 +90,20 @@ erfunden:
 
 `src/components/sections/ContactForm.astro`
 
-Der Satz aus `content.json` („Mit dem Absenden stimmen Sie der Verarbeitung Ihrer
-Angaben zu.") steht weiterhin neben dem Absenden-Button. Zusätzlich gibt es eine
-**Checkbox**, weil eine Einwilligung nach Art. 4 Nr. 11 DSGVO eine aktive Handlung sein
-muss und ein Hinweissatz das nicht leistet:
+Eine Einwilligung muss nach Art. 4 Nr. 11 DSGVO eine **aktive Handlung** sein; ein
+Hinweissatz leistet das nicht. Deshalb gibt es jetzt eine Checkbox:
 
 > Ich stimme der Verarbeitung meiner Angaben zur Bearbeitung der Anfrage zu. Hinweise
 > dazu in der Datenschutzerklärung.
 
-Der frühere Entwurf enthält eine zweckgebundene und damit juristisch bessere Variante
-des Hinweissatzes — **Vorschlag, den Satz in `content.json` zu ersetzen:**
+**Der Satz aus `content.json`** („Mit dem Absenden stimmen Sie der Verarbeitung Ihrer
+Angaben zu.") stand im Entwurf neben dem Absenden-Button. Er sagt jetzt dasselbe wie
+das Checkbox-Label unmittelbar darüber und wurde deshalb entfernt; an seiner Stelle
+steht „Pflichtfelder sind mit * gekennzeichnet." **Bitte bestätigen** — oder den Satz
+zurückholen, wenn er gewünscht ist.
+
+Der frühere Entwurf enthält übrigens eine zweckgebundene und damit juristisch bessere
+Variante desselben Hinweises, falls er doch bleiben soll:
 
 > Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zur Bearbeitung der
 > Anfrage zu.

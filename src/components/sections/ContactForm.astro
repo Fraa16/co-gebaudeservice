@@ -93,7 +93,10 @@ const message = field('message');
   <input type="hidden" name="renderedAt" data-rendered-at value="" />
 
   <div class="contact-form__footer">
-    <p class="contact-form__note">{contact.form.consentNote}</p>
+    <!-- content.json's consentNote said the same thing as the checkbox label directly
+         above it. The checkbox is the one that carries legal weight, so the note is
+         not repeated here. Recorded in CONTENT-REVIEW.md §5. -->
+    <p class="contact-form__note">Pflichtfelder sind mit * gekennzeichnet.</p>
     <button class="co-btn co-btn--primary" type="submit">{submitLabel}</button>
   </div>
 
