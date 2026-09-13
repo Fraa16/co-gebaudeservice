@@ -1,0 +1,63 @@
+---
+import { allServices } from '../../data/services';
+import { company } from '../../data/company';
+import { detail } from '../../data/content';
+
+/** The reference stat band: large figures separated by hairlines. Every value here
+ *  is factual — drawn from content.json and the service list — rather than an
+ *  invented metric. The CI tonality rule forbids claims we cannot stand behind. */
+const stats = [
+  { value: String(allServices.length), label: 'Leistungsbereiche' },
+  { value: detail.infoCard.facts[0]?.value ?? '', label: 'Turnus nach Plan' },
+  { value: company.areaServed[1] ?? '', label: 'Einsatzgebiet' },
+  { value: 'Zwei Werktage', label: 'Rückmeldung auf Anfragen' },
+];
+---
+
+<section class="co-card--xl stat-band">
+  {
+    stats.map((stat) => (
+      <div class="stat-band__item co-reveal">
+        <p class="stat-band__value">{stat.value}</p>
+        <p class="stat-band__label">{stat.label}</p>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .stat-band {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--co-white);
+    padding: clamp(26px, 3.2vw, 46px) clamp(22px, 2.6vw, 40px);
+    gap: clamp(20px, 2vw, 28px) 0;
+  }
+  .stat-band__item {
+    flex: 1 1 min(210px, 100%);
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    align-content: start;
+    padding: 0 clamp(16px, 2vw, 34px);
+    border-left: var(--co-rule);
+  }
+  .stat-band__item:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .stat-band__value {
+    /* Two rows' worth, so a value that wraps does not drop its label below the
+       others' baseline. */
+    min-height: calc(2 * 1.05em);
+    font: 700 clamp(22px, 2.2vw, 34px) / 1.05 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    color: var(--co-ink);
+    text-wrap: balance;
+  }
+  .stat-band__label {
+    font: 400 14px/1.4 var(--co-font-body);
+    color: var(--co-muted);
+  }
+</style>

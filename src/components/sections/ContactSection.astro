@@ -1,5 +1,4 @@
 ---
-import SectionHeader from '../ui/SectionHeader.astro';
 import ContactRows from './ContactRows.astro';
 import ContactForm from './ContactForm.astro';
 import { contact } from '../../data/content';
@@ -14,7 +13,10 @@ const { level = 2, id = 'kontakt' } = Astro.props;
 <section class="co-card co-card--white contact-section" id={id}>
   <div class="contact-section__grid">
     <div class="contact-section__intro">
-      <SectionHeader pill={contact.pill} heading={contact.h2} level={level} />
+      <p class="co-kicker"><span class="co-kicker__num">04</span> {contact.pill}</p>
+      {level === 1
+        ? <h1 class="co-display contact-section__heading">{contact.h2}</h1>
+        : <h2 class="co-display contact-section__heading">{contact.h2}</h2>}
       <p class="contact-section__text">{contact.text}</p>
       <ContactRows />
       <slot name="extras" />
@@ -26,14 +28,25 @@ const { level = 2, id = 'kontakt' } = Astro.props;
 
 <style>
   .contact-section__grid {
-    display: grid;
-    grid-template-columns: var(--co-grid-two-col);
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--co-two-col-gap);
-    align-items: start;
+    align-items: flex-start;
   }
   .contact-section__intro {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
+    flex: 1 1 min(460px, 100%);
+    min-width: 0;
+  }
+  .contact-section__heading {
+    font-size: clamp(30px, 3.4vw, 52px);
+    max-width: 16ch;
+  }
+  .contact-section__grid > :global(form) {
+    flex: 1 1 min(440px, 100%);
+    min-width: 0;
   }
   .contact-section__text {
     font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);

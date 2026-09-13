@@ -3,35 +3,52 @@ interface Props {
   num: string;
   title: string;
   text: string;
+  offset?: boolean;
 }
-const { num, title, text } = Astro.props;
+const { num, title, text, offset = false } = Astro.props;
 ---
 
-<div class="step-card">
-  <p class="step-card__num">{num}</p>
-  <p class="step-card__title">{title}</p>
-  <p class="step-card__text">{text}</p>
+<div class:list={['step', offset && 'is-offset']}>
+  <span class="co-numeral step__ghost" aria-hidden="true">{num}</span>
+  <div class="step__content">
+    <p class="step__title">{title}</p>
+    <p class="step__text">{text}</p>
+  </div>
 </div>
 
 <style>
-  .step-card {
+  .step {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(220px, 20vw, 290px);
     background: var(--co-on-dark-card-bg);
     border: 1px solid var(--co-on-dark-card-border);
     border-radius: var(--co-radius-step);
-    padding: clamp(22px, 2.4vw, 28px);
+    padding: clamp(22px, 2.4vw, 30px);
   }
-  .step-card__num {
-    font: 700 30px/1 var(--co-font-heading);
-    letter-spacing: var(--co-h2-tracking);
-    color: var(--co-cyan);
-    margin-bottom: 18px;
+  /* Stagger: every other step drops, so the row is not a flat band. */
+  .step.is-offset { transform: translateY(clamp(14px, 2.4vw, 34px)); }
+
+  .step__ghost {
+    position: absolute;
+    top: clamp(-12px, -1vw, -4px);
+    right: clamp(4px, 1vw, 14px);
+    color: var(--co-ice);
+    opacity: 0.14;
   }
-  .step-card__title {
-    font: 600 18px/1.25 var(--co-font-heading);
+  .step__content {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+  }
+  .step__title {
+    font: 600 clamp(18px, 1.8vw, 22px) / 1.2 var(--co-font-heading);
     letter-spacing: -0.015em;
-    margin-bottom: 9px;
   }
-  .step-card__text {
+  .step__text {
     font: 400 15px/1.5 var(--co-font-body);
     color: var(--co-pale);
   }

@@ -11,7 +11,7 @@ const isActive = (href: string) =>
   href === '/' ? currentPath === '/' : currentPath.startsWith(href);
 ---
 
-<header class="co-card--header site-header">
+<header class="co-card--header site-header" data-site-header>
   <Logo href="/" size={38} />
 
   <nav class="site-header__nav" aria-label="Hauptnavigation">
@@ -33,13 +33,23 @@ const isActive = (href: string) =>
   /* flex-wrap is the whole mobile story: the pills wrap to a second row inside the
      same card. No breakpoints, no disclosure menu — see CLAUDE.md "fully fluid". */
   .site-header {
+    position: sticky;
+    top: var(--co-page-padding);
+    z-index: 20;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 14px;
     padding: 14px 16px 14px 20px;
+    background: var(--co-glass-bg);
+    border: 1px solid var(--co-glass-border);
+    backdrop-filter: var(--co-glass-blur);
+    transition: box-shadow 300ms ease, background-color 300ms ease;
+  }
+  .site-header:global(.is-stuck) {
     background: var(--co-white);
+    box-shadow: var(--co-shadow-card);
   }
   .site-header__nav {
     display: flex;
