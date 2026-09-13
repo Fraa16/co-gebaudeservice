@@ -10,8 +10,16 @@ import { readFileSync } from 'node:fs';
 const css = readFileSync('src/styles/tokens.css', 'utf8');
 const spec = JSON.parse(readFileSync('design/tokens.json', 'utf8'));
 
+const GRID_REASON =
+  'Track minimums are wrapped in min(…, 100%): the bare minimum exceeds the viewport ' +
+  'below ~330px and scrolls the page sideways. Same behaviour wherever the minimum fits.';
+
 /** Deliberate differences, each with the reason it exists. */
 const DEVIATIONS = {
+  '--co-grid-services': GRID_REASON,
+  '--co-grid-two-col': GRID_REASON,
+  '--co-grid-steps': GRID_REASON,
+  '--co-grid-field-pair': GRID_REASON,
   '--co-font-heading':
     "Fontsource registers the family as 'Archivo Variable'; the bare name never matches.",
   '--co-font-body':

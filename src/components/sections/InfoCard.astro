@@ -41,7 +41,9 @@ const { label, items, facts } = Astro.props;
     font: 600 11px/1 var(--co-font-body);
     letter-spacing: var(--co-label-tracking);
     text-transform: uppercase;
-    color: var(--co-blue);
+    /* --co-blue on --co-pale measures 4.02:1, under AA. Rule 3 assigns
+       --co-deep-text to the pale ground; at 7.8:1 it passes. */
+    color: var(--co-deep-text);
     margin-bottom: 20px;
   }
   .info-card__list {
@@ -74,7 +76,7 @@ const { label, items, facts } = Astro.props;
     font: 600 11px/1 var(--co-font-body);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--co-blue);
+    color: var(--co-deep-text);
     margin-bottom: 5px;
   }
   .info-card__fact-value {

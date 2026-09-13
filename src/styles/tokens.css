@@ -78,10 +78,13 @@
   --co-input-padding: 13px 16px;
 
   /* Grids */
-  --co-grid-services: repeat(auto-fit, minmax(230px, 1fr));
-  --co-grid-two-col: repeat(auto-fit, minmax(290px, 1fr));
-  --co-grid-steps: repeat(auto-fit, minmax(215px, 1fr));
-  --co-grid-field-pair: repeat(auto-fit, minmax(150px, 1fr));
+  /* min(…, 100%) wraps every track minimum from design/tokens.json: below ~330px the
+     bare minimum exceeds the available width and the page scrolls sideways. Identical
+     behaviour at every width where the minimum fits. Documented in check-tokens.mjs. */
+  --co-grid-services: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  --co-grid-two-col: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+  --co-grid-steps: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
+  --co-grid-field-pair: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
 }
 
 /* Base ---------------------------------------------------------------- */
@@ -116,6 +119,10 @@ a:hover { color: var(--co-ink); }
 
 .co-page {
   display: grid;
+  /* minmax(0, 1fr) rather than the implicit `auto`: an auto track floors at the
+     widest child's min-content, so one long German compound stretched the whole
+     page. This lets children be clamped to the viewport instead. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--co-card-gap);
   padding: var(--co-page-padding);
 }

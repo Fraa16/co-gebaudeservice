@@ -1,7 +1,7 @@
 ---
 layout: ../layouts/LegalLayout.astro
 title: Impressum
-description: Anbieterkennzeichnung nach § 5 DDG für CO Gebäudeservice, Nagold.
+description: Anbieterkennzeichnung nach § 5 DDG für CO Gebäudeservice, Oguz Cakir, Schietinger Str. 28 in 72202 Nagold — Kontaktdaten und rechtliche Hinweise.
 pill: Rechtliches
 heading: Impressum
 path: /impressum

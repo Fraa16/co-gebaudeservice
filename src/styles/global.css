@@ -27,6 +27,15 @@ body {
 img, svg, picture, video { display: block; max-width: 100%; }
 img { height: auto; }
 
+/* German compounds ("Datenschutzerklärung", "Treppenhausreinigung") are longer than a
+   320px viewport at the h1 clamp floor. Breaking as a last resort keeps the page from
+   scrolling sideways without introducing a breakpoint. */
+h1, h2, h3, p, li, a, span, div { overflow-wrap: break-word; }
+h1, h2, h3, p { max-width: 100%; }
+
+/* Hyphenate running prose properly rather than breaking mid-word. */
+p, li { hyphens: auto; }
+
 ul, ol { list-style: none; margin: 0; padding: 0; }
 
 button, input, textarea, select { font: inherit; color: inherit; }
@@ -74,8 +83,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 .co-card--header { border-radius: var(--co-radius-header); }
 
-/* Text-heavy service sections need a wider column than the photo cards. */
-:root { --co-grid-service-sections: repeat(auto-fit, minmax(320px, 1fr)); }
+/* Text-heavy service sections need a wider column than the photo cards. The min()
+   keeps the track from exceeding the viewport on a 320px screen. */
+:root { --co-grid-service-sections: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
 
 /* Pills, buttons, nav -------------------------------------------------- */
 
@@ -151,3 +161,10 @@ button, input, textarea, select { font: inherit; color: inherit; }
   background: var(--co-blue);
 }
 .co-prose strong { color: var(--co-ink); font-weight: 600; }
+
+/* A link inside running text must not rely on colour alone (WCAG 1.4.1). */
+.co-prose a,
+.contact-form__consent-text a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

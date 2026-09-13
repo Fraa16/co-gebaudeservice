@@ -51,12 +51,6 @@ if (form) {
     const data = new FormData(form);
     const raw = (key: string) => String(data.get(key) ?? '');
 
-    if (looksLikeSpam({ website: raw('website'), renderedAt: raw('renderedAt') })) {
-      // Fail quietly — do not tell a bot which trap it hit.
-      successPanel?.removeAttribute('hidden');
-      return;
-    }
-
     const parsed = contactSchema.safeParse({
       name: raw('name'),
       company: raw('company'),
@@ -74,6 +68,15 @@ if (form) {
       form
         .querySelector<HTMLElement>('[aria-invalid="true"]')
         ?.focus({ preventScroll: false });
+      return;
+    }
+
+    // Only after the input is valid: a person who fills the form correctly but fast
+    // still gets the quiet treatment, while an empty submit gets its field errors.
+    if (looksLikeSpam({ website: raw('website'), renderedAt: raw('renderedAt') })) {
+      // Fail quietly — do not tell a bot which trap it hit.
+      form.reset();
+      successPanel?.removeAttribute('hidden');
       return;
     }
 

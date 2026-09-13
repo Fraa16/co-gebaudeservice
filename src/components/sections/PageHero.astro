@@ -29,7 +29,11 @@ const { pill, heading, lead, cta } = Astro.props;
   .page-hero__title {
     font: 700 var(--co-h1-size) / 1.06 var(--co-font-heading);
     letter-spacing: var(--co-h1-tracking);
-    max-width: 900px;
+    /* min(…, 100%): a bare 900px beats the global max-width:100% on specificity, and
+       "Datenschutzerklärung" is wider than a 320px screen at the h1 clamp floor.
+       hyphens breaks it as German rather than mid-syllable. */
+    max-width: min(900px, 100%);
+    hyphens: auto;
   }
   .page-hero__lead {
     font: 400 var(--co-body-size) / var(--co-lead-lh) var(--co-font-body);
