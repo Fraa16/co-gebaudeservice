@@ -1,26 +1,43 @@
 ---
 /** Stand-in for a photograph that does not exist yet.
- *  A brand-coloured ground with the logo swoosh as geometry — no gradients (rule 2),
- *  no third-party placeholder service (that would reintroduce the external-request
- *  problem self-hosting the fonts solves). Presentational: no alt text, because
- *  inventing German alt text for a panel that is not a photograph is worse than none. */
+ *  A brand-coloured ground with the logo swoosh as geometry — no gradients (rule 2's
+ *  photo-overlay exception), no third-party placeholder service (that would
+ *  reintroduce the external-request problem self-hosting the fonts solves).
+ *  Presentational: no alt text, because inventing German alt text for a panel that is
+ *  not a photograph is worse than none.
+ *
+ *  `variant` matters: a row of four identical panels reads as four broken images, so
+ *  each slot draws a different curve. */
 interface Props {
-  tone?: 'ice' | 'pale' | 'blue';
+  tone?: 'ice' | 'pale' | 'blue' | 'ink';
+  variant?: number;
   class?: string;
 }
-const { tone = 'pale', class: cls } = Astro.props;
+const { tone = 'pale', variant = 0, class: cls } = Astro.props;
 
 const grounds = {
   ice: 'var(--co-ice)',
   pale: 'var(--co-pale)',
   blue: 'var(--co-blue)',
+  ink: 'var(--co-ink)',
 } as const;
 
 const strokes = {
   ice: 'var(--co-white)',
   pale: 'var(--co-white)',
   blue: 'var(--co-ice)',
+  ink: 'var(--co-blue)',
 } as const;
+
+/** Four curves derived from the logo arc, so panels differ without inventing shapes. */
+const CURVES = [
+  ['M-40 210 C 70 90, 180 250, 300 110 C 350 50, 390 90, 440 60', 'M-40 268 C 90 170, 200 300, 440 138'],
+  ['M-40 120 C 90 220, 210 60, 440 190', 'M-40 196 C 110 280, 230 130, 440 246'],
+  ['M-40 250 C 120 150, 180 280, 300 150 C 360 86, 400 150, 440 118', 'M-40 160 C 80 60, 220 200, 440 70'],
+  ['M-40 90 C 120 200, 260 40, 440 150', 'M-40 230 C 140 130, 250 260, 440 190'],
+] as const;
+
+const curve = CURVES[variant % CURVES.length]!;
 ---
 
 <div
@@ -28,11 +45,16 @@ const strokes = {
   role="presentation"
   style={`--panel-bg:${grounds[tone]};--panel-stroke:${strokes[tone]}`}
 >
-  <svg class="brand-panel__swoosh" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <path d="M-40 210 C 70 90, 180 250, 300 110 C 350 50, 390 90, 440 60"
-      fill="none" stroke="var(--panel-stroke)" stroke-width="54" stroke-linecap="round" opacity="0.28"></path>
-    <path d="M-40 260 C 90 160, 200 290, 440 130"
-      fill="none" stroke="var(--panel-stroke)" stroke-width="22" stroke-linecap="round" opacity="0.18"></path>
+  <svg
+    class="brand-panel__swoosh"
+    viewBox="0 0 400 300"
+    preserveAspectRatio="xMidYMid slice"
+    aria-hidden="true"
+  >
+    <path d={curve[0]} fill="none" stroke="var(--panel-stroke)" stroke-width="54"
+      stroke-linecap="round" opacity="0.26"></path>
+    <path d={curve[1]} fill="none" stroke="var(--panel-stroke)" stroke-width="22"
+      stroke-linecap="round" opacity="0.17"></path>
   </svg>
 </div>
 

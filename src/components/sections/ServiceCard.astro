@@ -25,7 +25,7 @@ const num = String(index + 1).padStart(2, '0');
   ]}
   id={service.slug}
 >
-  {tone === 'photo' && <Photo slot={service.photoSlot} sizes="(max-width: 760px) 100vw, 55vw" />}
+  {tone === 'photo' && <Photo slot={service.photoSlot} sizes="(max-width: 760px) 100vw, 55vw" variant={index} />}
   {tone === 'photo' && <div class="co-scrim" aria-hidden="true"></div>}
 
   {tone !== 'photo' && (

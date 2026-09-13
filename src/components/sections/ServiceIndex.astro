@@ -1,0 +1,101 @@
+---
+import type { Service } from '../../data/services';
+
+/** The Leistungen page's signature device: every service as a full-width typographic
+ *  row, hairline-separated, rather than another grid of cards. Deliberately the
+ *  opposite texture to the homepage's bento mosaic — this page is a catalogue, so it
+ *  reads as an index, not a showcase. */
+interface Props {
+  services: Service[];
+}
+const { services } = Astro.props;
+---
+
+<section class="co-card co-card--white index">
+  <ol class="index__list">
+    {
+      services.map((service, i) => (
+        <li class="index__row co-reveal">
+          <a class="index__link" href={`#${service.slug}`}>
+            <span class="index__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="index__title">{service.title}</span>
+            <span class="index__turnus">{service.turnus}</span>
+            <span class="index__arrow" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h13M12 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .index {
+    padding: clamp(18px, 2.4vw, 34px) clamp(18px, 2.6vw, 40px);
+  }
+  .index__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .index__row + .index__row {
+    border-top: var(--co-rule);
+  }
+  .index__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: clamp(12px, 2vw, 28px);
+    padding: clamp(16px, 1.8vw, 26px) clamp(8px, 1vw, 16px);
+    color: var(--co-ink);
+    border-radius: var(--co-radius-m);
+    transition: background-color 260ms ease, padding-left 260ms ease;
+  }
+  .index__link:hover {
+    background: var(--co-mist);
+    padding-left: clamp(14px, 1.8vw, 26px);
+    color: var(--co-ink);
+  }
+  .index__num {
+    flex: none;
+    /* Wide enough for "01" plus its tracking — 2.6ch wrapped the digits onto two
+       lines once letter-spacing was applied. */
+    min-width: 3.4ch;
+    white-space: nowrap;
+    font: 600 12px/1 var(--co-font-body);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--co-label-tracking);
+    color: var(--co-deep-text);
+  }
+  .index__title {
+    flex: 1 1 min(360px, 100%);
+    min-width: 0;
+    font: 600 clamp(21px, 2.4vw, 32px) / 1.1 var(--co-font-heading);
+    letter-spacing: var(--co-h3-tracking);
+  }
+  .index__turnus {
+    flex: 0 1 auto;
+    font: 400 14px/1.4 var(--co-font-body);
+    color: var(--co-muted);
+    text-align: right;
+  }
+  .index__arrow {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    align-self: center;
+    border-radius: var(--co-radius-pill);
+    color: var(--co-deep-text);
+    transition: background-color 240ms ease, color 240ms ease, transform 260ms ease;
+  }
+  .index__link:hover .index__arrow {
+    background: var(--co-ink);
+    color: var(--co-white);
+    transform: translateX(3px);
+  }
+</style>

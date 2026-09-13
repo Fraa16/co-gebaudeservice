@@ -10,11 +10,22 @@ interface Props {
   priority?: boolean;
   widths?: number[];
   sizes?: string;
+  /** Overrides the slot's placeholder ground — used where several panels sit in a row. */
+  tone?: 'ice' | 'pale' | 'blue' | 'ink';
+  /** Picks a different swoosh so adjacent placeholders are not identical. */
+  variant?: number;
   class?: string;
 }
 
-const { slot, priority = false, widths = [480, 800, 1200], sizes = '100vw', class: cls } =
-  Astro.props;
+const {
+  slot,
+  priority = false,
+  widths = [480, 800, 1200],
+  sizes = '100vw',
+  tone,
+  variant = 0,
+  class: cls,
+} = Astro.props;
 const photo = getPhoto(slot);
 ---
 
@@ -31,7 +42,7 @@ const photo = getPhoto(slot);
       decoding={priority ? 'sync' : 'async'}
     />
   ) : (
-    <BrandPanel tone={photo.tone} class={cls} />
+    <BrandPanel tone={tone ?? photo.tone} variant={variant} class={cls} />
   )
 }
 

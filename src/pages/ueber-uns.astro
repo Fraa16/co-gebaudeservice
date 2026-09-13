@@ -1,14 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
+import Statement from '../components/sections/Statement.astro';
 import StatStrip from '../components/sections/StatStrip.astro';
-import Process from '../components/sections/Process.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
 import Photo from '../components/ui/Photo.astro';
 import DraftNote from '../components/ui/DraftNote.astro';
 import { ueberUns } from '../data/ueber-uns';
+import { company } from '../data/company';
 import { pageSeo } from '../data/seo';
 import { buildGraph } from '../lib/jsonld';
 
+/** Rhythm: narrative. Opens on ink — the only page that does — then a full-width photo
+ *  band, a single large statement with the prose beside it, the Einsatzgebiet as a
+ *  place list, and a closing band. No index, no mosaic, no form. */
 const seo = pageSeo.ueberUns;
 const jsonLd = buildGraph({
   path: '/ueber-uns',
@@ -20,53 +25,131 @@ const jsonLd = buildGraph({
     { name: 'Über uns', path: '/ueber-uns' },
   ],
 });
+
+/** TODO(client): confirm these places — draft, see CONTENT-REVIEW.md §3. */
+const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebhausen'];
 ---
 
 <BaseLayout {...seo} path="/ueber-uns" jsonLd={jsonLd}>
-  <PageHero pill={ueberUns.pill} heading={ueberUns.h1} lead={ueberUns.lead} />
+  <PageHero
+    pill={ueberUns.pill}
+    pillNum="01"
+    heading={ueberUns.h1}
+    lead={ueberUns.lead}
+    tone="ink"
+    size="display"
+  />
 
-  <section class="co-card co-card--white about">
-    <div class="about__prose">
-      {ueberUns.paragraphs.map((p) => <p class="about__para">{p.text}</p>)}
-      <DraftNote what="Absätze 2 und 3 sowie Überschrift und Einleitung dieser Seite" />
-    </div>
+  <section class="about__band" aria-hidden="true">
+    {
+      /* Alternating tone and curve: four identical placeholders in a row read as
+         four broken images. */
+      ueberUns.photoBand.map((slot, i) => (
+        <div class="about__band-item co-reveal">
+          <Photo
+            slot={slot}
+            sizes="(max-width: 700px) 50vw, 25vw"
+            tone={(['blue', 'ice', 'ink', 'pale'] as const)[i % 4]}
+            variant={i}
+          />
+        </div>
+      ))
+    }
   </section>
 
-  <section class="co-card co-card--ink about__facts">
+  <Statement
+    kicker="Arbeitsweise"
+    kickerNum="02"
+    statement="Dieselben Gesichter im Haus, ein Ansprechpartner für die Verwaltung."
+    paragraphs={ueberUns.paragraphs}
+  >
+    <DraftNote what="Absätze 2 und 3, Überschrift, Einleitung und die Ortsliste dieser Seite" />
+  </Statement>
+
+  <section class="co-card co-card--ink co-grain about__facts">
+    <p class="co-kicker"><span class="co-kicker__num">03</span> In Zahlen</p>
     <StatStrip stats={ueberUns.stats} />
   </section>
 
-  <section class="about__band" aria-hidden="true">
-    {ueberUns.photoBand.map((slot) => (
-      <div class="about__band-item"><Photo slot={slot} sizes="25vw" /></div>
-    ))}
+  <section class="co-card co-card--white about__area">
+    <div class="about__area-head co-reveal">
+      <p class="co-kicker"><span class="co-kicker__num">04</span> Einsatzgebiet</p>
+      <h2 class="about__area-title">Kurze Wege, auch beim Winterdienst.</h2>
+      <p class="about__area-text">{company.areaLong}</p>
+    </div>
+    <ul class="about__orte co-reveal">
+      {orte.map((ort) => <li class="about__ort">{ort}</li>)}
+    </ul>
   </section>
 
-  <Process currentPath="/ueber-uns" />
+  <CtaBand
+    heading="Objekt ansehen, Angebot erhalten."
+    text="Kein Vertrag ohne Objektbesichtigung. Wir melden uns innerhalb von zwei Werktagen."
+    cta={{ label: 'Angebot anfordern', href: '/kontakt' }}
+    secondary={{ label: 'Alle Leistungen', href: '/leistungen' }}
+  />
 </BaseLayout>
 
 <style>
-  .about__prose {
-    display: grid;
-    gap: 16px;
-    max-width: 760px;
-  }
-  .about__para {
-    font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);
-    color: var(--co-muted);
-  }
-  .about__facts {
-    padding: var(--co-section-padding);
-  }
+  /* Photography immediately after the hero — this page leads with pictures, where
+     /leistungen leads with a list. */
   .about__band {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--co-grid-gap);
   }
   .about__band-item {
     position: relative;
     overflow: hidden;
-    height: clamp(150px, 17vw, 220px);
+    flex: 1 1 min(220px, 100%);
+    min-width: 0;
+    height: clamp(170px, 20vw, 260px);
     border-radius: var(--co-radius-photo);
+    box-shadow: var(--co-shadow-card);
+  }
+
+  .about__facts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(22px, 3vw, 38px);
+  }
+
+  .about__area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(26px, 4vw, 64px);
+    align-items: center;
+    justify-content: space-between;
+  }
+  .about__area-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    flex: 1 1 min(400px, 100%);
+    min-width: 0;
+  }
+  .about__area-title {
+    font: 700 clamp(24px, 2.8vw, 38px) / 1.06 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    max-width: 18ch;
+  }
+  .about__area-text {
+    font: 400 16px/1.5 var(--co-font-body);
+    color: var(--co-muted);
+  }
+  .about__orte {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1 1 min(320px, 100%);
+    min-width: 0;
+  }
+  .about__ort {
+    border: 1px solid var(--co-line);
+    border-radius: var(--co-radius-pill);
+    padding: var(--co-chip-padding);
+    font: 500 15px/1 var(--co-font-body);
+    color: var(--co-ink);
+    background: var(--co-mist);
   }
 </style>

@@ -1,0 +1,58 @@
+---
+import Button from '../ui/Button.astro';
+
+/** A compact closing call to action. Deliberately not the full ContactSection: only
+ *  the homepage and /kontakt carry the form, so the inner pages end with a short band
+ *  instead of repeating the same block on every page. */
+interface Props {
+  heading: string;
+  text?: string;
+  cta: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+const { heading, text, cta, secondary } = Astro.props;
+---
+
+<section class="co-card co-card--ink co-grain cta-band">
+  <div class="cta-band__text co-reveal">
+    <h2 class="cta-band__heading">{heading}</h2>
+    {text && <p class="cta-band__body">{text}</p>}
+  </div>
+
+  <div class="cta-band__actions co-reveal">
+    <Button href={cta.href} variant="onInk" arrow>{cta.label}</Button>
+    {secondary && <Button href={secondary.href} variant="quiet">{secondary.label}</Button>}
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(24px, 3vw, 48px);
+  }
+  .cta-band__text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    flex: 1 1 min(460px, 100%);
+    min-width: 0;
+  }
+  .cta-band__heading {
+    font: 700 clamp(26px, 3.2vw, 44px) / 1.04 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    max-width: 20ch;
+  }
+  .cta-band__body {
+    font: 400 clamp(16px, 1.35vw, 18px) / 1.55 var(--co-font-body);
+    color: var(--co-ice);
+    max-width: 46ch;
+  }
+  .cta-band__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+</style>

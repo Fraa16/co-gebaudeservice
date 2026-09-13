@@ -1,0 +1,50 @@
+---
+import type { IconName } from '../../data/services';
+
+/** The eight service icons. CI sheet: "Icons als Platzhalter — einheitliche Strichstärke
+ *  1,6 px, Ecken gerundet." Four are taken from the sheet itself (Treppe, Fenster,
+ *  Hausmeister, Garten, Winter); the three new services needed new marks drawn to the
+ *  same construction. */
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+const { name, size = 26, class: cls } = Astro.props;
+
+const PATHS: Record<IconName, string[]> = {
+  // From the CI sheet
+  treppe: ['M3 20h4v-4h5v-4h5V8h4', 'M3 20V8'],
+  fenster: ['M4 4h16v16H4z', 'M12 4v16M4 12h16'],
+  hausmeister: ['M14.5 3.5a4.6 4.6 0 0 0 5.9 5.9L21 10l-9 9-2.5 2.5-3-3L9 16l9-9z'],
+  garten: ['M5 21c0-8 5-14 15-15C19 15 13 20 5 21z', 'M5 21c3-5 7-8 11-9'],
+  winter: ['M12 2v20M3.5 7l17 10M20.5 7l-17 10', 'M12 6.5 9.5 4M12 6.5 14.5 4M12 17.5 9.5 20M12 17.5 14.5 20'],
+  // Drawn to match
+  keller: ['M4 21V9l8-5 8 5v12', 'M4 21h16', 'M9 21v-6h6v6'],
+  aussen: ['M3 5h7v6H3zM14 5h7v6h-7zM3 14h7v6H3zM14 14h7v6h-7z'],
+  tonne: ['M5 7h14', 'M6.5 7 7.5 20h9L17.5 7', 'M10 4h4v3h-4z', 'M10 11v5M14 11v5'],
+};
+---
+
+<svg
+  class:list={['service-icon', cls]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {PATHS[name].map((d) => <path d={d} />)}
+</svg>
+
+<style>
+  .service-icon {
+    flex: none;
+    color: var(--co-blue);
+  }
+</style>

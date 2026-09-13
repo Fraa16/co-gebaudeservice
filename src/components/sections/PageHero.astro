@@ -1,21 +1,55 @@
 ---
-import PillLabel from '../ui/PillLabel.astro';
 import Button from '../ui/Button.astro';
 
+/** Inner-page opening. Variants exist so the three inner pages do not all begin the
+ *  same way: /leistungen opens pale and factual with a meta row, /ueber-uns opens on
+ *  ink with a single large statement and nothing else. */
 interface Props {
   pill: string;
+  pillNum?: string;
   heading: string;
   lead?: string;
   cta?: { label: string; href: string };
+  tone?: 'pale' | 'ink' | 'white';
+  size?: 'default' | 'display';
+  meta?: readonly { readonly label: string; readonly value: string }[];
 }
-const { pill, heading, lead, cta } = Astro.props;
+const {
+  pill,
+  pillNum,
+  heading,
+  lead,
+  cta,
+  tone = 'pale',
+  size = 'default',
+  meta,
+} = Astro.props;
 ---
 
-<section class="co-card co-card--pale page-hero">
-  <PillLabel text={pill} />
-  <h1 class="page-hero__title">{heading}</h1>
+<section class:list={['co-card', `co-card--${tone}`, tone === 'ink' && 'co-grain', 'page-hero']}>
+  <p class="co-kicker">
+    {pillNum && <span class="co-kicker__num">{pillNum}</span>}
+    {pill}
+  </p>
+
+  <h1 class:list={['page-hero__title', size === 'display' && 'is-display']}>{heading}</h1>
+
   {lead && <p class="page-hero__lead">{lead}</p>}
-  {cta && <Button href={cta.href} variant="primary">{cta.label}</Button>}
+
+  {cta && <Button href={cta.href} variant={tone === 'ink' ? 'onInk' : 'primary'} arrow>{cta.label}</Button>}
+
+  {
+    meta && (
+      <div class="page-hero__meta">
+        {meta.map((item) => (
+          <div class="page-hero__meta-item">
+            <span class="page-hero__meta-label">{item.label}</span>
+            <span class="page-hero__meta-value">{item.value}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
 </section>
 
 <style>
@@ -23,21 +57,62 @@ const { pill, heading, lead, cta } = Astro.props;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 18px;
     padding: var(--co-hero-padding);
   }
   .page-hero__title {
-    font: 700 var(--co-h1-size) / 1.06 var(--co-font-heading);
+    font: 700 var(--co-h1-size) / 1.02 var(--co-font-heading);
     letter-spacing: var(--co-h1-tracking);
-    /* min(…, 100%): a bare 900px beats the global max-width:100% on specificity, and
-       "Datenschutzerklärung" is wider than a 320px screen at the h1 clamp floor.
-       hyphens breaks it as German rather than mid-syllable. */
-    max-width: min(900px, 100%);
+    /* min(…, 100%): a bare max-width beats the global max-width:100% on specificity,
+       and "Datenschutzerklärung" is wider than a 320px screen at the clamp floor.
+       hyphens breaks German compounds at a hyphen rather than mid-syllable. */
+    max-width: min(17ch, 100%);
     hyphens: auto;
   }
-  .page-hero__lead {
-    font: 400 var(--co-body-size) / var(--co-lead-lh) var(--co-font-body);
-    color: var(--co-deep-text);
-    max-width: 620px;
+  .page-hero__title.is-display {
+    font-size: var(--co-display-size);
+    line-height: var(--co-display-lh);
+    letter-spacing: var(--co-display-tracking);
+    max-width: min(15ch, 100%);
   }
+  .page-hero__lead {
+    font: 400 clamp(16px, 1.4vw, 19px) / var(--co-lead-lh) var(--co-font-body);
+    color: var(--co-deep-text);
+    max-width: 54ch;
+  }
+  .co-card--ink .page-hero__lead { color: var(--co-ice); }
+
+  .page-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: clamp(8px, 1.6vw, 22px);
+    width: 100%;
+  }
+  .page-hero__meta-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 4px clamp(18px, 2.4vw, 36px);
+    border-left: var(--co-rule);
+  }
+  .page-hero__meta-item:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .co-card--ink .page-hero__meta-item { border-left-color: var(--co-on-dark-divider); }
+
+  .page-hero__meta-label {
+    font: 600 10px/1 var(--co-font-body);
+    letter-spacing: var(--co-label-tracking);
+    text-transform: uppercase;
+    color: var(--co-deep-text);
+  }
+  .co-card--ink .page-hero__meta-label { color: var(--co-ice); }
+
+  .page-hero__meta-value {
+    font: 600 clamp(15px, 1.3vw, 18px) / 1.25 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  .co-card--ink .page-hero__meta-value { color: var(--co-white); }
 </style>

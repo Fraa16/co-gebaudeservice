@@ -1,0 +1,77 @@
+---
+import { processContent } from '../../data/content';
+
+/** The /kontakt signature: the same four steps the homepage shows as ghost-numeral
+ *  cards, here as a flat hairline timeline. Same content, different instrument — the
+ *  contact page wants "here is what happens next", not a showcase. */
+interface Props {
+  heading?: string;
+}
+const { heading = 'Was nach Ihrer Anfrage passiert' } = Astro.props;
+---
+
+<section class="co-card co-card--white timeline">
+  <p class="co-kicker"><span class="co-kicker__num">02</span> {processContent.pill}</p>
+  <h2 class="timeline__heading">{heading}</h2>
+
+  <ol class="timeline__list">
+    {
+      processContent.steps.map((step) => (
+        <li class="timeline__step co-reveal">
+          <span class="timeline__num">{step.num}</span>
+          <span class="timeline__rule" aria-hidden="true" />
+          <span class="timeline__title">{step.title}</span>
+          <span class="timeline__text">{step.text}</span>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .timeline {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .timeline__heading {
+    font: 700 clamp(24px, 2.8vw, 38px) / 1.06 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    max-width: 22ch;
+    margin-bottom: clamp(12px, 2vw, 26px);
+  }
+  .timeline__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(20px, 2.4vw, 34px);
+  }
+  .timeline__step {
+    flex: 1 1 min(210px, 100%);
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    align-content: start;
+  }
+  .timeline__num {
+    font: 600 12px/1 var(--co-font-body);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--co-label-tracking);
+    color: var(--co-deep-text);
+  }
+  .timeline__rule {
+    height: 2px;
+    background: var(--co-cyan);
+    border-radius: var(--co-radius-pill);
+    margin-bottom: 6px;
+  }
+  .timeline__title {
+    font: 600 clamp(17px, 1.6vw, 20px) / 1.2 var(--co-font-heading);
+    letter-spacing: -0.015em;
+    color: var(--co-ink);
+  }
+  .timeline__text {
+    font: 400 15px/1.5 var(--co-font-body);
+    color: var(--co-muted);
+  }
+</style>

@@ -1,13 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
-import ServiceSection from '../../components/sections/ServiceSection.astro';
-import ServicesCtaCard from '../../components/sections/ServicesCtaCard.astro';
-import Process from '../../components/sections/Process.astro';
+import ServiceIndex from '../../components/sections/ServiceIndex.astro';
+import ServiceRow from '../../components/sections/ServiceRow.astro';
+import CtaBand from '../../components/sections/CtaBand.astro';
 import { allServices } from '../../data/services';
+import { company } from '../../data/company';
 import { pageSeo } from '../../data/seo';
 import { buildGraph } from '../../lib/jsonld';
 
+/** Rhythm: catalogue. Pale factual opening → typographic index of all eight →
+ *  alternating editorial rows inside one document card → closing band.
+ *  Deliberately no bento mosaic and no contact form: those belong to the homepage. */
 const seo = pageSeo.leistungen;
 const jsonLd = buildGraph({
   path: '/leistungen',
@@ -19,29 +23,44 @@ const jsonLd = buildGraph({
     { name: 'Leistungen', path: '/leistungen' },
   ],
 });
+
+const meta = [
+  { label: 'Leistungen', value: String(allServices.length) },
+  { label: 'Einsatzgebiet', value: company.areaLong },
+  { label: 'Abrechnung', value: 'Festpreis pro Monat' },
+] as const;
 ---
 
 <BaseLayout {...seo} path="/leistungen" jsonLd={jsonLd}>
   <PageHero
     pill="Leistungen"
+    pillNum="01"
     heading="Alles rund ums Objekt, aus einer Hand."
     lead="Einzeln beauftragbar oder als Paket im Dauerauftrag. Turnus, Umfang und Erreichbarkeit legen wir vorab schriftlich fest."
-    cta={{ label: 'Angebot anfordern', href: '/kontakt' }}
+    size="display"
+    meta={meta}
   />
 
-  <div class="leistungen__grid">
-    {allServices.map((service) => <ServiceSection service={service} />)}
-    <ServicesCtaCard />
-  </div>
+  <ServiceIndex services={allServices} />
 
-  <Process currentPath="/leistungen" />
+  <section class="co-card co-card--white leistungen__detail">
+    {allServices.map((service, i) => <ServiceRow service={service} index={i} />)}
+  </section>
+
+  <CtaBand
+    heading="Mehrere Objekte oder ein Sonderfall?"
+    text="Wir sehen uns das Objekt an und kalkulieren einen Turnus zum Festpreis."
+    cta={{ label: 'Angebot anfordern', href: '/kontakt' }}
+    secondary={{ label: 'Über uns', href: '/ueber-uns' }}
+  />
 </BaseLayout>
 
 <style>
-  .leistungen__grid {
+  /* One card holding all eight rows, so the page reads as a document rather than a
+     grid of tiles. The rows draw their own hairline separators. */
+  .leistungen__detail {
     display: grid;
-    grid-template-columns: var(--co-grid-service-sections);
-    gap: var(--co-card-gap);
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: clamp(6px, 1vw, 18px);
   }
 </style>

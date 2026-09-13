@@ -1,0 +1,62 @@
+---
+/** The Über-uns signature: one sentence at display scale carrying the page, with the
+ *  supporting paragraphs set small beside it. A narrative device — nothing else on the
+ *  site uses type this way, which is what keeps the page from reading as a homepage
+ *  clone. */
+interface Props {
+  kicker: string;
+  kickerNum?: string;
+  statement: string;
+  paragraphs: readonly { readonly text: string; readonly draft: boolean }[];
+}
+const { kicker, kickerNum = '01', statement, paragraphs } = Astro.props;
+---
+
+<section class="co-card co-card--white statement">
+  <div class="statement__lead co-reveal">
+    <p class="co-kicker"><span class="co-kicker__num">{kickerNum}</span> {kicker}</p>
+    <p class="statement__quote">{statement}</p>
+  </div>
+
+  <div class="statement__body co-reveal">
+    {paragraphs.map((p) => <p class="statement__para">{p.text}</p>)}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .statement {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(28px, 4vw, 72px);
+    align-items: flex-start;
+  }
+  .statement__lead {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    flex: 1 1 min(480px, 100%);
+    min-width: 0;
+  }
+  .statement__quote {
+    font: 600 clamp(24px, 2.9vw, 42px) / 1.14 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    color: var(--co-ink);
+    text-wrap: pretty;
+    max-width: 18ch;
+  }
+  .statement__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    flex: 1 1 min(380px, 100%);
+    min-width: 0;
+    /* Optically aligns the running text with the statement's second line. */
+    padding-top: clamp(0px, 1vw, 14px);
+  }
+  .statement__para {
+    font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);
+    color: var(--co-muted);
+    max-width: 60ch;
+  }
+</style>
