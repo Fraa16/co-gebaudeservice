@@ -1,0 +1,50 @@
+---
+import Logo from './ui/Logo.astro';
+import { primaryNav } from '../data/nav';
+
+interface Props {
+  currentPath: string;
+}
+const { currentPath } = Astro.props;
+
+const isActive = (href: string) =>
+  href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+---
+
+<header class="co-card--header site-header">
+  <Logo href="/" size={38} />
+
+  <nav class="site-header__nav" aria-label="Hauptnavigation">
+    {
+      primaryNav.map((item) => (
+        <a
+          class:list={['co-nav-pill', item.primary && 'co-nav-pill--primary']}
+          href={item.href}
+          aria-current={!item.primary && isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  /* flex-wrap is the whole mobile story: the pills wrap to a second row inside the
+     same card. No breakpoints, no disclosure menu — see CLAUDE.md "fully fluid". */
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 16px 14px 20px;
+    background: var(--co-white);
+  }
+  .site-header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import BaseHead, { type SeoProps } from '../components/seo/BaseHead.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../data/site';
+import '../styles/global.css';
+
+type Props = SeoProps & { jsonLd?: unknown };
+
+const { jsonLd, ...seo } = Astro.props;
+const currentPath = Astro.url.pathname.replace(/(.)\/$/, '$1');
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <BaseHead {...seo} jsonLd={jsonLd} />
+  </head>
+  <body>
+    <a class="co-skip-link" href="#inhalt">Zum Inhalt springen</a>
+
+    <div class="co-page">
+      <SiteHeader currentPath={currentPath} />
+
+      <main id="inhalt" class="co-page__main">
+        <slot />
+      </main>
+
+      <SiteFooter />
+    </div>
+  </body>
+</html>
+
+<style>
+  /* The page is a grid of cards on a ground with one gutter. <main> is a subgrid-ish
+     pass-through so sections stay direct children of that rhythm. */
+  .co-page__main {
+    display: grid;
+    gap: var(--co-card-gap);
+  }
+</style>

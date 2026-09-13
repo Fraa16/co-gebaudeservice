@@ -1,0 +1,39 @@
+---
+import PillLabel from '../ui/PillLabel.astro';
+import Button from '../ui/Button.astro';
+
+interface Props {
+  pill: string;
+  heading: string;
+  lead?: string;
+  cta?: { label: string; href: string };
+}
+const { pill, heading, lead, cta } = Astro.props;
+---
+
+<section class="co-card co-card--pale page-hero">
+  <PillLabel text={pill} />
+  <h1 class="page-hero__title">{heading}</h1>
+  {lead && <p class="page-hero__lead">{lead}</p>}
+  {cta && <Button href={cta.href} variant="primary">{cta.label}</Button>}
+</section>
+
+<style>
+  .page-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: var(--co-hero-padding);
+  }
+  .page-hero__title {
+    font: 700 var(--co-h1-size) / 1.06 var(--co-font-heading);
+    letter-spacing: var(--co-h1-tracking);
+    max-width: 900px;
+  }
+  .page-hero__lead {
+    font: 400 var(--co-body-size) / var(--co-lead-lh) var(--co-font-body);
+    color: var(--co-deep-text);
+    max-width: 620px;
+  }
+</style>

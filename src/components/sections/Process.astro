@@ -1,0 +1,41 @@
+---
+import SectionHeader from '../ui/SectionHeader.astro';
+import StepCard from './StepCard.astro';
+import { processContent } from '../../data/content';
+import { resolveHref } from '../../data/routes';
+
+interface Props {
+  currentPath?: string;
+}
+const { currentPath = '' } = Astro.props;
+---
+
+<section class="co-card co-card--ink process" id="ablauf">
+  <SectionHeader
+    pill={processContent.pill}
+    heading={processContent.h2}
+    lead={processContent.lead}
+    layout="split"
+    cta={{
+      label: processContent.cta.label,
+      href: resolveHref(processContent.cta.href, currentPath),
+      variant: 'onInk',
+    }}
+    class="process__header"
+  />
+
+  <div class="process__steps">
+    {processContent.steps.map((step) => <StepCard {...step} />)}
+  </div>
+</section>
+
+<style>
+  .process__header {
+    margin-bottom: clamp(24px, 3vw, 38px);
+  }
+  .process__steps {
+    display: grid;
+    grid-template-columns: var(--co-grid-steps);
+    gap: var(--co-grid-gap);
+  }
+</style>

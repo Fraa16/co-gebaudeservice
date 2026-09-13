@@ -1,0 +1,83 @@
+---
+interface Props {
+  label: string;
+  items: string[];
+  facts: { label: string; value: string }[];
+}
+const { label, items, facts } = Astro.props;
+---
+
+<div class="co-card--l co-card--pale info-card">
+  <p class="info-card__label">{label}</p>
+
+  <ul class="info-card__list">
+    {
+      items.map((item) => (
+        <li class="info-card__item">
+          <span class="info-card__dot" aria-hidden="true" />
+          <span>{item}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="info-card__facts">
+    {
+      facts.map((fact) => (
+        <div>
+          <p class="info-card__fact-label">{fact.label}</p>
+          <p class="info-card__fact-value">{fact.value}</p>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .info-card {
+    padding: clamp(22px, 2.6vw, 30px);
+  }
+  .info-card__label {
+    font: 600 11px/1 var(--co-font-body);
+    letter-spacing: var(--co-label-tracking);
+    text-transform: uppercase;
+    color: var(--co-blue);
+    margin-bottom: 20px;
+  }
+  .info-card__list {
+    display: grid;
+    gap: 11px;
+  }
+  .info-card__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    font: 400 16px/1.45 var(--co-font-body);
+  }
+  .info-card__dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    margin-top: 9px;
+    border-radius: var(--co-radius-pill);
+    background: var(--co-blue);
+  }
+  .info-card__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--co-info-divider);
+  }
+  .info-card__fact-label {
+    font: 600 11px/1 var(--co-font-body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--co-blue);
+    margin-bottom: 5px;
+  }
+  .info-card__fact-value {
+    font: 400 15px/1.4 var(--co-font-body);
+  }
+</style>

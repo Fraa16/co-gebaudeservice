@@ -1,0 +1,62 @@
+---
+import { company } from '../../data/company';
+import { contact } from '../../data/content';
+
+/** Placeholder phone and email still render — they are part of the design — but they
+ *  are not linked, because nobody should dial or mail a placeholder. */
+const rows = contact.rows.map((row) => {
+  if (row.label === 'Anschrift') return { ...row, value: company.address.display, href: undefined };
+  if (row.label === 'Telefon')
+    return { ...row, href: company.phone.verified ? `tel:${company.phone.e164}` : undefined };
+  if (row.label === 'E-Mail')
+    return { ...row, href: company.email.verified ? `mailto:${company.email.display}` : undefined };
+  return { ...row, href: undefined };
+});
+---
+
+<div class="contact-rows">
+  {
+    rows.map((row) => (
+      <div class="contact-row">
+        <span class="contact-row__label">{row.label}</span>
+        {row.href ? (
+          <a class="contact-row__value" href={row.href}>
+            {row.value}
+          </a>
+        ) : (
+          <span class="contact-row__value">{row.value}</span>
+        )}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .contact-rows {
+    display: grid;
+    gap: 10px;
+  }
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--co-mist);
+    border-radius: var(--co-radius-contact-row);
+    padding: 18px 22px;
+  }
+  .contact-row__label {
+    font: 600 11px/1 var(--co-font-body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--co-blue);
+  }
+  .contact-row__value {
+    font: 400 17px/1.3 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  a.contact-row__value:hover {
+    color: var(--co-blue);
+  }
+</style>

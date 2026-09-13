@@ -1,0 +1,50 @@
+---
+/** Stand-in for a photograph that does not exist yet.
+ *  A brand-coloured ground with the logo swoosh as geometry — no gradients (rule 2),
+ *  no third-party placeholder service (that would reintroduce the external-request
+ *  problem self-hosting the fonts solves). Presentational: no alt text, because
+ *  inventing German alt text for a panel that is not a photograph is worse than none. */
+interface Props {
+  tone?: 'ice' | 'pale' | 'blue';
+  class?: string;
+}
+const { tone = 'pale', class: cls } = Astro.props;
+
+const grounds = {
+  ice: 'var(--co-ice)',
+  pale: 'var(--co-pale)',
+  blue: 'var(--co-blue)',
+} as const;
+
+const strokes = {
+  ice: 'var(--co-white)',
+  pale: 'var(--co-white)',
+  blue: 'var(--co-ice)',
+} as const;
+---
+
+<div
+  class:list={['brand-panel', cls]}
+  role="presentation"
+  style={`--panel-bg:${grounds[tone]};--panel-stroke:${strokes[tone]}`}
+>
+  <svg class="brand-panel__swoosh" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M-40 210 C 70 90, 180 250, 300 110 C 350 50, 390 90, 440 60"
+      fill="none" stroke="var(--panel-stroke)" stroke-width="54" stroke-linecap="round" opacity="0.28"></path>
+    <path d="M-40 260 C 90 160, 200 290, 440 130"
+      fill="none" stroke="var(--panel-stroke)" stroke-width="22" stroke-linecap="round" opacity="0.18"></path>
+  </svg>
+</div>
+
+<style>
+  .brand-panel {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--panel-bg);
+  }
+  .brand-panel__swoosh {
+    width: 100%;
+    height: 100%;
+  }
+</style>

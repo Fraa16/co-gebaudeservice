@@ -1,0 +1,42 @@
+---
+import { marquee } from '../../data/content';
+
+/** Decorative: it repeats the service names that are already in the cards below,
+ *  so it is hidden from assistive tech rather than read twice. */
+---
+
+<div class="schriftband" aria-hidden="true">
+  <svg viewBox="0 0 1200 160" preserveAspectRatio="xMidYMid slice" class="schriftband__svg">
+    <path
+      id="co-ribbon"
+      d="M-60 122 C 200 18, 420 152, 660 58 C 880 -24, 1020 112, 1270 26"
+      fill="none"
+      stroke="var(--co-cyan)"
+      stroke-width="48"
+      stroke-linecap="butt"></path>
+    <text dominant-baseline="middle" class="schriftband__text">
+      <textPath href="#co-ribbon" startOffset="4%">{marquee}</textPath>
+    </text>
+  </svg>
+</div>
+
+<style>
+  .schriftband {
+    position: relative;
+    overflow: hidden;
+    height: clamp(96px, 11vw, 150px);
+  }
+  .schriftband__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .schriftband__text {
+    fill: var(--co-ink);
+    font-family: var(--co-font-body);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+</style>

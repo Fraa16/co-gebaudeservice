@@ -1,0 +1,92 @@
+---
+import Button from '../ui/Button.astro';
+import Photo from '../ui/Photo.astro';
+import { hero } from '../../data/content';
+import { resolveHref } from '../../data/routes';
+---
+
+<section class="co-card co-card--pale hero" id="hero">
+  <div class="hero__media">
+    <Photo slot="r-hero" priority sizes="(max-width: 900px) 100vw, 52vw" />
+    <div class="hero__fade" aria-hidden="true"></div>
+  </div>
+
+  <div class="hero__body">
+    <p class="co-glass-pill">
+      <span class="hero__dot" aria-hidden="true"></span>
+      <span class="hero__pill-text">{hero.locationPill}</span>
+    </p>
+
+    <h1 class="hero__title">{hero.h1}</h1>
+    <p class="hero__sub">{hero.sub}</p>
+
+    <div class="hero__actions">
+      <Button href={resolveHref(hero.primaryCta.href)} variant="primary">
+        {hero.primaryCta.label}
+      </Button>
+      <Button href={resolveHref(hero.secondaryCta.href)} variant="onPale">
+        {hero.secondaryCta.label}
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    min-height: clamp(380px, 42vw, 520px);
+    padding: 0;
+  }
+  .hero__media {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 52%;
+  }
+  .hero__fade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--co-hero-photo-fade);
+  }
+  .hero__body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: var(--co-hero-padding);
+    /* The prototype's 620px was a content-box width; our reset is border-box. */
+    max-width: calc(620px + 2 * var(--co-hero-padding));
+  }
+  .hero__dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: var(--co-radius-pill);
+    background: var(--co-blue);
+  }
+  .hero__pill-text {
+    font: 600 11px/1 var(--co-font-body);
+    letter-spacing: var(--co-label-tracking);
+    text-transform: uppercase;
+    color: var(--co-ink);
+  }
+  .hero__title {
+    font: 700 var(--co-h1-size) / 1.06 var(--co-font-heading);
+    letter-spacing: var(--co-h1-tracking);
+  }
+  .hero__sub {
+    font: 400 var(--co-body-size) / var(--co-lead-lh) var(--co-font-body);
+    color: var(--co-deep-text);
+    max-width: 420px;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+</style>

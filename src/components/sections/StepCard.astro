@@ -1,0 +1,38 @@
+---
+interface Props {
+  num: string;
+  title: string;
+  text: string;
+}
+const { num, title, text } = Astro.props;
+---
+
+<div class="step-card">
+  <p class="step-card__num">{num}</p>
+  <p class="step-card__title">{title}</p>
+  <p class="step-card__text">{text}</p>
+</div>
+
+<style>
+  .step-card {
+    background: var(--co-on-dark-card-bg);
+    border: 1px solid var(--co-on-dark-card-border);
+    border-radius: var(--co-radius-step);
+    padding: clamp(22px, 2.4vw, 28px);
+  }
+  .step-card__num {
+    font: 700 30px/1 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    color: var(--co-cyan);
+    margin-bottom: 18px;
+  }
+  .step-card__title {
+    font: 600 18px/1.25 var(--co-font-heading);
+    letter-spacing: -0.015em;
+    margin-bottom: 9px;
+  }
+  .step-card__text {
+    font: 400 15px/1.5 var(--co-font-body);
+    color: var(--co-pale);
+  }
+</style>

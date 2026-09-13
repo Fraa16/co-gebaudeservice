@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import { pageSeo } from '../data/seo';
+
+const seo = pageSeo.notFound;
+---
+
+<BaseLayout {...seo} path="/404" noindex>
+  <PageHero
+    pill="Fehler 404"
+    heading="Diese Seite gibt es nicht."
+    lead="Der Link ist womöglich veraltet. Über die Navigation oben finden Sie zu den Leistungen und zum Kontaktformular."
+    cta={{ label: 'Zur Startseite', href: '/' }}
+  />
+</BaseLayout>

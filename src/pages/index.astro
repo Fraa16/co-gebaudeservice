@@ -1,3 +1,24 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Schriftband from '../components/sections/Schriftband.astro';
+import ServiceGrid from '../components/sections/ServiceGrid.astro';
+import DetailChapter from '../components/sections/DetailChapter.astro';
+import Process from '../components/sections/Process.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
+import { homeServices } from '../data/services';
+import { pageSeo } from '../data/seo';
+import { buildGraph } from '../lib/jsonld';
+
+const seo = pageSeo.home;
+const jsonLd = buildGraph({ path: '/', title: seo.title, description: seo.description });
 ---
-<p>bootstrap</p>
+
+<BaseLayout {...seo} path="/" jsonLd={jsonLd}>
+  <Hero />
+  <Schriftband />
+  <ServiceGrid services={homeServices} linkTo={(s) => s.href ?? `/leistungen#${s.slug}`} />
+  <DetailChapter condensed />
+  <Process currentPath="/" />
+  <ContactSection />
+</BaseLayout>

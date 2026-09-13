@@ -1,0 +1,33 @@
+---
+import { site } from '../../data/site';
+
+/** Preview-only marker for copy the client has not approved. Never rendered in
+ *  production. Every string it flags is listed in CONTENT-REVIEW.md. */
+interface Props {
+  what: string;
+}
+const { what } = Astro.props;
+---
+
+{
+  site.showDraftNotes && (
+    <p class="draft-note">
+      <strong>Entwurf</strong> — {what}. Siehe CONTENT-REVIEW.md.
+    </p>
+  )
+}
+
+<style>
+  .draft-note {
+    border: 1px dashed var(--co-line);
+    border-radius: var(--co-radius-input);
+    padding: 10px 14px;
+    font: 400 13px/1.45 var(--co-font-body);
+    color: var(--co-muted);
+    background: var(--co-mist);
+  }
+  .draft-note strong {
+    color: var(--co-blue);
+    font-weight: 600;
+  }
+</style>

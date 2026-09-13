@@ -1,0 +1,176 @@
+---
+import ChipGroup from './ChipGroup.astro';
+import { contact } from '../../data/content';
+import { site } from '../../data/site';
+
+const { fields, submitLabel, successMessage } = contact.form;
+
+const field = (name: string) => fields.find((f) => f.name === name)!;
+const text = field('name');
+const firma = field('company');
+const mail = field('email');
+const phone = field('phone');
+const services = field('services');
+const message = field('message');
+---
+
+<form
+  class="co-card--l contact-form"
+  data-contact-form
+  data-endpoint={site.formEndpoint}
+  novalidate
+>
+  <div class="contact-form__pair">
+    <label class="contact-form__field">
+      <span class="co-field-label">{text.label}{text.required && <span aria-hidden="true"> *</span>}</span>
+      <input
+        class="co-field" type="text" name="name" autocomplete="name"
+        placeholder={text.placeholder} required={text.required}
+        aria-describedby="err-name"
+      />
+      <span class="co-field-error" id="err-name" data-error-for="name"></span>
+    </label>
+
+    <label class="contact-form__field">
+      <span class="co-field-label">{firma.label}</span>
+      <input
+        class="co-field" type="text" name="company" autocomplete="organization"
+        placeholder={firma.placeholder}
+      />
+    </label>
+  </div>
+
+  <div class="contact-form__pair">
+    <label class="contact-form__field">
+      <span class="co-field-label">{mail.label}{mail.required && <span aria-hidden="true"> *</span>}</span>
+      <input
+        class="co-field" type="email" name="email" autocomplete="email"
+        placeholder={mail.placeholder} required={mail.required}
+        aria-describedby="err-email"
+      />
+      <span class="co-field-error" id="err-email" data-error-for="email"></span>
+    </label>
+
+    <label class="contact-form__field">
+      <span class="co-field-label">{phone.label}</span>
+      <input
+        class="co-field" type="tel" name="phone" autocomplete="tel"
+        placeholder={phone.placeholder}
+      />
+    </label>
+  </div>
+
+  <ChipGroup name="services" label={services.label} options={services.options ?? []} />
+
+  <label class="contact-form__field">
+    <span class="co-field-label">{message.label}{message.required && <span aria-hidden="true"> *</span>}</span>
+    <textarea
+      class="co-field contact-form__textarea" name="message" rows={message.rows ?? 4}
+      placeholder={message.placeholder} required={message.required}
+      aria-describedby="err-message"></textarea>
+    <span class="co-field-error" id="err-message" data-error-for="message"></span>
+  </label>
+
+  <!-- Consent must be an affirmative act (Art. 4 Nr. 11 DSGVO); the design's
+       consentNote sentence alone is a notice, not consent. -->
+  <label class="contact-form__consent">
+    <input class="contact-form__checkbox" type="checkbox" name="consent" required
+      aria-describedby="err-consent" />
+    <span class="contact-form__consent-text">
+      Ich stimme der Verarbeitung meiner Angaben zur Bearbeitung der Anfrage zu.
+      Hinweise dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.
+    </span>
+  </label>
+  <span class="co-field-error" id="err-consent" data-error-for="consent"></span>
+
+  <!-- Spam traps: a field no human sees, and a render timestamp. -->
+  <div class="contact-form__trap" aria-hidden="true">
+    <label>
+      Bitte nicht ausfüllen
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
+  <input type="hidden" name="renderedAt" data-rendered-at value="" />
+
+  <div class="contact-form__footer">
+    <p class="contact-form__note">{contact.form.consentNote}</p>
+    <button class="co-btn co-btn--primary" type="submit">{submitLabel}</button>
+  </div>
+
+  <p class="contact-form__success" data-form-success hidden role="status" aria-live="polite">
+    {successMessage}
+  </p>
+</form>
+
+<script>
+  import '../scripts/contact-form';
+</script>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: 16px;
+    background: var(--co-mist);
+    padding: var(--co-form-padding);
+  }
+  .contact-form__pair {
+    display: grid;
+    grid-template-columns: var(--co-grid-field-pair);
+    gap: 16px;
+  }
+  .contact-form__field {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+  }
+  .contact-form__textarea {
+    line-height: 1.5;
+    resize: vertical;
+  }
+  .contact-form__consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+  }
+  .contact-form__checkbox {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--co-ink);
+  }
+  .contact-form__consent-text {
+    font: 400 14px/1.45 var(--co-font-body);
+    color: var(--co-muted);
+  }
+  .contact-form__trap {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .contact-form__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .contact-form__note {
+    font: 400 13px/1.45 var(--co-font-body);
+    color: var(--co-muted);
+    max-width: 250px;
+  }
+  .contact-form__success {
+    background: var(--co-pale);
+    border-radius: var(--co-radius-input);
+    padding: 14px 16px;
+    font: 500 15px/1.4 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  .co-field-error:empty {
+    display: none;
+  }
+</style>

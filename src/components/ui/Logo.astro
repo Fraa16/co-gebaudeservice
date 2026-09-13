@@ -1,0 +1,81 @@
+---
+/** The CO mark: rounded square, the cleaning swoosh, and "CO".
+ *  CI sheet: "Der Bogen steht für den Wisch- und Reinigungszug und verbindet die beiden
+ *  Buchstaben." Mindestbreite der Bildmarke 24 px. */
+interface Props {
+  tone?: 'onLight' | 'onDark';
+  size?: number;
+  wordmark?: boolean;
+  href?: string;
+  class?: string;
+}
+
+const { tone = 'onLight', size = 38, wordmark = true, href, class: cls } = Astro.props;
+
+const markBg = tone === 'onLight' ? 'var(--co-ink)' : 'var(--co-white)';
+const letterFill = tone === 'onLight' ? 'var(--co-white)' : 'var(--co-ink)';
+const swoosh = tone === 'onLight' ? 'var(--co-cyan)' : 'var(--co-ice)';
+const labelColor = tone === 'onLight' ? 'var(--co-ink)' : 'var(--co-white)';
+
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag
+  class:list={['logo', cls]}
+  href={href}
+  aria-label={href ? 'CO Gebäudeservice — zur Startseite' : undefined}
+>
+  <span class="logo__mark" style={`--mark-size:${size}px;--mark-bg:${markBg}`}>
+    <svg class="logo__swoosh" viewBox="0 0 38 38" aria-hidden="true" focusable="false">
+      <path
+        d="M-3 29 C 8 14, 21 35, 44 10"
+        stroke={swoosh}
+        stroke-width="3.6"
+        fill="none"
+        stroke-linecap="round"
+      ></path>
+    </svg>
+    <span class="logo__letters" style={`--letter-fill:${letterFill}`}>CO</span>
+  </span>
+  {wordmark && <span class="logo__label" style={`--label-color:${labelColor}`}>CO Gebäudeservice</span>}
+</Tag>
+
+<style>
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+  .logo__mark {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    width: var(--mark-size);
+    height: var(--mark-size);
+    background: var(--mark-bg);
+    border-radius: var(--co-radius-logo);
+  }
+  .logo__swoosh {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .logo__letters {
+    position: relative;
+    font-family: var(--co-font-heading);
+    font-weight: 700;
+    font-size: calc(var(--mark-size) * 0.37);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--letter-fill);
+  }
+  .logo__label {
+    font: 600 10px/1.2 var(--co-font-body);
+    letter-spacing: var(--co-logo-tracking);
+    text-transform: uppercase;
+    color: var(--label-color);
+  }
+</style>

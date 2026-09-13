@@ -1,0 +1,103 @@
+---
+import PillLabel from '../ui/PillLabel.astro';
+import Button from '../ui/Button.astro';
+import Photo from '../ui/Photo.astro';
+import InfoCard from './InfoCard.astro';
+import { detail } from '../../data/content';
+import { resolveHref } from '../../data/routes';
+
+interface Props {
+  /** Home shows one paragraph and no info card; the service page shows everything. */
+  condensed?: boolean;
+  level?: 1 | 2;
+  id?: string;
+}
+const { condensed = false, level = 2, id = 'treppenhaus' } = Astro.props;
+
+const paragraphs = condensed ? detail.paragraphs.slice(0, 1) : detail.paragraphs;
+const Heading = level === 1 ? 'h1' : 'h2';
+---
+
+<section class="co-card co-card--white detail" id={id}>
+  <div class="detail__grid">
+    <div class="detail__text">
+      <PillLabel text={detail.pill} />
+      <Heading class:list={['detail__heading', level === 1 && 'is-h1']}>{detail.h2}</Heading>
+
+      {paragraphs.map((p) => <p class="detail__para">{p}</p>)}
+
+      <div class="detail__actions">
+        {
+          detail.ctas.map((cta) => (
+            <Button
+              href={condensed && cta.style === 'quiet' ? '/leistungen' : resolveHref(cta.href)}
+              variant={cta.style === 'primary' ? 'primary' : 'quiet'}
+            >
+              {cta.label}
+            </Button>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="detail__aside">
+      <div class="detail__photo">
+        <Photo slot={detail.photo.slot} sizes="(max-width: 900px) 100vw, 45vw" />
+      </div>
+      {
+        !condensed && (
+          <InfoCard
+            label={detail.infoCard.label}
+            items={detail.infoCard.items}
+            facts={detail.infoCard.facts}
+          />
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .detail__grid {
+    display: grid;
+    grid-template-columns: var(--co-grid-two-col);
+    gap: var(--co-two-col-gap);
+    align-items: start;
+  }
+  .detail__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .detail__heading {
+    font: 700 var(--co-h2-size) / 1.1 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    margin-bottom: 4px;
+  }
+  .detail__heading.is-h1 {
+    font-size: var(--co-h1-size);
+    line-height: 1.06;
+    letter-spacing: var(--co-h1-tracking);
+  }
+  .detail__para {
+    font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);
+    color: var(--co-muted);
+  }
+  .detail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .detail__aside {
+    display: grid;
+    gap: var(--co-grid-gap);
+  }
+  .detail__photo {
+    position: relative;
+    overflow: hidden;
+    height: clamp(200px, 20vw, 260px);
+    border-radius: var(--co-radius-photo);
+  }
+</style>

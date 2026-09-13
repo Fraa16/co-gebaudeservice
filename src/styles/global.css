@@ -74,6 +74,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 .co-card--header { border-radius: var(--co-radius-header); }
 
+/* Text-heavy service sections need a wider column than the photo cards. */
+:root { --co-grid-service-sections: repeat(auto-fit, minmax(320px, 1fr)); }
+
 /* Pills, buttons, nav -------------------------------------------------- */
 
 .co-glass-pill {

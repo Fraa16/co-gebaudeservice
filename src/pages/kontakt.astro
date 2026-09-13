@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
+import { company } from '../data/company';
+import { pageSeo } from '../data/seo';
+import { buildGraph } from '../lib/jsonld';
+
+const seo = pageSeo.kontakt;
+const jsonLd = buildGraph({
+  path: '/kontakt',
+  title: seo.title,
+  description: seo.description,
+  pageType: 'ContactPage',
+  breadcrumbs: [
+    { name: 'Start', path: '/' },
+    { name: 'Kontakt', path: '/kontakt' },
+  ],
+});
+---
+
+<BaseLayout {...seo} path="/kontakt" jsonLd={jsonLd}>
+  <ContactSection level={1}>
+    <div slot="extras" class="kontakt__area">
+      <p class="kontakt__area-label">Einsatzgebiet</p>
+      <p class="kontakt__area-value">{company.areaLong}</p>
+    </div>
+  </ContactSection>
+</BaseLayout>
+
+<style>
+  .kontakt__area {
+    background: var(--co-pale);
+    border-radius: var(--co-radius-contact-row);
+    padding: 18px 22px;
+  }
+  .kontakt__area-label {
+    font: 600 11px/1 var(--co-font-body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--co-blue);
+    margin-bottom: 6px;
+  }
+  .kontakt__area-value {
+    font: 400 17px/1.3 var(--co-font-body);
+  }
+</style>

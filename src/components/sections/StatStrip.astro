@@ -1,0 +1,41 @@
+---
+interface Props {
+  stats: readonly { readonly value: string; readonly label: string }[];
+}
+const { stats } = Astro.props;
+---
+
+<div class="stat-strip">
+  {
+    stats.map((stat) => (
+      <div class="stat-strip__item">
+        <p class="stat-strip__value">{stat.value}</p>
+        <p class="stat-strip__label">{stat.label}</p>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .stat-strip {
+    display: grid;
+    grid-template-columns: var(--co-grid-steps);
+    gap: var(--co-grid-gap);
+  }
+  .stat-strip__item {
+    background: var(--co-on-dark-card-bg);
+    border: 1px solid var(--co-on-dark-card-border);
+    border-radius: var(--co-radius-step);
+    padding: clamp(22px, 2.4vw, 28px);
+  }
+  .stat-strip__value {
+    font: 700 clamp(20px, 2.2vw, 26px) / 1.18 var(--co-font-heading);
+    letter-spacing: var(--co-h3-tracking);
+    color: var(--co-cyan);
+    margin-bottom: 8px;
+  }
+  .stat-strip__label {
+    font: 400 15px/1.5 var(--co-font-body);
+    color: var(--co-pale);
+  }
+</style>

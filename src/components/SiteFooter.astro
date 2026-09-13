@@ -1,0 +1,83 @@
+---
+import Logo from './ui/Logo.astro';
+import { company } from '../data/company';
+import { footer } from '../data/content';
+import { legalNav } from '../data/nav';
+---
+
+<footer class="co-card co-card--ink site-footer">
+  <div class="site-footer__top">
+    <Logo href="/" tone="onDark" size={42} />
+
+    <address class="site-footer__address">
+      {company.address.display}<br />
+      {
+        company.phone.verified ? (
+          <a href={`tel:${company.phone.e164}`}>{company.phone.display}</a>
+        ) : (
+          company.phone.display
+        )
+      }<br />
+      {
+        company.email.verified ? (
+          <a href={`mailto:${company.email.display}`}>{company.email.display}</a>
+        ) : (
+          company.email.display
+        )
+      }
+    </address>
+  </div>
+
+  <div class="site-footer__bottom">
+    <span>{footer.meta}</span>
+    <nav class="site-footer__legal" aria-label="Rechtliches">
+      {legalNav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: clamp(28px, 3.4vw, 44px);
+  }
+  .site-footer__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--co-on-dark-divider);
+  }
+  .site-footer__address {
+    font: 400 16px/1.75 var(--co-font-body);
+    font-style: normal;
+    color: var(--co-pale);
+  }
+  .site-footer__address a {
+    color: var(--co-cyan);
+  }
+  .site-footer__address a:hover {
+    color: var(--co-ice);
+  }
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 22px;
+    font: 400 13px/1.5 var(--co-font-body);
+    color: var(--co-ice);
+  }
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .site-footer__legal a {
+    color: var(--co-ice);
+  }
+  .site-footer__legal a:hover {
+    color: var(--co-white);
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import ServiceSection from '../../components/sections/ServiceSection.astro';
+import ServicesCtaCard from '../../components/sections/ServicesCtaCard.astro';
+import Process from '../../components/sections/Process.astro';
+import { allServices } from '../../data/services';
+import { pageSeo } from '../../data/seo';
+import { buildGraph } from '../../lib/jsonld';
+
+const seo = pageSeo.leistungen;
+const jsonLd = buildGraph({
+  path: '/leistungen',
+  title: seo.title,
+  description: seo.description,
+  pageType: 'CollectionPage',
+  breadcrumbs: [
+    { name: 'Start', path: '/' },
+    { name: 'Leistungen', path: '/leistungen' },
+  ],
+});
+---
+
+<BaseLayout {...seo} path="/leistungen" jsonLd={jsonLd}>
+  <PageHero
+    pill="Leistungen"
+    heading="Alles rund ums Objekt, aus einer Hand."
+    lead="Einzeln beauftragbar oder als Paket im Dauerauftrag. Turnus, Umfang und Erreichbarkeit legen wir vorab schriftlich fest."
+    cta={{ label: 'Angebot anfordern', href: '/kontakt' }}
+  />
+
+  <div class="leistungen__grid">
+    {allServices.map((service) => <ServiceSection service={service} />)}
+    <ServicesCtaCard />
+  </div>
+
+  <Process currentPath="/leistungen" />
+</BaseLayout>
+
+<style>
+  .leistungen__grid {
+    display: grid;
+    grid-template-columns: var(--co-grid-service-sections);
+    gap: var(--co-card-gap);
+    align-items: stretch;
+  }
+</style>

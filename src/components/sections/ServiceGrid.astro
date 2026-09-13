@@ -1,0 +1,27 @@
+---
+import ServiceCard from './ServiceCard.astro';
+import ServicesCtaCard from './ServicesCtaCard.astro';
+import type { Service } from '../../data/services';
+
+interface Props {
+  services: Service[];
+  showCta?: boolean;
+  /** Draft services render as unlinked tiles until their copy is approved. */
+  linkTo?: (service: Service) => string | undefined;
+}
+
+const { services, showCta = true, linkTo } = Astro.props;
+---
+
+<section class="service-grid" id="leistungen">
+  {services.map((service) => <ServiceCard service={service} href={linkTo?.(service)} />)}
+  {showCta && <ServicesCtaCard />}
+</section>
+
+<style>
+  .service-grid {
+    display: grid;
+    grid-template-columns: var(--co-grid-services);
+    gap: var(--co-card-gap);
+  }
+</style>

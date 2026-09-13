@@ -1,0 +1,71 @@
+---
+import { site } from '../../data/site';
+import { withSuffix } from '../../data/seo';
+import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url';
+import sourceSansLatin from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url';
+
+export interface SeoProps {
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+type Props = SeoProps & { jsonLd?: unknown };
+
+const {
+  title,
+  description,
+  path,
+  ogImage = '/og/default.png',
+  ogType = 'website',
+  noindex,
+  jsonLd,
+} = Astro.props;
+
+const canonical = new URL(path, site.url).href.replace(/(.)\/$/, '$1');
+const ogImageUrl = new URL(ogImage, site.url).href;
+const fullTitle = withSuffix(title);
+const isNoindex = noindex ?? !site.indexable;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<meta
+  name="robots"
+  content={isNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
+/>
+
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="CO Gebäudeservice — Gebäudereinigung und Hausmeisterdienste in Nagold" />
+<meta property="og:locale" content="de_DE" />
+<meta property="og:site_name" content="CO Gebäudeservice" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<meta name="theme-color" content="#03045E" />
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Latin subsets only; the ext/vietnamese subsets are never used by German copy. -->
+<link rel="preload" as="font" type="font/woff2" href={archivoLatin} crossorigin />
+<link rel="preload" as="font" type="font/woff2" href={sourceSansLatin} crossorigin />
+
+<link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+{jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

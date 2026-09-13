@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import StatStrip from '../components/sections/StatStrip.astro';
+import Process from '../components/sections/Process.astro';
+import Photo from '../components/ui/Photo.astro';
+import DraftNote from '../components/ui/DraftNote.astro';
+import { ueberUns } from '../data/ueber-uns';
+import { pageSeo } from '../data/seo';
+import { buildGraph } from '../lib/jsonld';
+
+const seo = pageSeo.ueberUns;
+const jsonLd = buildGraph({
+  path: '/ueber-uns',
+  title: seo.title,
+  description: seo.description,
+  pageType: 'AboutPage',
+  breadcrumbs: [
+    { name: 'Start', path: '/' },
+    { name: 'Über uns', path: '/ueber-uns' },
+  ],
+});
+---
+
+<BaseLayout {...seo} path="/ueber-uns" jsonLd={jsonLd}>
+  <PageHero pill={ueberUns.pill} heading={ueberUns.h1} lead={ueberUns.lead} />
+
+  <section class="co-card co-card--white about">
+    <div class="about__prose">
+      {ueberUns.paragraphs.map((p) => <p class="about__para">{p.text}</p>)}
+      <DraftNote what="Absätze 2 und 3 sowie Überschrift und Einleitung dieser Seite" />
+    </div>
+  </section>
+
+  <section class="co-card co-card--ink about__facts">
+    <StatStrip stats={ueberUns.stats} />
+  </section>
+
+  <section class="about__band" aria-hidden="true">
+    {ueberUns.photoBand.map((slot) => (
+      <div class="about__band-item"><Photo slot={slot} sizes="25vw" /></div>
+    ))}
+  </section>
+
+  <Process currentPath="/ueber-uns" />
+</BaseLayout>
+
+<style>
+  .about__prose {
+    display: grid;
+    gap: 16px;
+    max-width: 760px;
+  }
+  .about__para {
+    font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);
+    color: var(--co-muted);
+  }
+  .about__facts {
+    padding: var(--co-section-padding);
+  }
+  .about__band {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--co-grid-gap);
+  }
+  .about__band-item {
+    position: relative;
+    overflow: hidden;
+    height: clamp(150px, 17vw, 220px);
+    border-radius: var(--co-radius-photo);
+  }
+</style>

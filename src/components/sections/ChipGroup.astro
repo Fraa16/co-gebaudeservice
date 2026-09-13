@@ -1,0 +1,39 @@
+---
+interface Props {
+  name: string;
+  label: string;
+  options: string[];
+}
+const { name, label, options } = Astro.props;
+---
+
+<fieldset class="chip-group">
+  <legend class="co-field-label">{label}</legend>
+  <div class="chip-group__chips" data-chip-group={name}>
+    {
+      options.map((option) => (
+        <button class="co-chip" type="button" aria-pressed="false" data-chip-value={option}>
+          {option}
+        </button>
+      ))
+    }
+  </div>
+  <!-- Mirrors the pressed chips so the payload is plain FormData. -->
+  <input type="hidden" name={name} data-chip-mirror={name} value="" />
+</fieldset>
+
+<style>
+  .chip-group {
+    display: grid;
+    gap: 9px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .chip-group__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>

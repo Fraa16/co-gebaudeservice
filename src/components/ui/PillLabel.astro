@@ -1,0 +1,9 @@
+---
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: cls } = Astro.props;
+---
+
+<span class:list={['co-pill-label', cls]}>{text}</span>
