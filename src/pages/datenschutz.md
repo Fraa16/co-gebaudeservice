@@ -20,7 +20,7 @@ Schietinger Str. 28<br />
 </address>
 
 Telefon: 0172 3001489  
-E-Mail: `TODO(client)` — echte Adresse ergänzen
+E-Mail: info@co-gebaeudeservice.de
 
 ## Keine Cookies, kein Tracking
 

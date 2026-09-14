@@ -17,13 +17,13 @@ Schietinger Str. 28<br />
 72202 Nagold
 </address>
 
-**Rechtsform:** `TODO(client)` — Einzelunternehmen, GbR oder GmbH?
+**Rechtsform:** Einzelunternehmen
 
 ## Kontakt
 
 **Telefon:** 0172 3001489
 
-**E-Mail:** `TODO(client)` — echte E-Mail-Adresse
+**E-Mail:** info@co-gebaeudeservice.de
 
 ## Umsatzsteuer
 
@@ -33,12 +33,10 @@ Alternativ, falls keine USt-IdNr. vorliegt, die Steuernummer: `TODO(client)`
 
 ## Berufsrechtliche Angaben
 
-`TODO(client)` — Für das Gebäudereiniger-Handwerk kann eine Eintragung bei der
-Handwerkskammer erforderlich sein. Bitte prüfen und ergänzen:
+Eine Eintragung bei der Handwerkskammer besteht nicht.
 
-- Zuständige Handwerkskammer
-- Berufsbezeichnung und Staat, in dem sie verliehen wurde
-- Zuständige Aufsichtsbehörde, falls einschlägig
+`TODO(client)` — Diese Angabe bitte von der Kanzlei oder dem Steuerberater bestätigen
+lassen, bevor die Seite online geht.
 
 ## Verantwortlich für den Inhalt
 

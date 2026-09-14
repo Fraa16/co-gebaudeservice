@@ -45,16 +45,20 @@ export const company = {
   },
 
   email: {
-    verified: false, // TODO(client): real address
+    /* Confirmed by the client, 14 Sep 2026. The mailbox has to exist on the domain
+       before launch — this flag puts the address into mailto: links and the structured
+       data graph, and an address that bounces is worse there than none. */
+    verified: true,
     display: content.company.email,
   },
 
-  /** TODO(client): Rechtsform, USt-IdNr. oder Steuernummer, Handwerkskammer-Eintrag. */
   legal: {
-    rechtsform: '',
+    rechtsform: 'Einzelunternehmen',
+    /** TODO(client): USt-IdNr. oder, falls keine vorliegt, die Steuernummer. */
     ustId: '',
     steuernummer: '',
-    kammer: '',
+    /** No Handwerkskammer entry, per the client. */
+    kammer: null,
   },
 } as const;
 

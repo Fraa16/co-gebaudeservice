@@ -3,7 +3,7 @@
 const env = import.meta.env;
 
 export const site = {
-  url: env.PUBLIC_SITE_URL ?? 'https://www.co-gebaeudeservice.de',
+  url: env.PUBLIC_SITE_URL ?? 'https://co-gebaeudeservice.de',
   locale: 'de-DE',
   lang: 'de',
 

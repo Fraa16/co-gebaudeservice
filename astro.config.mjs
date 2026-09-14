@@ -5,9 +5,10 @@ import vercel from '@astrojs/vercel';
 
 /**
  * The canonical origin. Baked into canonical URLs, the sitemap and OG tags.
- * TODO(client): confirm the registered domain before launch.
+ * Confirmed by the client: co-gebaeudeservice.de, without www. Vercel must redirect
+ * www -> apex so only one of the two is ever canonical.
  */
-const SITE = process.env.PUBLIC_SITE_URL ?? 'https://www.co-gebaeudeservice.de';
+const SITE = process.env.PUBLIC_SITE_URL ?? 'https://co-gebaeudeservice.de';
 
 export default defineConfig({
   site: SITE,
