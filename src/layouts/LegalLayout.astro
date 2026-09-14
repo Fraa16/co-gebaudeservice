@@ -2,8 +2,13 @@
 import BaseLayout from './BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import DraftNote from '../components/ui/DraftNote.astro';
+import Button from '../components/ui/Button.astro';
+import { company } from '../data/company';
 import { buildGraph } from '../lib/jsonld';
 
+/** Rhythm: documentary. These are reference texts, not marketing — so the page is
+ *  quiet: a compact opening, a numbered index of the sections beside the prose, and a
+ *  single line of help at the end. No photography, no bento, no CTA band. */
 interface Props {
   frontmatter: {
     title: string;
@@ -13,9 +18,12 @@ interface Props {
     path: string;
     updated: string;
   };
+  /** Astro passes the parsed headings of a Markdown page to its layout. */
+  headings?: { depth: number; slug: string; text: string }[];
 }
 
 const { title, description, pill, heading, path, updated } = Astro.props.frontmatter;
+const sections = (Astro.props.headings ?? []).filter((h) => h.depth === 2);
 
 const jsonLd = buildGraph({
   path,
@@ -26,32 +34,126 @@ const jsonLd = buildGraph({
     { name: heading, path },
   ],
 });
+
+const meta = [
+  { label: 'Stand', value: updated },
+  { label: 'Verantwortlich', value: `${company.owner}, ${company.address.locality}` },
+] as const;
 ---
 
 <BaseLayout title={title} description={description} path={path} jsonLd={jsonLd} noindex>
-  <PageHero pill={pill} heading={heading} />
+  <PageHero pill={pill} pillNum="01" heading={heading} meta={meta} />
 
   <section class="co-card co-card--white legal">
-    <DraftNote what="diese Seite ist ein Entwurf und muss juristisch geprüft werden" />
-    <div class="co-prose legal__body">
-      <slot />
+    <aside class="legal__index" aria-label="Inhalt dieser Seite">
+      <p class="co-kicker">Inhalt</p>
+      <ol class="legal__index-list">
+        {
+          sections.map((section, i) => (
+            <li class="legal__index-item">
+              <a class="legal__index-link" href={`#${section.slug}`}>
+                <span class="legal__index-num">{String(i + 1).padStart(2, '0')}</span>
+                <span>{section.text}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </aside>
+
+    <div class="legal__main">
+      <DraftNote what="diese Seite ist ein Entwurf und muss juristisch geprüft werden" />
+      <div class="co-prose legal__body">
+        <slot />
+      </div>
     </div>
-    <p class="legal__updated">Stand: {updated}</p>
+  </section>
+
+  <section class="co-card co-card--white legal__help">
+    <div class="legal__help-text">
+      <p class="co-kicker">Fragen</p>
+      <p class="legal__help-line">
+        Fragen zu diesen Angaben beantworten wir Ihnen direkt.
+      </p>
+    </div>
+    <Button href="/kontakt" variant="quiet" arrow>Kontakt aufnehmen</Button>
   </section>
 </BaseLayout>
 
 <style>
   .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(28px, 4vw, 68px);
+    align-items: flex-start;
+  }
+
+  /* The index sits beside the text on a wide screen and stacks above it on a narrow
+     one. Not sticky: pinned at full width on a phone it would cover the prose, and
+     avoiding that would need a breakpoint. */
+  .legal__index {
+    flex: 1 1 min(260px, 100%);
+    min-width: 0;
     display: grid;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .legal__index-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .legal__index-item + .legal__index-item {
+    border-top: var(--co-rule);
+  }
+  .legal__index-link {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 11px 10px 11px 0;
+    font: 500 15px/1.35 var(--co-font-body);
+    color: var(--co-ink);
+    border-radius: var(--co-radius-input);
+    transition: color 200ms ease, padding-left 240ms ease;
+  }
+  .legal__index-link:hover {
+    color: var(--co-blue);
+    padding-left: 8px;
+  }
+  .legal__index-num {
+    flex: none;
+    min-width: 3.4ch;
+    white-space: nowrap;
+    font: 600 11px/1.5 var(--co-font-body);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--co-label-tracking);
+    color: var(--co-deep-text);
+  }
+
+  .legal__main {
+    flex: 2 1 min(440px, 100%);
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
   }
   .legal__body {
-    max-width: 760px;
+    max-width: 68ch;
   }
-  .legal__updated {
-    font: 400 13px/1.45 var(--co-font-body);
+
+  .legal__help {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .legal__help-text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .legal__help-line {
+    font: 400 clamp(16px, 1.4vw, 19px) / 1.5 var(--co-font-body);
     color: var(--co-muted);
-    border-top: 1px solid var(--co-line);
-    padding-top: 16px;
   }
 </style>

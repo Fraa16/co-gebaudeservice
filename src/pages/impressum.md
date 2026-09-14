@@ -10,16 +10,19 @@ updated: September 2026
 
 ## Angaben gemäß § 5 DDG
 
-CO Gebäudeservice
-Oguz Cakir
-Schietinger Str. 28
+<address>
+CO Gebäudeservice<br />
+Oguz Cakir<br />
+Schietinger Str. 28<br />
 72202 Nagold
+</address>
 
 **Rechtsform:** `TODO(client)` — Einzelunternehmen, GbR oder GmbH?
 
 ## Kontakt
 
 **Telefon:** `TODO(client)` — echte Rufnummer
+
 **E-Mail:** `TODO(client)` — echte E-Mail-Adresse
 
 ## Umsatzsteuer

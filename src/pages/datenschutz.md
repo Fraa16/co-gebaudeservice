@@ -12,10 +12,12 @@ updated: September 2026
 
 Verantwortlich für die Datenverarbeitung auf dieser Website ist:
 
-CO Gebäudeservice
-Oguz Cakir
-Schietinger Str. 28
+<address>
+CO Gebäudeservice<br />
+Oguz Cakir<br />
+Schietinger Str. 28<br />
 72202 Nagold
+</address>
 
 Kontakt: `TODO(client)` — Telefon und E-Mail
 
@@ -92,9 +94,11 @@ Wenden Sie sich dazu an den oben genannten Verantwortlichen.
 Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.
 Zuständig ist:
 
-Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit
-Baden-Württemberg
+<address>
+Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit<br />
+Baden-Württemberg<br />
 Lautenschlagerstraße 20, 70173 Stuttgart
+</address>
 
 ## SSL- beziehungsweise TLS-Verschlüsselung
 
