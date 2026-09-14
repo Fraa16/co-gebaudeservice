@@ -72,8 +72,6 @@ const facts = [
     overflow: hidden;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    align-content: center;
-    min-height: clamp(500px, 66vh, 720px);
     background: var(--co-pale);
   }
   .hero__media {
@@ -94,9 +92,8 @@ const facts = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 22px;
-    padding: clamp(28px, 5vw, 76px);
-    padding-bottom: clamp(120px, 14vw, 180px);
+    gap: 20px;
+    padding: clamp(26px, 5vw, 76px);
     max-width: min(100%, 900px);
   }
   .hero__pill {
@@ -137,9 +134,9 @@ const facts = [
 
   /* Panels floating over the bottom corners of the container. */
   .hero__float {
-    position: absolute;
-    bottom: clamp(16px, 2vw, 28px);
+    position: relative;
     z-index: 1;
+    margin: 0 clamp(12px, 2vw, 28px);
     background: var(--co-glass-bg);
     border: 1px solid var(--co-glass-border);
     backdrop-filter: var(--co-glass-blur);
@@ -147,11 +144,11 @@ const facts = [
     box-shadow: var(--co-shadow-card);
   }
   .hero__float--left {
-    left: clamp(16px, 2vw, 28px);
     display: flex;
     flex-wrap: wrap;
-    padding: clamp(16px, 1.6vw, 22px) clamp(18px, 2vw, 26px);
-    gap: clamp(16px, 2vw, 30px);
+    padding: clamp(14px, 1.6vw, 22px) clamp(16px, 2vw, 26px);
+    gap: clamp(14px, 2vw, 30px);
+    margin-bottom: 10px;
   }
   .hero__fact {
     display: grid;
@@ -170,8 +167,8 @@ const facts = [
   }
 
   .hero__float--right {
-    right: clamp(16px, 2vw, 28px);
     display: flex;
+    margin-bottom: clamp(14px, 2vw, 28px);
     align-items: center;
     gap: 14px;
     padding: clamp(14px, 1.4vw, 18px) clamp(18px, 2vw, 24px);
@@ -200,5 +197,21 @@ const facts = [
   .hero__float-meta {
     font: 400 12px/1 var(--co-font-body);
     color: var(--co-muted);
+  }
+
+  /* Wide enough to float the panels over the corners without hitting the CTAs. */
+  @container page (min-width: 720px) {
+    .hero {
+      align-content: center;
+      min-height: clamp(500px, 66vh, 720px);
+    }
+    .hero__body { padding-bottom: clamp(120px, 14vw, 180px); }
+    .hero__float {
+      position: absolute;
+      bottom: clamp(16px, 2vw, 28px);
+      margin: 0;
+    }
+    .hero__float--left { left: clamp(16px, 2vw, 28px); }
+    .hero__float--right { right: clamp(16px, 2vw, 28px); }
   }
 </style>

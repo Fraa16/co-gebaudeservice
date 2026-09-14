@@ -44,7 +44,16 @@ test('the skip link is the first focusable element', async ({ page }) => {
   await expect(page.locator(':focus')).toHaveClass(/co-skip-link/);
 });
 
-test('the active nav pill is marked aria-current', async ({ page }) => {
+test('the active nav link is marked aria-current', async ({ page }) => {
   await page.goto('/leistungen');
-  await expect(page.locator('nav a[aria-current="page"]')).toHaveText('Leistungen');
+
+  // The header carries the links twice — inline pills once it has room, a disclosure
+  // panel when it does not — and exactly one of the two is ever displayed. Open the
+  // disclosure if this viewport is showing it, then assert on what the reader can see.
+  const toggle = page.locator('.site-header__toggle');
+  if (await toggle.isVisible()) await toggle.click();
+
+  const current = page.locator('nav a[aria-current="page"]:visible');
+  await expect(current).toHaveCount(1);
+  await expect(current).toHaveText('Leistungen');
 });

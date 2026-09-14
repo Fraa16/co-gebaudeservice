@@ -40,11 +40,11 @@ const {
 
   {
     meta && (
-      <div class="page-hero__meta">
+      <div class="co-facts page-hero__meta">
         {meta.map((item) => (
-          <div class="page-hero__meta-item">
-            <span class="page-hero__meta-label">{item.label}</span>
-            <span class="page-hero__meta-value">{item.value}</span>
+          <div class="co-facts__item">
+            <span class="co-facts__label">{item.label}</span>
+            <span class="co-facts__value">{item.value}</span>
           </div>
         ))}
       </div>
@@ -82,37 +82,11 @@ const {
   }
   .co-card--ink .page-hero__lead { color: var(--co-ice); }
 
+  /* The row itself is .co-facts in global.css — it carries the divider, which has to
+     flip from a left rule to a rule above when the facts stack. Only the placement
+     inside this hero is this component's business. */
   .page-hero__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0;
     margin-top: clamp(8px, 1.6vw, 22px);
     width: 100%;
   }
-  .page-hero__meta-item {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 6px;
-    padding: 4px clamp(18px, 2.4vw, 36px);
-    border-left: var(--co-rule);
-  }
-  .page-hero__meta-item:first-child {
-    padding-left: 0;
-    border-left: 0;
-  }
-  .co-card--ink .page-hero__meta-item { border-left-color: var(--co-on-dark-divider); }
-
-  .page-hero__meta-label {
-    font: 600 10px/1 var(--co-font-body);
-    letter-spacing: var(--co-label-tracking);
-    text-transform: uppercase;
-    color: var(--co-deep-text);
-  }
-  .co-card--ink .page-hero__meta-label { color: var(--co-ice); }
-
-  .page-hero__meta-value {
-    font: 600 clamp(15px, 1.3vw, 18px) / 1.25 var(--co-font-body);
-    color: var(--co-ink);
-  }
-  .co-card--ink .page-hero__meta-value { color: var(--co-white); }
 </style>

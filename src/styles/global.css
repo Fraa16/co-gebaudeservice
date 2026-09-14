@@ -316,30 +316,61 @@ button, input, textarea, select { font: inherit; color: inherit; }
 /* A comfortable reading measure — long-form text should never run the full card. */
 .co-measure { max-width: 62ch; }
 
-/* Meta row: small-caps facts separated by hairlines. */
-.co-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
+/* Fact row: small-caps facts separated by hairlines.
+
+   The divider flips direction rather than staying on the left. A wrapping flex row
+   cannot tell CSS which item begins a visual row, so a `border-left` survives the
+   wrap: stacked on a phone, items 2..n sat indented behind a stray vertical rule
+   while the first stayed flush left — ragged, and the single worst thing on the
+   small-screen render. An explicit grid knows its own column count, so stacked the
+   hairline sits *above* each item and every item stays flush; side by side it moves
+   to the left edge. Container queries, so this follows the content column and not a
+   device width (CLAUDE.md rule: no media queries). */
+.co-facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
 }
-.co-meta__item {
+.co-facts__item {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
-  padding: 0 clamp(16px, 2vw, 28px);
-  border-left: var(--co-rule);
+  min-width: 0;
+  padding-block: clamp(12px, 1.6vw, 16px);
+  border-top: var(--co-rule);
 }
-.co-meta__item:first-child { padding-left: 0; border-left: 0; }
-.co-meta__label {
+.co-facts__item:first-child { border-top: 0; padding-top: 0; }
+.co-facts__item:last-child { padding-bottom: 0; }
+
+/* 720px of content column is what three facts need before they read as columns
+   rather than as three cramped slivers — the card's own padding comes off this. */
+@container main (min-width: 720px) {
+  .co-facts {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+  .co-facts__item {
+    padding-block: 4px;
+    padding-inline: clamp(18px, 2.4vw, 36px);
+    border-top: 0;
+    border-left: var(--co-rule);
+  }
+  .co-facts__item:first-child { padding-left: 0; border-left: 0; }
+}
+.co-card--ink .co-facts__item { border-color: var(--co-on-dark-divider); }
+
+.co-facts__label {
   font: 600 10px/1 var(--co-font-body);
   letter-spacing: var(--co-label-tracking);
   text-transform: uppercase;
-  color: var(--co-blue);
+  color: var(--co-deep-text);
 }
-.co-meta__value {
-  font: 500 15px/1.3 var(--co-font-body);
+.co-card--ink .co-facts__label { color: var(--co-ice); }
+.co-facts__value {
+  font: 600 clamp(15px, 1.3vw, 18px) / 1.3 var(--co-font-body);
   color: var(--co-ink);
 }
+.co-card--ink .co-facts__value { color: var(--co-white); }
 
 /* Fluid asymmetry ------------------------------------------------------- */
 
@@ -355,6 +386,17 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .co-split > .co-split__minor { flex: 1 1 min(300px, 100%); min-width: 0; }
 .co-split--wide > .co-split__major { flex: 3 1 min(600px, 100%); }
 .co-split--wide > .co-split__minor { flex: 1 1 min(280px, 100%); }
+
+/* Header wordmark --------------------------------------------------------
+
+   On a phone the wordmark wrapped to two lines and pushed the menu button past the
+   edge of the screen; the mark alone carries the brand at that size. This lives here
+   rather than in SiteHeader because Astro gives a class passed to a child component
+   the class name but not the scope attribute, so a scoped rule never matches it. */
+.site-header .logo__label { display: none; }
+@container page (min-width: 660px) {
+  .site-header .logo__label { display: block; }
+}
 
 /* Rows of four ---------------------------------------------------------- */
 
@@ -386,20 +428,33 @@ button, input, textarea, select { font: inherit; color: inherit; }
   .co-row-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* Hairline dividers that reset at the start of each row, whatever the column count. */
+/* Hairline dividers that reset at the start of each row, whatever the column count —
+   and that turn horizontal once there is only one column, for the reason given above
+   the .co-facts block: a left-hand rule on a stacked item reads as a broken indent. */
 .co-row-4--divided > * {
-  border-left: var(--co-rule);
-  padding-left: clamp(16px, 2vw, 34px);
+  border-top: var(--co-rule);
+  padding-top: clamp(16px, 2vw, 26px);
 }
-.co-row-4--divided > :first-child { border-left: 0; padding-left: 0; }
+.co-row-4--divided > :first-child { border-top: 0; padding-top: 0; }
+
 @container main (min-width: 580px) {
+  .co-row-4--divided > * {
+    border-top: 0;
+    padding-top: 0;
+    border-left: var(--co-rule);
+    padding-left: clamp(16px, 2vw, 34px);
+  }
   .co-row-4--divided > :nth-child(2n + 1) { border-left: 0; padding-left: 0; }
 }
 @container main (min-width: 1200px) {
-  .co-row-4--divided > * { border-left: var(--co-rule); padding-left: clamp(16px, 2vw, 34px); }
+  /* Four across: what was a row start at two columns no longer is. */
+  .co-row-4--divided > :nth-child(2n + 1) {
+    border-left: var(--co-rule);
+    padding-left: clamp(16px, 2vw, 34px);
+  }
   .co-row-4--divided > :nth-child(4n + 1) { border-left: 0; padding-left: 0; }
 }
-.co-card--ink .co-row-4--divided > * { border-left-color: var(--co-on-dark-divider); }
+.co-card--ink .co-row-4--divided > * { border-color: var(--co-on-dark-divider); }
 
 /* Motion ---------------------------------------------------------------- */
 

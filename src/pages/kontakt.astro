@@ -45,17 +45,17 @@ const routes = contact.rows.map((row) => ({
       <p class="reach__lead">{contact.text}</p>
     </div>
 
-    <div class="reach__routes">
+    <div class="co-facts reach__routes">
       {
         routes.map((route) => (
-          <div class="reach__route co-reveal">
-            <span class="reach__route-label">{route.label}</span>
+          <div class="co-facts__item co-reveal">
+            <span class="co-facts__label">{route.label}</span>
             {route.href ? (
-              <a class="reach__route-value co-link-sweep" href={route.href}>
+              <a class="co-facts__value reach__route-link co-link-sweep" href={route.href}>
                 {route.value}
               </a>
             ) : (
-              <span class="reach__route-value">{route.value}</span>
+              <span class="co-facts__value">{route.value}</span>
             )}
           </div>
         ))
@@ -113,37 +113,14 @@ const routes = contact.rows.map((row) => ({
     color: var(--co-ice);
     max-width: 52ch;
   }
+  /* The three routes are a .co-facts row (global.css): hairline on the left when they
+     sit side by side, hairline above once they stack. This rule is only the group's
+     own separation from the lead above it. */
   .reach__routes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0;
     border-top: var(--co-rule-ink);
     padding-top: clamp(20px, 2.4vw, 32px);
   }
-  .reach__route {
-    flex: 1 1 min(230px, 100%);
-    min-width: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-    padding: 0 clamp(18px, 2.4vw, 36px);
-    border-left: var(--co-rule-ink);
-  }
-  .reach__route:first-child {
-    padding-left: 0;
-    border-left: 0;
-  }
-  .reach__route-label {
-    font: 600 10px/1 var(--co-font-body);
-    letter-spacing: var(--co-label-tracking);
-    text-transform: uppercase;
-    color: var(--co-ice);
-  }
-  .reach__route-value {
-    font: 600 clamp(16px, 1.5vw, 21px) / 1.25 var(--co-font-body);
-    color: var(--co-white);
-  }
-  a.reach__route-value:hover { color: var(--co-cyan); }
+  a.reach__route-link:hover { color: var(--co-cyan); }
 
   /* The form takes the card; the aside is deliberately slim. */
   .enquiry {

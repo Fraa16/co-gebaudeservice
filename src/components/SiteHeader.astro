@@ -9,39 +9,66 @@ const { currentPath } = Astro.props;
 
 const isActive = (href: string) =>
   href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+
+const links = primaryNav.filter((i) => !i.primary);
+const cta = primaryNav.find((i) => i.primary)!;
 ---
 
 <header class="co-card--header site-header" data-site-header>
-  <Logo href="/" size={38} />
+  <Logo href="/" size={38} class="site-header__logo" />
 
-  <nav class="site-header__nav" aria-label="Hauptnavigation">
+  <!-- Wide: the links sit inline as pills. -->
+  <nav class="site-header__inline" aria-label="Hauptnavigation">
     {
-      primaryNav.map((item) => (
+      links.map((item) => (
         <a
-          class:list={['co-nav-pill', item.primary && 'co-nav-pill--primary']}
+          class="co-nav-pill"
           href={item.href}
-          aria-current={!item.primary && isActive(item.href) ? 'page' : undefined}
+          aria-current={isActive(item.href) ? 'page' : undefined}
         >
           {item.label}
         </a>
       ))
     }
   </nav>
+
+  <div class="site-header__end">
+    <a class="co-nav-pill co-nav-pill--primary site-header__cta" href={cta.href}>{cta.label}</a>
+
+    <!-- Narrow: the links collapse behind a disclosure. <details> needs no JavaScript,
+         so the menu still opens if the script never runs (CLAUDE.md rule 10). -->
+    <details class="site-header__menu">
+      <summary class="site-header__toggle" aria-label="Menü öffnen">
+        <span class="site-header__burger" aria-hidden="true"></span>
+      </summary>
+      <nav class="site-header__panel" aria-label="Hauptnavigation">
+        {
+          links.map((item) => (
+            <a
+              class="site-header__panel-link"
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </details>
+  </div>
 </header>
 
 <style>
-  /* flex-wrap is the whole mobile story: the pills wrap to a second row inside the
-     same card. No breakpoints, no disclosure menu — see CLAUDE.md "fully fluid". */
   .site-header {
     position: sticky;
     top: var(--co-page-padding);
     z-index: 20;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
-    padding: 14px 16px 14px 20px;
+    gap: 12px;
+    padding: 10px 12px 10px 16px;
     background: var(--co-glass-bg);
     border: 1px solid var(--co-glass-border);
     backdrop-filter: var(--co-glass-blur);
@@ -51,10 +78,99 @@ const isActive = (href: string) =>
     background: var(--co-white);
     box-shadow: var(--co-shadow-card);
   }
-  .site-header__nav {
+
+  .site-header__end {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
+    flex: none;
+  }
+
+  /* Inline links: hidden until the header has room for them. */
+  .site-header__inline { display: none; }
+
+  .site-header__logo { flex: none; }
+
+  .site-header__cta {
+    white-space: nowrap;
+    padding: 11px 16px;
+  }
+
+  /* Disclosure -------------------------------------------------------- */
+
+  .site-header__menu { position: relative; flex: none; }
+
+  .site-header__toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--co-line);
+    border-radius: var(--co-radius-pill);
+    background: var(--co-white);
+    cursor: pointer;
+    list-style: none;
+  }
+  .site-header__toggle::-webkit-details-marker { display: none; }
+
+  /* Three bars that become a cross when open. */
+  .site-header__burger,
+  .site-header__burger::before,
+  .site-header__burger::after {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: var(--co-radius-pill);
+    background: var(--co-ink);
+    transition: transform 220ms ease, opacity 160ms ease;
+  }
+  .site-header__burger::before { transform: translateY(-6px); }
+  .site-header__burger::after { transform: translateY(4px); }
+  [open] .site-header__burger { background: transparent; }
+  [open] .site-header__burger::before { transform: translateY(0) rotate(45deg); }
+  [open] .site-header__burger::after { transform: translateY(-2px) rotate(-45deg); }
+
+  .site-header__panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    min-width: 220px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    padding: 8px;
+    background: var(--co-white);
+    border: 1px solid var(--co-line);
+    border-radius: var(--co-radius-l);
+    box-shadow: var(--co-shadow-lift);
+  }
+  .site-header__panel-link {
+    display: flex;
+    align-items: center;
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: var(--co-radius-m);
+    font: 500 16px/1 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  .site-header__panel-link:hover { background: var(--co-mist); color: var(--co-ink); }
+  .site-header__panel-link[aria-current='page'] {
+    background: var(--co-pale);
+    color: var(--co-ink);
+  }
+
+  /* Once the header has room, swap the disclosure for inline pills. A container query,
+     so it responds to the page column rather than the device. */
+  @container page (min-width: 660px) {
+    .site-header { padding: 14px 16px 14px 20px; gap: 14px; }
+    .site-header__inline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .site-header__menu { display: none; }
+    .site-header__cta { padding: var(--co-nav-pill-padding); }
   }
 </style>

@@ -161,6 +161,9 @@ a:hover { color: var(--co-ink); }
 /* Page shell: cards on a ground, one gutter between them --------------- */
 
 .co-page {
+  /* Named container so the header and hero can respond to the page column. */
+  container-type: inline-size;
+  container-name: page;
   display: grid;
   /* minmax(0, 1fr) rather than the implicit `auto`: an auto track floors at the
      widest child's min-content, so one long German compound stretched the whole
