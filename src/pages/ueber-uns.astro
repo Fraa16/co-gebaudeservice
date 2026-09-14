@@ -7,6 +7,7 @@ import CtaBand from '../components/sections/CtaBand.astro';
 import Photo from '../components/ui/Photo.astro';
 import DraftNote from '../components/ui/DraftNote.astro';
 import { ueberUns } from '../data/ueber-uns';
+import { getPhoto } from '../data/photos';
 import { company } from '../data/company';
 import { pageSeo } from '../data/seo';
 import { buildGraph } from '../lib/jsonld';
@@ -28,6 +29,9 @@ const jsonLd = buildGraph({
 
 /** TODO(client): confirm these places — draft, see CONTENT-REVIEW.md §3. */
 const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebhausen'];
+
+/** Only the slots that actually hold a photograph. */
+const bandPhotos = ueberUns.photoBand.filter((slot) => getPhoto(slot).image);
 ---
 
 <BaseLayout {...seo} path="/ueber-uns" jsonLd={jsonLd}>
@@ -40,22 +44,32 @@ const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebh
     size="display"
   />
 
-  <section class="about__band co-row-4" aria-hidden="true">
-    {
-      /* Alternating tone and curve: four identical placeholders in a row read as
-         four broken images. */
-      ueberUns.photoBand.map((slot, i) => (
-        <div class="about__band-item co-reveal">
-          <Photo
-            slot={slot}
-            sizes="(max-width: 700px) 50vw, 25vw"
-            tone={(['blue', 'ice', 'ink', 'pale'] as const)[i % 4]}
-            variant={i}
-          />
-        </div>
-      ))
-    }
-  </section>
+  {
+    /* Four photographs in a row is the design. Four *placeholders* in a row is four
+       broken images, which is what it looked like while the shots are outstanding —
+       alternating the tone and the curve did not rescue it. So the band follows the
+       data: it appears once real photographs exist, and until then a single wide
+       panel stands in, which reads as a deliberate graphic rather than a gap.
+       Nothing here changes when the shots land in src/data/photos.ts. */
+    bandPhotos.length > 0 ? (
+      <section class="about__band co-row-4" aria-hidden="true">
+        {bandPhotos.map((slot, i) => (
+          <div class="about__band-item co-reveal">
+            <Photo
+              slot={slot}
+              sizes="(max-width: 700px) 50vw, 25vw"
+              tone={(['blue', 'ice', 'ink', 'pale'] as const)[i % 4]}
+              variant={i}
+            />
+          </div>
+        ))}
+      </section>
+    ) : (
+      <section class="about__band-single co-reveal" aria-hidden="true">
+        <Photo slot={ueberUns.photoBand[0]!} sizes="100vw" tone="blue" />
+      </section>
+    )
+  }
 
   <Statement
     kicker="Arbeitsweise"
@@ -64,6 +78,12 @@ const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebh
     paragraphs={ueberUns.paragraphs}
   >
     <DraftNote what="Absätze 2 und 3, Überschrift, Einleitung und die Ortsliste dieser Seite" />
+
+    <div class="about__owner" slot="foot">
+      <span class="about__owner-role">{company.ownerRole}</span>
+      <span class="about__owner-name">{company.owner}</span>
+      <span class="about__owner-place">{company.address.locality}</span>
+    </div>
   </Statement>
 
   <section class="co-card co-card--ink co-grain about__facts">
@@ -100,6 +120,42 @@ const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebh
     height: clamp(170px, 20vw, 260px);
     border-radius: var(--co-radius-photo);
     box-shadow: var(--co-shadow-card);
+  }
+
+  /* Stand-in while the four shots are outstanding: one wide panel, taller than a
+     single band item so it holds the page's rhythm on its own. */
+  .about__band-single {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    height: clamp(200px, 26vw, 340px);
+    border-radius: var(--co-radius-photo);
+    box-shadow: var(--co-shadow-card);
+  }
+
+  /* Who is actually behind the business, at the foot of the statement column. Facts
+     from company.ts, not new marketing copy. */
+  .about__owner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    border-top: var(--co-rule);
+    padding-top: 18px;
+  }
+  .about__owner-role {
+    font: 600 10px/1 var(--co-font-body);
+    letter-spacing: var(--co-label-tracking);
+    text-transform: uppercase;
+    color: var(--co-deep-text);
+  }
+  .about__owner-name {
+    font: 600 clamp(18px, 1.6vw, 22px) / 1.2 var(--co-font-heading);
+    letter-spacing: var(--co-h3-tracking);
+    color: var(--co-ink);
+  }
+  .about__owner-place {
+    font: 400 15px/1.4 var(--co-font-body);
+    color: var(--co-muted);
   }
 
   .about__facts {

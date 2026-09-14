@@ -11,6 +11,7 @@ export const company = {
   name: 'CO Gebäudeservice',
   legalName: 'CO Gebäudeservice',
   owner: 'Oguz Cakir',
+  ownerRole: 'Inhaber',
 
   area: content.company.area,
   areaLong: content.company.areaLong,

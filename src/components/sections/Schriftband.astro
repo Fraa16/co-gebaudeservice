@@ -2,7 +2,18 @@
 import { marquee } from '../../data/content';
 
 /** Decorative: it repeats the service names that are already in the cards below,
- *  so it is hidden from assistive tech rather than read twice. */
+ *  so it is hidden from assistive tech rather than read twice.
+ *
+ *  The ribbon has to be full end to end. The path begins at x=-60, outside the
+ *  viewBox, so whatever sits at its start is clipped by the left edge — which reads
+ *  as a band passing through only if the right edge is clipped too. With the list
+ *  written once it was not: 823 units of text on a 1348-unit path left the last
+ *  third empty, so one end looked cropped and the other looked unfinished.
+ *
+ *  Repeating the list overruns the path instead, and a textPath simply stops
+ *  rendering where the path ends. Two passes already exceed it; three leaves room for
+ *  the copy to be shortened at sign-off without the gap coming back. */
+const band = Array.from({ length: 3 }, () => marquee).join(' · ');
 ---
 
 <div class="schriftband" aria-hidden="true">
@@ -15,7 +26,7 @@ import { marquee } from '../../data/content';
       stroke-width="48"
       stroke-linecap="butt"></path>
     <text dominant-baseline="middle" class="schriftband__text">
-      <textPath href="#co-ribbon" startOffset="4%">{marquee}</textPath>
+      <textPath href="#co-ribbon" startOffset="0%">{band}</textPath>
     </text>
   </svg>
 </div>
