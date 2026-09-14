@@ -5,11 +5,10 @@
     "logoLabel": "CO Gebäudeservice",
     "area": "Nagold und Umgebung",
     "areaLong": "Nagold und Umgebung · Kreis Calw",
-    "address": "Musterstraße 1 · 72202 Nagold",
+    "address": "Schietinger Str. 28 · 72202 Nagold",
     "phone": "0172 3001489",
     "email": "info@co-gebaeudeservice.de",
     "$placeholder": [
-      "address",
       "email"
     ]
   },
@@ -189,7 +188,7 @@
       },
       {
         "label": "Anschrift",
-        "value": "Musterstraße 1 · 72202 Nagold"
+        "value": "Schietinger Str. 28 · 72202 Nagold"
       }
     ],
     "form": {
