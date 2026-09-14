@@ -282,3 +282,34 @@ test('no heading is narrower than its longest word', async ({ page }) => {
 
   expect(bad).toEqual([]);
 });
+
+test('no two sections on a page claim the same number', async ({ page }) => {
+  /* /kontakt counted 01, 02, 02: the enquiry card and the Timeline both claimed 02,
+     because Timeline hard-coded its own kicker instead of taking it from the page.
+     The numbers are a navigational device — a repeat makes the page look unproofed.
+     Only section kickers count; .co-kicker__num--item indexes rows in a catalogue. */
+  const bad: string[] = [];
+
+  for (const route of ['/', '/leistungen', '/ueber-uns', '/kontakt', '/impressum', '/datenschutz']) {
+    await page.goto(route);
+    const numbers = await page.evaluate(() =>
+      [...document.querySelectorAll('.co-kicker__num:not(.co-kicker__num--item)')].map((el) =>
+        (el.textContent ?? '').trim(),
+      ),
+    );
+
+    const seen = new Map<string, number>();
+    for (const n of numbers) seen.set(n, (seen.get(n) ?? 0) + 1);
+    for (const [n, count] of seen) {
+      if (count > 1) bad.push(`${route}: section number ${n} used ${count} times`);
+    }
+
+    // They should also read in order, which is the point of numbering them at all.
+    const sorted = [...numbers].sort();
+    if (numbers.join() !== sorted.join()) {
+      bad.push(`${route}: section numbers out of order — ${numbers.join(', ')}`);
+    }
+  }
+
+  expect(bad).toEqual([]);
+});

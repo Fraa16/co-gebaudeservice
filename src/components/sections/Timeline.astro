@@ -6,12 +6,18 @@ import { processContent } from '../../data/content';
  *  contact page wants "here is what happens next", not a showcase. */
 interface Props {
   heading?: string;
+  /** Where this sits in the page's numbering. Hard-coding it made /kontakt count
+   *  01, 02, 02 — the enquiry card and this both claimed 02. */
+  kickerNum?: string;
 }
-const { heading = 'Was nach Ihrer Anfrage passiert' } = Astro.props;
+const {
+  heading = 'Was nach Ihrer Anfrage passiert',
+  kickerNum = '03',
+} = Astro.props;
 ---
 
 <section class="co-card co-card--white timeline">
-  <p class="co-kicker"><span class="co-kicker__num">02</span> {processContent.pill}</p>
+  <p class="co-kicker"><span class="co-kicker__num">{kickerNum}</span> {processContent.pill}</p>
   <h2 class="timeline__heading">{heading}</h2>
 
   <ol class="timeline__list co-row-4">

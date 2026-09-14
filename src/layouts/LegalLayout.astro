@@ -81,18 +81,24 @@ const meta = [
 </BaseLayout>
 
 <style>
+  /* A document, not a full-bleed section. The prose is capped at a reading measure,
+     so stretching the columns across a 1400px card left a third of it empty on the
+     right — which reads as unused card rather than as margin. Centring the pair turns
+     the remainder into a margin on both sides and gives the legal pages the quiet,
+     documentary rhythm they are supposed to have. */
   .legal {
     display: flex;
     flex-wrap: wrap;
     gap: clamp(28px, 4vw, 68px);
     align-items: flex-start;
+    justify-content: center;
   }
 
   /* The index sits beside the text on a wide screen and stacks above it on a narrow
-     one. Not sticky: pinned at full width on a phone it would cover the prose, and
-     avoiding that would need a breakpoint. */
+     one. It follows only once the two are actually side by side — see the container
+     query below. Pinned at full width on a phone it would cover the prose. */
   .legal__index {
-    flex: 1 1 min(260px, 100%);
+    flex: 0 1 min(280px, 100%);
     min-width: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -130,7 +136,7 @@ const meta = [
   }
 
   .legal__main {
-    flex: 2 1 min(440px, 100%);
+    flex: 0 1 min(68ch, 100%);
     min-width: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -138,6 +144,21 @@ const meta = [
   }
   .legal__body {
     max-width: 68ch;
+  }
+
+  /* Once the columns are side by side the index can follow the reader, which also
+     stops a nine-item list leaving its column blank beside two metres of prose. A
+     container query, not a breakpoint: it asks whether this layout has the room,
+     which is the actual condition. The offset clears the sticky header. */
+  @container main (min-width: 820px) {
+    .legal__index {
+      position: sticky;
+      top: calc(var(--co-page-padding) + 96px);
+      align-self: start;
+      /* Never taller than the space it has, or a long index would clip. */
+      max-height: calc(100vh - var(--co-page-padding) - 130px);
+      overflow-y: auto;
+    }
   }
 
   .legal__help {

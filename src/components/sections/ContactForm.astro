@@ -1,9 +1,15 @@
 ---
 import ChipGroup from './ChipGroup.astro';
 import { contact } from '../../data/content';
+import { allServices } from '../../data/services';
 import { site } from '../../data/site';
 
 const { fields, submitLabel, successMessage } = contact.form;
+
+/** content.json still lists the original five services here, so the form offered five
+ *  chips on a site that advertises eight — someone wanting Kellerreinigung had nowhere
+ *  to say so. The catalogue is the single source of truth for what can be asked for. */
+const serviceOptions = allServices.map((service) => service.title);
 
 const field = (name: string) => fields.find((f) => f.name === name)!;
 const text = field('name');
@@ -60,7 +66,7 @@ const message = field('message');
     </label>
   </div>
 
-  <ChipGroup name="services" label={services.label} options={services.options ?? []} />
+  <ChipGroup name="services" label={services.label} options={serviceOptions} />
 
   <label class="contact-form__field">
     <span class="co-field-label">{message.label}{message.required && <span aria-hidden="true"> *</span>}</span>

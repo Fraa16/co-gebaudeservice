@@ -26,13 +26,16 @@ const jsonLd = buildGraph({
 /** An unverified detail still renders — it is part of the design — but is not linked
  *  and never reaches structured data. See src/data/company.ts. */
 const routes = contactRoutes;
+const phone = contactRoutes.find((route) => route.label === 'Telefon');
 ---
 
 <BaseLayout {...seo} path="/kontakt" jsonLd={jsonLd}>
   <section class="co-card co-card--ink co-grain reach">
     <div class="reach__head">
-      <p class="co-kicker"><span class="co-kicker__num">01</span> {contact.pill}</p>
-      <h1 class="co-display reach__title">{contact.h2}</h1>
+      <div class="reach__head-main">
+        <p class="co-kicker"><span class="co-kicker__num">01</span> {contact.pill}</p>
+        <h1 class="co-display reach__title">{contact.h2}</h1>
+      </div>
       <p class="reach__lead">{contact.text}</p>
     </div>
 
@@ -73,6 +76,25 @@ const routes = contactRoutes;
           <dd class="enquiry__fact-value">{company.areaLong}</dd>
         </div>
       </dl>
+
+      {
+        /* The form is tall and this column was not, leaving the lower third of the
+           card blank. Someone who would rather talk than type is exactly who is
+           looking at that space — so it holds the number, gated like every other
+           contact detail. */
+        phone && (
+          <div class="enquiry__direct">
+            <span class="enquiry__fact-label">{phone.label}</span>
+            {phone.href ? (
+              <a class="enquiry__direct-value co-link-sweep" href={phone.href}>
+                {phone.value}
+              </a>
+            ) : (
+              <span class="enquiry__direct-value">{phone.value}</span>
+            )}
+          </div>
+        )
+      }
     </div>
 
     <div class="enquiry__form">
@@ -80,7 +102,7 @@ const routes = contactRoutes;
     </div>
   </section>
 
-  <Timeline />
+  <Timeline kickerNum="03" />
 </BaseLayout>
 
 <style>
@@ -90,19 +112,31 @@ const routes = contactRoutes;
     grid-template-columns: minmax(0, 1fr);
     gap: clamp(30px, 4vw, 54px);
   }
+  /* Heading and lead sit side by side once there is room. Stacked, the title's 16ch
+     measure left the right half of a very large ink card empty. */
   .reach__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(18px, 3vw, 56px);
+    align-items: flex-end;
+  }
+  .reach__head-main {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 18px;
+    flex: 1 1 min(460px, 100%);
+    min-width: 0;
   }
   .reach__title {
     font-size: clamp(30px, 4vw, 62px);
     max-width: 16ch;
   }
   .reach__lead {
+    flex: 1 1 min(340px, 100%);
+    min-width: 0;
     font: 400 clamp(16px, 1.4vw, 19px) / var(--co-lead-lh) var(--co-font-body);
     color: var(--co-ice);
-    max-width: 52ch;
+    max-width: 46ch;
   }
   /* The three routes are a .co-facts row (global.css): hairline on the left when they
      sit side by side, hairline above once they stack. This rule is only the group's
@@ -118,15 +152,29 @@ const routes = contactRoutes;
     display: flex;
     flex-wrap: wrap;
     gap: clamp(26px, 4vw, 60px);
-    align-items: flex-start;
+    align-items: stretch;
   }
   .enquiry__aside {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 18px;
     flex: 1 1 min(300px, 100%);
     min-width: 0;
   }
+  /* Pushed to the foot of the column, whatever height the form takes. */
+  .enquiry__direct {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    border-top: var(--co-rule);
+    padding-top: 18px;
+  }
+  .enquiry__direct-value {
+    font: 600 clamp(18px, 1.7vw, 24px) / 1.2 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  a.enquiry__direct-value:hover { color: var(--co-blue); }
   .enquiry__title {
     font: 700 clamp(22px, 2.2vw, 32px) / 1.1 var(--co-font-heading);
     letter-spacing: var(--co-h2-tracking);

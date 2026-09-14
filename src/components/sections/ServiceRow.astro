@@ -18,7 +18,12 @@ const flipped = index % 2 === 1;
 <article class:list={['service-row', flipped && 'is-flipped']} id={service.slug}>
   <div class="service-row__main">
     <p class="co-kicker">
-      <span class="co-kicker__num">{String(index + 1).padStart(2, '0')}</span>
+      {/* --item: this counts rows in the catalogue, not sections in the page. Same
+          type treatment, different meaning — and it is what lets
+          tests/responsive.spec.ts assert that no two sections claim one number. */}
+      <span class="co-kicker__num co-kicker__num--item">
+        {String(index + 1).padStart(2, '0')}
+      </span>
       {service.chip}
     </p>
 
