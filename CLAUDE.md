@@ -32,8 +32,10 @@ wins** — several literals in the prototype (the header's 28px radius among the
 dead CSS, overridden by the tweak layer that does not ship.
 
 The production site is **Astro 7, static output, TypeScript, deployed on Vercel.** It
-lives in `src/`. The only client JS is the chip toggle and form validation in
-`src/components/scripts/contact-form.ts`.
+lives in `src/`. Client JS is deliberately tiny: a header scroll state, and the chip
+toggle plus form handling in `src/components/scripts/contact-form.ts`. The zod validator
+is loaded on first interaction with the form, not with the page — it is 19 kB and most
+visitors never touch the form.
 
 ## The identity in one paragraph
 
@@ -69,29 +71,38 @@ kickers, roughly 8:1.
    listed in `CONTENT-REVIEW.md` for sign-off. The tonality rule holds regardless: no
    added marketing language, no superlatives, no exclamation marks, no emoji.
 5. **Flex/grid with `gap`** for every group of siblings — never margin-spaced inline elements.
-   Two rules that keep this fluid without breakpoints, both learned the hard way:
+   Three rules that keep this fluid without breakpoints, all learned the hard way:
    a flex-basis must be `min(<px>, 100%)`, never a percentage (a percentage collapses
-   on narrow screens and children punch out of the page); and every `display: grid`
-   holding text needs `grid-template-columns: minmax(0, 1fr)`, because an `auto` track
-   floors at min-content and one German compound then widens the whole page.
-6. **Keep `text-wrap: pretty`** on headings and paragraphs.
-7. **Form inputs stay at 16px** font-size (prevents iOS zoom-on-focus).
-8. Visible `:focus-visible` ring on every interactive element (the prototype sets
+   on narrow screens and children punch out of the page); every `display: grid` holding
+   text needs `grid-template-columns: minmax(0, 1fr)`, because an `auto` track floors at
+   min-content and one German compound then widens the whole page; and **a row of four
+   uses `.co-row-4`**, never wrapping flex — a wrapping row always passes through a
+   width band where exactly three fit, stranding the fourth with its divider still
+   attached. `.co-row-4` steps 1 → 2 → 4 via **container queries**, which respond to the
+   content column rather than the device, so "no media queries" still holds.
+6. **Type scales need an intercept, not a bare `vw`.** `clamp(38px, 5.4vw, 80px)` does
+   not overtake its own floor until a 704px viewport, so every phone and small tablet
+   got identical, desktop-tuned type. Interpolate between two viewports instead —
+   `clamp(30px, 16px + 4.444vw, 80px)`. `tests/responsive.spec.ts` asserts the display
+   size actually grows from 360px to 768px.
+7. **Keep `text-wrap: pretty`** on headings and paragraphs.
+8. **Form inputs stay at 16px** font-size (prevents iOS zoom-on-focus).
+9. Visible `:focus-visible` ring on every interactive element (the prototype sets
    `outline: none` — that is a prototype shortcut, not the design). The ring is
    **ink on light grounds and cyan on dark**: the token's cyan measures 2.46:1 on white,
    below the 3:1 WCAG 1.4.11 requires. For the same reason small labels on the pale
    ground use `--co-deep-text`, not `--co-blue` (4.02:1, under AA).
-9. **Content must never depend on JavaScript to be visible.** Scroll reveals are
+10. **Content must never depend on JavaScript to be visible.** Scroll reveals are
    CSS-only (`animation-timeline: view()` behind an `@supports` guard) precisely
    because the earlier JS version blanked the whole site in production: Astro inlined
    the script and `vercel.json`'s `script-src 'self'` blocked it. `astro preview`
    applies no headers, so nothing local caught it — `tests/csp.spec.ts` now
    reproduces the deployed CSP and asserts the page still paints with JS disabled.
    Keep `assetsInlineLimit: 0` so Astro never inlines a script back into the HTML.
-10. **Colour and radius live in tokens, never as literals in a component style block.**
+11. **Colour and radius live in tokens, never as literals in a component style block.**
    `npm run lint:styles` fails the build on a hex colour, an `rgb()` literal or a
    numeric `border-radius` anywhere in `src/`.
-11. **No `LocalBusiness` markup and no linked `tel:`/`mailto:` while contact details are
+12. **No `LocalBusiness` markup and no linked `tel:`/`mailto:` while contact details are
    placeholders.** `src/data/company.ts` gates each field; a fake NAP in structured data
    is worse than none.
 

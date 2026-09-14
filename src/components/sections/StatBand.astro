@@ -14,7 +14,7 @@ const stats = [
 ];
 ---
 
-<section class="co-card--xl stat-band">
+<section class="co-card--xl stat-band co-row-4 co-row-4--divided">
   {
     stats.map((stat) => (
       <div class="stat-band__item co-reveal">
@@ -27,25 +27,15 @@ const stats = [
 
 <style>
   .stat-band {
-    display: flex;
-    flex-wrap: wrap;
     background: var(--co-white);
     padding: clamp(26px, 3.2vw, 46px) clamp(22px, 2.6vw, 40px);
-    gap: clamp(20px, 2vw, 28px) 0;
   }
   .stat-band__item {
-    flex: 1 1 min(210px, 100%);
     min-width: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 8px;
     align-content: start;
-    padding: 0 clamp(16px, 2vw, 34px);
-    border-left: var(--co-rule);
-  }
-  .stat-band__item:first-child {
-    padding-left: 0;
-    border-left: 0;
   }
   .stat-band__value {
     /* Two rows' worth, so a value that wraps does not drop its label below the

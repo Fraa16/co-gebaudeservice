@@ -29,7 +29,7 @@ const { currentPath = '', kicker = '03' } = Astro.props;
     </div>
   </header>
 
-  <div class="process__steps">
+  <div class="process__steps co-row-4">
     {
       processContent.steps.map((step, i) => (
         <div class="process__step co-reveal">
@@ -79,13 +79,7 @@ const { currentPath = '', kicker = '03' } = Astro.props;
     font: 400 clamp(16px, 1.4vw, 19px) / 1.55 var(--co-font-body);
     color: var(--co-ice);
   }
-  .process__steps {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--co-grid-gap);
-  }
   .process__step {
-    flex: 1 1 min(230px, 100%);
     min-width: 0;
     display: flex;
   }

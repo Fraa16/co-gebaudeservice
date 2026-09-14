@@ -86,6 +86,8 @@ const Heading = level === 1 ? 'h1' : 'h2';
   .detail__lede {
     flex: 1 1 min(400px, 100%);
     min-width: 0;
+    /* Ran to ~100ch at 900px without this. */
+    max-width: 52ch;
     font: 400 clamp(16px, 1.35vw, 19px) / 1.55 var(--co-font-body);
     color: var(--co-muted);
   }
@@ -124,6 +126,7 @@ const Heading = level === 1 ? 'h1' : 'h2';
   .detail__para {
     font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);
     color: var(--co-muted);
+    max-width: 68ch;
   }
   .detail__actions {
     display: flex;

@@ -14,7 +14,7 @@ const { heading = 'Was nach Ihrer Anfrage passiert' } = Astro.props;
   <p class="co-kicker"><span class="co-kicker__num">02</span> {processContent.pill}</p>
   <h2 class="timeline__heading">{heading}</h2>
 
-  <ol class="timeline__list">
+  <ol class="timeline__list co-row-4">
     {
       processContent.steps.map((step) => (
         <li class="timeline__step co-reveal">
@@ -40,13 +40,7 @@ const { heading = 'Was nach Ihrer Anfrage passiert' } = Astro.props;
     max-width: 22ch;
     margin-bottom: clamp(12px, 2vw, 26px);
   }
-  .timeline__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: clamp(20px, 2.4vw, 34px);
-  }
   .timeline__step {
-    flex: 1 1 min(210px, 100%);
     min-width: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);

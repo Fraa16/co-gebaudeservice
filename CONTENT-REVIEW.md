@@ -114,13 +114,15 @@ Variante desselben Hinweises, falls er doch bleiben soll:
 
 | Seite | Titel | Beschreibung |
 |---|---|---|
-| Start | Gebäudereinigung und Hausmeisterdienst in Nagold | Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Objekte in Nagold und Umgebung. Fester Turnus, fester Ansprechpartner. |
-| Leistungen | Leistungen — Reinigung und Objektbetreuung | Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst. |
+| Start | Gebäudereinigung in Nagold und Umgebung | Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Objekte in Nagold und Umgebung. Fester Turnus, fester Ansprechpartner. |
+| Leistungen | Leistungen für Objekte in Nagold | Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst. |
 | Treppenhausreinigung | Treppenhausreinigung in Nagold | Unterhaltsreinigung von Treppen, Fluren und Eingangsbereichen nach festem Reinigungsplan. Wöchentlich oder 14-tägig, mit eigenem Personal und festem Objektbetreuer. |
 | Über uns | Über uns | CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw — mit eigenem Personal, festen Objektbetreuern und schriftlich vereinbartem Turnus. |
 | Kontakt | Kontakt und Angebot anfordern | Objektbesichtigung vereinbaren und ein Angebot zum Festpreis erhalten. Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag. |
 
-An jeden Titel wird „| CO Gebäudeservice" angehängt.
+An jeden Titel wird „| CO Gebäudeservice" angehängt. Titel und Beschreibungen wurden
+gekürzt, damit sie in den Suchergebnissen nicht abgeschnitten werden (Titel maximal
+60 Zeichen inklusive Zusatz, Beschreibung maximal 158 Zeichen).
 
 **Zu klären:** Soll „Gebäudereinigung" neben „Gebäudeservice" in den Titeln stehen? Es
 ist der häufiger gesuchte Begriff, und das CI-Blatt verwendet ihn bereits im Fließtext.

@@ -40,7 +40,7 @@ const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebh
     size="display"
   />
 
-  <section class="about__band" aria-hidden="true">
+  <section class="about__band co-row-4" aria-hidden="true">
     {
       /* Alternating tone and curve: four identical placeholders in a row read as
          four broken images. */
@@ -93,15 +93,9 @@ const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebh
 <style>
   /* Photography immediately after the hero — this page leads with pictures, where
      /leistungen leads with a list. */
-  .about__band {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--co-grid-gap);
-  }
   .about__band-item {
     position: relative;
     overflow: hidden;
-    flex: 1 1 min(220px, 100%);
     min-width: 0;
     height: clamp(170px, 20vw, 260px);
     border-radius: var(--co-radius-photo);

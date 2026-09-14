@@ -11,24 +11,24 @@ const SUFFIX = ' | CO Gebäudeservice';
 
 export const pageSeo = {
   home: {
-    title: 'Gebäudereinigung und Hausmeisterdienst in Nagold',
+    title: 'Gebäudereinigung in Nagold und Umgebung',
     description:
-      'Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Objekte in Nagold und Umgebung. Fester Turnus, fester Ansprechpartner.',
+      'Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Objekte in Nagold. Fester Turnus, fester Ansprechpartner.',
   },
   leistungen: {
-    title: 'Leistungen — Reinigung und Objektbetreuung',
+    title: 'Leistungen für Objekte in Nagold',
     description:
       'Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst.',
   },
   treppenhausreinigung: {
     title: 'Treppenhausreinigung in Nagold',
     description:
-      'Unterhaltsreinigung von Treppen, Fluren und Eingangsbereichen nach festem Reinigungsplan. Wöchentlich oder 14-tägig, mit eigenem Personal und festem Objektbetreuer.',
+      'Unterhaltsreinigung von Treppen, Fluren und Eingangsbereichen nach festem Plan. Wöchentlich oder 14-tägig, mit eigenem Personal und festem Objektbetreuer.',
   },
   ueberUns: {
     title: 'Über uns',
     description:
-      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw — mit eigenem Personal, festen Objektbetreuern und schriftlich vereinbartem Turnus.',
+      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw — eigenes Personal, feste Objektbetreuer, vereinbarter Turnus.',
   },
   kontakt: {
     title: 'Kontakt und Angebot anfordern',

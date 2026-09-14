@@ -31,7 +31,6 @@
      rather than announcing a shadow. */
   --co-shadow-card: 0 2px 4px rgba(3, 4, 94, 0.03), 0 12px 28px rgba(3, 4, 94, 0.05);
   --co-shadow-lift: 0 4px 10px rgba(3, 4, 94, 0.05), 0 24px 54px rgba(3, 4, 94, 0.11);
-  --co-shadow-inset-photo: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 
   /* A tonal shift across ink sections so navy is not a dead slab. */
   --co-ink-gradient: linear-gradient(157deg, #0A0C6B 0%, #03045E 46%, #02033F 100%);
@@ -65,24 +64,28 @@
 
   /* Scale contrast is the voice. The original topped out at 54px against 17px body
      — a ratio of 3.2:1, which reads as a template. This runs ~8:1. */
-  --co-display-size: clamp(38px, 5.4vw, 80px);
-  --co-display-lh: 0.96;
+  /* Fluid scales, interpolated between 360px and 1440px viewports.
+     A bare `vw` term (the previous `clamp(38px, 5.4vw, 80px)`) does not overtake its
+     own floor until 704px, so every screen from a phone to a small tablet rendered
+     identical, desktop-tuned type. These carry an intercept, so the scale actually
+     moves across the range people are on. */
+  --co-display-size: clamp(30px, 16px + 4.444vw, 80px);
+  --co-display-lh: 0.98;
   --co-display-tracking: -0.04em;
 
-  --co-h1-size: clamp(34px, 4.6vw, 62px);
-  --co-h2-size: clamp(28px, 3.6vw, 46px);
-  --co-h3-card-size: clamp(19px, 2.1vw, 24px);
+  --co-h1-size: clamp(28px, 19.33px + 2.963vw, 62px);
+  --co-h2-size: clamp(22px, 16.67px + 2.037vw, 46px);
+  --co-h3-card-size: clamp(18px, 17.33px + 0.463vw, 24px);
   --co-h1-tracking: -0.04em;
   --co-h2-tracking: -0.035em;
   --co-h3-tracking: -0.025em;
 
   /* Oversized index numerals sitting behind content. */
-  --co-numeral-size: clamp(72px, 12vw, 190px);
+  --co-numeral-size: clamp(52px, 11.33px + 12.407vw, 190px);
 
   --co-body-size: 17px;
   --co-body-lh: 1.6;
   --co-lead-lh: 1.55;
-  --co-card-body-size: 14px;
   --co-label-tracking: 0.16em;
   --co-logo-tracking: 0.18em;
 
@@ -102,9 +105,9 @@
   --co-page-padding: clamp(10px, 1.4vw, 20px);
   --co-card-gap: clamp(10px, 1.4vw, 18px);
   --co-grid-gap: clamp(10px, 1.4vw, 16px);
-  --co-section-padding: clamp(28px, 4vw, 56px);
-  --co-hero-padding: clamp(32px, 4.4vw, 60px);
-  --co-small-card-padding: clamp(22px, 2.6vw, 32px);
+  --co-section-padding: clamp(22px, 4vw, 56px);
+  --co-hero-padding: clamp(24px, 4.4vw, 60px);
+  --co-small-card-padding: clamp(18px, 2.6vw, 32px);
   --co-form-padding: clamp(24px, 3vw, 34px);
   --co-two-col-gap: clamp(26px, 4vw, 56px);
 
@@ -124,6 +127,7 @@
   --co-grid-two-col: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   --co-grid-steps: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
   --co-grid-field-pair: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+
 }
 
 /* Base ---------------------------------------------------------------- */

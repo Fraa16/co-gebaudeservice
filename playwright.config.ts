@@ -28,10 +28,11 @@ export default defineConfig({
         reuseExistingServer: true,
         timeout: 60_000,
       },
+  // The responsiveness sweep drives the viewport itself, so run it once.
   projects: [
     { name: 'ref-924', use: { ...devices['Desktop Chrome'], viewport: { width: 924, height: 540 } } },
-    { name: 'desk-1440', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
-    { name: 'mob-390', use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 } } },
-    { name: 'narrow-320', use: { ...devices['Desktop Chrome'], viewport: { width: 320, height: 568 } } },
+    { name: 'desk-1440', testIgnore: /responsive\.spec\.ts/, use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
+    { name: 'mob-390', testIgnore: /responsive\.spec\.ts/, use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 } } },
+    { name: 'narrow-320', testIgnore: /responsive\.spec\.ts/, use: { ...devices['Desktop Chrome'], viewport: { width: 320, height: 568 } } },
   ],
 });

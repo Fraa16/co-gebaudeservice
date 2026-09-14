@@ -21,6 +21,14 @@ export default defineConfig({
   ],
   image: { responsiveStyles: true },
 
+  build: {
+    // Astro's own stylesheet inlining, independent of vite's assetsInlineLimit below.
+    // The CSP allows style-src 'unsafe-inline', so small stylesheets can be inlined —
+    // without this the homepage made six render-blocking CSS requests, five of them
+    // under 6 kB.
+    inlineStylesheets: 'always',
+  },
+
   vite: {
     build: {
       // Astro inlines small hoisted scripts into the HTML. vercel.json sets

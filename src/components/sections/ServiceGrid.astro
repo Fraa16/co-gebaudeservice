@@ -13,7 +13,13 @@ interface Props {
   services: Service[];
   linkTo?: LinkResolver;
 }
-const { services, linkTo } = Astro.props;
+/** `as Props` rather than plain destructuring: Astro does not bind the Props interface
+ *  in this particular file — TypeScript reports it as "declared but never used" and
+ *  Astro.props falls back to Record<string, any>. Every construct in here binds
+ *  correctly in isolation, so it is a compiler quirk rather than a mistake in the
+ *  source. Asserting the contract restores types inside the component; it does not
+ *  type-check the caller, which is the one thing lost. */
+const { services, linkTo } = Astro.props as Props;
 
 /** Tile recipe by position. Varied deliberately — never a repeating pattern. */
 const RECIPE = [
@@ -36,7 +42,7 @@ const RECIPE = [
 
   <div class="leistungen__grid">
     {
-      services.map((service: Service, i: number) => {
+      services.map((service, i) => {
         const recipe = RECIPE[i % RECIPE.length]!;
         return (
           <div class:list={['leistungen__cell', `is-${recipe.span}`, 'co-reveal']}>

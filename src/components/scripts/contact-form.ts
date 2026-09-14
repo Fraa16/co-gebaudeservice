@@ -1,4 +1,10 @@
-import { contactSchema, looksLikeSpam } from '../../lib/contact-schema';
+import type { contactSchema as ContactSchema } from '../../lib/contact-schema';
+
+/** The validator is ~19 kB of zod for four field checks. Loading it with the page put
+ *  that on every visitor, including the ones who never touch the form, so it is
+ *  fetched on first interaction and cached — warm long before anyone can submit. */
+let validatorPromise: Promise<typeof import('../../lib/contact-schema')> | null = null;
+const loadValidator = () => (validatorPromise ??= import('../../lib/contact-schema'));
 
 /** The only client JS on the site: chip toggling, German validation messages, and the
  *  submit seam. When the Resend endpoint lands, data-endpoint is set and the same
@@ -10,6 +16,10 @@ if (form) {
   const successPanel = form.querySelector<HTMLElement>('[data-form-success]');
   const stamp = form.querySelector<HTMLInputElement>('[data-rendered-at]');
   if (stamp) stamp.value = String(Date.now());
+
+  // Warm the validator as soon as the reader engages with the form at all.
+  form.addEventListener('focusin', loadValidator, { once: true });
+  form.addEventListener('pointerdown', loadValidator, { once: true });
 
   // --- chips ---------------------------------------------------------------
   const chipWrap = form.querySelector<HTMLElement>('[data-chip-group]');
@@ -50,6 +60,8 @@ if (form) {
 
     const data = new FormData(form);
     const raw = (key: string) => String(data.get(key) ?? '');
+
+    const { contactSchema, looksLikeSpam } = await loadValidator();
 
     const parsed = contactSchema.safeParse({
       name: raw('name'),
