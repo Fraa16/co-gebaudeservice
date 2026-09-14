@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "build": "astro build && node scripts/inject-vercel-headers.mjs",
+    "preview": "node scripts/preview-static.mjs",
     "check": "astro check",
     "lint:tokens": "node scripts/check-tokens.mjs",
     "lint:styles": "node scripts/check-styles.mjs",
@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vercel": "^11.0.10",
     "@fontsource-variable/archivo": "^5.3.0",
     "@fontsource-variable/source-sans-3": "^5.3.0",
     "astro": "^7.3.2",

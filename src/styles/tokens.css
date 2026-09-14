@@ -16,6 +16,12 @@
   --co-deep-text: #0B4A6F;
   --co-white: #FFFFFF;
 
+  /* WhatsApp's own green, used only for the WhatsApp glyph. Not part of the CI: the
+     mark is recognised by that colour, and recolouring it to brand navy would turn an
+     instantly-read contact route into an anonymous chat bubble. Everything around it —
+     the pill, the border, the shadow — stays on the site's own tokens. */
+  --co-whatsapp: #25D366;
+
   /* Color — on dark grounds */
   --co-on-dark-card-bg: rgba(144, 224, 239, 0.10);
   --co-on-dark-card-border: rgba(144, 224, 239, 0.18);

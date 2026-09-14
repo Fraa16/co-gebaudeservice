@@ -1,17 +1,10 @@
 ---
-import { company } from '../../data/company';
-import { contact } from '../../data/content';
+import { contactRoutes } from '../../data/company';
 
-/** Placeholder phone and email still render — they are part of the design — but they
- *  are not linked, because nobody should dial or mail a placeholder. */
-const rows = contact.rows.map((row) => {
-  if (row.label === 'Anschrift') return { ...row, value: company.address.display, href: undefined };
-  if (row.label === 'Telefon')
-    return { ...row, href: company.phone.verified ? `tel:${company.phone.e164}` : undefined };
-  if (row.label === 'E-Mail')
-    return { ...row, href: company.email.verified ? `mailto:${company.email.display}` : undefined };
-  return { ...row, href: undefined };
-});
+/** An unverified detail still renders — it is part of the design — but it is not
+ *  linked, because nobody should dial or mail a placeholder. Both the value and the
+ *  link come from contactRoutes, so they cannot disagree. */
+const rows = contactRoutes;
 ---
 
 <div class="contact-rows">

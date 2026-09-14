@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactForm from '../components/sections/ContactForm.astro';
 import Timeline from '../components/sections/Timeline.astro';
-import { company } from '../data/company';
+import { company, contactRoutes } from '../data/company';
 import { contact, detail } from '../data/content';
 import { pageSeo } from '../data/seo';
 import { buildGraph } from '../lib/jsonld';
@@ -23,18 +23,9 @@ const jsonLd = buildGraph({
   ],
 });
 
-/** Placeholder phone and e-mail still render — they are part of the design — but are
- *  not linked, and never reach structured data. See src/data/company.ts. */
-const routes = contact.rows.map((row) => ({
-  label: row.label,
-  value: row.label === 'Anschrift' ? company.address.display : row.value,
-  href:
-    row.label === 'Telefon' && company.phone.verified
-      ? `tel:${company.phone.e164}`
-      : row.label === 'E-Mail' && company.email.verified
-        ? `mailto:${company.email.display}`
-        : undefined,
-}));
+/** An unverified detail still renders — it is part of the design — but is not linked
+ *  and never reaches structured data. See src/data/company.ts. */
+const routes = contactRoutes;
 ---
 
 <BaseLayout {...seo} path="/kontakt" jsonLd={jsonLd}>

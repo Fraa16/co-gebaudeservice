@@ -120,9 +120,17 @@ test('no element overlaps another at mobile widths', async ({ page }) => {
           typeof el.checkVisibility === 'function'
             ? el.checkVisibility({ contentVisibilityAuto: true, opacityProperty: true, visibilityProperty: true })
             : true;
+        // A fixed element floats over the page by design — the WhatsApp button is
+        // supposed to sit on top of whatever is under it. Only in-flow collisions are
+        // faults. (The header is sticky, not fixed, so it stays checked.)
+        const floating = (el: Element) => getComputedStyle(el).position === 'fixed';
+
         const nodes = [...document.querySelectorAll('a, button, h1, h2, h3, .hero__float, .co-btn')]
           .map((e) => ({ e, b: e.getBoundingClientRect() }))
-          .filter((x) => x.b.width > 8 && x.b.height > 8 && visible(x.e) && !clipped(x.e));
+          .filter(
+            (x) =>
+              x.b.width > 8 && x.b.height > 8 && visible(x.e) && !clipped(x.e) && !floating(x.e),
+          );
         const out: string[] = [];
         for (let i = 0; i < nodes.length; i++) {
           for (let j = i + 1; j < nodes.length; j++) {

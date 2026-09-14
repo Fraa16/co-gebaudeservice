@@ -19,7 +19,8 @@ Schietinger Str. 28<br />
 72202 Nagold
 </address>
 
-Kontakt: `TODO(client)` — Telefon und E-Mail
+Telefon: 0172 3001489  
+E-Mail: `TODO(client)` — echte Adresse ergänzen
 
 ## Keine Cookies, kein Tracking
 
@@ -75,6 +76,32 @@ Vertragsverhältnis führen, löschen wir nach sechs Monaten.
 **Spamschutz:** Das Formular enthält ein für Sie unsichtbares Feld sowie eine Prüfung der
 Bearbeitungsdauer. Dabei werden keine personenbezogenen Daten an Dritte übermittelt; es
 kommt insbesondere kein reCAPTCHA zum Einsatz.
+
+**Versand der Anfrage:** Für die Zustellung der Formularanfragen an unser Postfach setzen
+wir den Dienst Resend (Resend, Inc., USA) als Auftragsverarbeiter ein. Dabei werden die
+von Ihnen angegebenen Daten an diesen Dienst übermittelt. `TODO(client)` — Abschluss
+eines Auftragsverarbeitungsvertrags nach Art. 28 DSGVO sowie Prüfung der Grundlage für
+die Übermittlung in ein Drittland (Art. 44 ff. DSGVO) vor Freischaltung des Formulars.
+
+## Kontaktaufnahme über WhatsApp
+
+Auf unserer Website finden Sie eine Schaltfläche, die zu WhatsApp verlinkt. Es handelt
+sich um einen gewöhnlichen Link: Beim Aufruf unserer Seiten wird **keine** Verbindung zu
+WhatsApp aufgebaut und es werden keine Daten an WhatsApp übermittelt.
+
+Erst wenn Sie die Schaltfläche anklicken, öffnet sich WhatsApp und es besteht eine
+Verbindung zu WhatsApp Ireland Limited. Ab diesem Zeitpunkt gelten deren
+Datenschutzbestimmungen. Wenn Sie uns über WhatsApp schreiben, verarbeiten wir Ihre
+Telefonnummer, Ihren dort hinterlegten Namen und den Inhalt Ihrer Nachricht zur
+Bearbeitung Ihrer Anfrage.
+
+**Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO, soweit die Anfrage auf den Abschluss
+eines Vertrages gerichtet ist, im Übrigen Art. 6 Abs. 1 lit. f DSGVO — unser berechtigtes
+Interesse an einer einfachen Erreichbarkeit.
+
+`TODO(client)` — Von der Kanzlei prüfen zu lassen, ob die geschäftliche Nutzung von
+WhatsApp im vorliegenden Umfang mitgeteilt werden muss und ob ein Hinweis auf
+alternative Kontaktwege genügt.
 
 ## Ihre Rechte
 

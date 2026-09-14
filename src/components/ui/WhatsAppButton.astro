@@ -1,0 +1,93 @@
+---
+import { company } from '../../data/company';
+
+/** A floating WhatsApp route, bottom-right on every page.
+ *
+ *  Gated on `company.whatsapp.verified` like every other contact detail — a dead
+ *  WhatsApp link is worse than none, because the visitor believes they have sent
+ *  something.
+ *
+ *  Treatment: the site's own pill — white ground, hairline border, tokenised shadow,
+ *  999px radius — carrying the WhatsApp mark in its own green. A solid green blob is
+ *  the single most template-looking element on the web, and the glyph alone is what
+ *  makes the channel recognisable.
+ *
+ *  It is a plain link: nothing is requested from WhatsApp until the visitor clicks, so
+ *  no third-party connection is opened on page load. That matters here — the site
+ *  self-hosts its fonts for the same reason. */
+const { verified, waMe } = company.whatsapp;
+
+/** Pre-filling the first message saves the visitor typing and tells Oguz where the
+ *  enquiry came from. */
+const text = encodeURIComponent('Guten Tag, ich habe eine Frage zu Ihren Leistungen.');
+const href = `https://wa.me/${waMe}?text=${text}`;
+---
+
+{
+  verified && (
+    <a
+      class="wa"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Kontakt über WhatsApp aufnehmen (öffnet WhatsApp in einem neuen Tab)"
+    >
+      <svg class="wa__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 1.67c2.2 0 4.28.86 5.84 2.42a8.21 8.21 0 0 1 2.42 5.83c0 4.55-3.71 8.25-8.26 8.25a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.39c0-4.54 3.7-8.25 8.25-8.25z"
+        />
+        <path
+          fill="currentColor"
+          d="M9.3 7.13c-.19-.42-.38-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.43 1.03 2.6c.13.17 1.74 2.79 4.3 3.8 2.12.84 2.55.67 3.01.63.46-.04 1.49-.61 1.7-1.2.21-.59.21-1.09.15-1.2-.06-.1-.23-.16-.48-.29-.25-.12-1.49-.73-1.72-.82-.23-.08-.4-.12-.57.13-.17.25-.65.82-.8.99-.14.17-.29.19-.54.06-.25-.12-1.06-.39-2.02-1.25-.75-.66-1.25-1.48-1.4-1.73-.14-.25-.01-.38.11-.5.11-.11.25-.29.38-.44.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.55-1.37-.76-1.87z"
+        />
+      </svg>
+    </a>
+  )
+}
+
+<style>
+  .wa {
+    position: fixed;
+    /* env() keeps it clear of the iPhone home indicator and any browser chrome. */
+    right: max(var(--co-page-padding), env(safe-area-inset-right));
+    bottom: max(var(--co-page-padding), env(safe-area-inset-bottom));
+    z-index: 30;
+
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--co-line);
+    border-radius: var(--co-radius-pill);
+    background: var(--co-white);
+    box-shadow: var(--co-shadow-lift);
+    color: var(--co-whatsapp);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .wa:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--co-shadow-card);
+  }
+
+  .wa__glyph {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* No focus rule here on purpose: the global :focus-visible in tokens.css already
+     gives an ink ring on light grounds, and this pill is white. */
+
+  @media (prefers-reduced-motion: reduce) {
+    .wa,
+    .wa:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  @media print {
+    .wa { display: none; }
+  }
+</style>

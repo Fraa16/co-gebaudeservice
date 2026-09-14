@@ -21,7 +21,7 @@ Schietinger Str. 28<br />
 
 ## Kontakt
 
-**Telefon:** `TODO(client)` — echte Rufnummer
+**Telefon:** 0172 3001489
 
 **E-Mail:** `TODO(client)` — echte E-Mail-Adresse
 

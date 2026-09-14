@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 /**
  * The canonical origin. Baked into canonical URLs, the sitemap and OG tags.
@@ -12,6 +13,14 @@ export default defineConfig({
   site: SITE,
   trailingSlash: 'never',
   compressHTML: true,
+
+  /* Static stays the default: every page is prerendered at build time exactly as
+     before. The adapter exists only so `src/pages/api/kontakt.ts` — which opts out with
+     `export const prerender = false` — can run as a serverless function. Nothing else
+     on the site becomes server-rendered, and `astro build` still emits the same static
+     HTML for all nine pages. */
+  output: 'static',
+  adapter: vercel(),
   integrations: [
     sitemap({
       // The OG source route and the 404 are real pages but must not be indexed.

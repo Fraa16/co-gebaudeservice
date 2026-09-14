@@ -74,15 +74,28 @@ visible focus ring on every interactive element.
 
 ## Contact form
 
-Frontend-only today: it validates, shows German field errors, and confirms with the
-success message from `content.json`. It sends nothing.
+The endpoint is built. `src/pages/api/kontakt.ts` is the only server-rendered route on
+the site: it re-parses the body with the same `src/lib/contact-schema.ts` the browser
+uses, re-checks the spam traps, refuses cross-origin posts, rate-limits per address, and
+sends through Resend. `tests/contact-endpoint.spec.ts` covers it without a server.
 
-To wire up Resend:
+It stays dormant until four environment variables are set — three of them server-side
+only, so set them in the Vercel project settings, not in a committed file:
 
-1. `npx astro add vercel` and keep `output: 'static'`.
-2. Add `src/pages/api/kontakt.ts` with `export const prerender = false`, re-parsing with
-   the same `src/lib/contact-schema.ts` server-side.
-3. Set `PUBLIC_FORM_ENDPOINT="/api/kontakt"`.
+| Variable | Value |
+| --- | --- |
+| `PUBLIC_FORM_ENDPOINT` | `/api/kontakt` |
+| `RESEND_API_KEY` | from <https://resend.com/api-keys> |
+| `CONTACT_TO` | the inbox enquiries should reach |
+| `CONTACT_FROM` | e.g. `Website <noreply@co-gebaeudeservice.de>` — the domain must be verified in Resend first |
+
+With any of them missing the endpoint answers 503 and the form tells the visitor it
+could not send. That is deliberate: the one thing it must never do is confirm
+*"wir melden uns innerhalb von zwei Werktagen"* while dropping the enquiry.
+
+Before switching it on, the Datenschutzerklärung names Resend as an Auftragsverarbeiter
+and carries a `TODO(client)` for the Art. 28 contract and the third-country transfer
+basis. Both need to be settled first.
 
 Nothing else changes; every other page stays static.
 
@@ -98,12 +111,14 @@ requests get preview deployments. Environment variables are in `.env.example`.
 everything — until all of these are true:
 
 1. **Real phone number and e-mail** in `src/data/company.ts`, with `verified: true`.
-   Until then they render visibly but are not linked and never reach structured data:
-   publishing a placeholder NAP is worse than publishing none, because the entity gets
-   cross-referenced against every other citation of the business.
+   The phone is done (0172 3001489); **the e-mail is still a placeholder.** Until a
+   field is verified it renders visibly but is not linked and never reaches structured
+   data: publishing a placeholder NAP is worse than publishing none, because the entity
+   gets cross-referenced against every other citation of the business.
 2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
    Steuerberater, and every `TODO(client)` filled in.
-3. **The contact form actually sends**, or is hidden. A public page that says
+3. **The contact form actually sends.** The endpoint exists; it needs the four
+   environment variables above and the Resend domain verified. A public page that says
    *"wir melden uns innerhalb von zwei Werktagen"* while dropping the enquiry costs a
    customer who would otherwise have phoned.
 4. **The six outstanding photographs** — `PHOTOS.md`. The hero photo's stock licence

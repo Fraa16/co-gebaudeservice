@@ -18,14 +18,19 @@ export const contactSchema = z.object({
 
 export type ContactPayload = z.infer<typeof contactSchema>;
 
-/** Spam heuristics. Kept out of the schema so a bot submission fails silently rather
- *  than showing a validation error that tells it what to fix. */
-export function looksLikeSpam(form: {
-  website: string;
-  renderedAt: string;
-}): boolean {
+/** Spam heuristics, run on both sides. Kept out of the schema so a bot submission fails
+ *  silently rather than showing a validation error that tells it what to fix.
+ *
+ *  `elapsedMs` is how long the form was on screen, measured by the client against its
+ *  own clock — not the render timestamp itself. The server has no way to trust another
+ *  machine's clock: a visitor whose clock runs a few minutes fast would produce a
+ *  negative age and have a genuine enquiry dropped in silence, which is the one failure
+ *  mode this form must never have. A duration has no such problem.
+ *
+ *  Neither trap stops a determined bot — both are forgeable. They stop the naive ones,
+ *  which is what actually hits a small business contact form. */
+export function looksLikeSpam(form: { website: string; elapsedMs: number }): boolean {
   if (form.website.trim() !== '') return true;
-  const rendered = Number(form.renderedAt);
-  if (!Number.isFinite(rendered)) return false;
-  return Date.now() - rendered < 3000;
+  if (!Number.isFinite(form.elapsedMs)) return false;
+  return form.elapsedMs >= 0 && form.elapsedMs < 3000;
 }

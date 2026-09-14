@@ -85,7 +85,11 @@ if (form) {
 
     // Only after the input is valid: a person who fills the form correctly but fast
     // still gets the quiet treatment, while an empty submit gets its field errors.
-    if (looksLikeSpam({ website: raw('website'), renderedAt: raw('renderedAt') })) {
+    // How long the form was on screen, by this machine's clock only — see the note on
+    // looksLikeSpam for why a duration travels and a timestamp does not.
+    const elapsedMs = Date.now() - Number(raw('renderedAt'));
+
+    if (looksLikeSpam({ website: raw('website'), elapsedMs })) {
       // Fail quietly — do not tell a bot which trap it hit.
       form.reset();
       successPanel?.removeAttribute('hidden');
@@ -94,15 +98,37 @@ if (form) {
 
     const endpoint = form.dataset.endpoint;
     if (endpoint) {
+      let res: Response;
       try {
-        const res = await fetch(endpoint, {
+        res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(parsed.data),
+          // The traps travel with the payload: the endpoint re-checks them, because a
+          // bot can POST to it without ever loading the form.
+          body: JSON.stringify({ ...parsed.data, website: raw('website'), elapsedMs }),
         });
-        if (!res.ok) throw new Error(String(res.status));
       } catch {
-        showError('message', 'Die Anfrage konnte nicht gesendet werden. Bitte rufen Sie uns an.');
+        showError('message', 'Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.');
+        return;
+      }
+
+      if (!res.ok) {
+        // 422 means the server disagreed with the client about a field. That should be
+        // impossible — both parse with the same schema — so surface it on the field
+        // rather than hiding it behind a generic message.
+        if (res.status === 422) {
+          const detail = await res.json().catch(() => null);
+          const fields = (detail?.fields ?? []) as { path: string; message: string }[];
+          for (const f of fields) showError(f.path, f.message);
+          form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+          return;
+        }
+        showError(
+          'message',
+          res.status === 429
+            ? 'Zu viele Anfragen. Bitte versuchen Sie es in einer Minute erneut.'
+            : 'Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.',
+        );
         return;
       }
     }

@@ -142,3 +142,25 @@ ist der häufiger gesuchte Begriff, und das CI-Blatt verwendet ihn bereits im Fl
 Beide sind **Entwürfe nach dem üblichen Aufbau, keine Rechtsberatung.** Alle noch
 fehlenden Angaben sind mit `TODO(client)` markiert. Vor der Freischaltung sollte ein
 Anwalt oder der Steuerberater beide Seiten prüfen.
+
+---
+
+## 9. WhatsApp-Schaltfläche und Versand des Formulars
+
+`src/pages/datenschutz.md` · `src/components/ui/WhatsAppButton.astro`
+
+Neu hinzugekommen, beides **Entwurf und rechtlich zu prüfen:**
+
+- **Abschnitt „Kontaktaufnahme über WhatsApp"** in der Datenschutzerklärung. Die
+  Schaltfläche ist ein reiner Link — beim Laden der Seite wird keine Verbindung zu
+  WhatsApp aufgebaut und nichts übertragen. Erst ein Klick öffnet WhatsApp.
+- **Voreingestellter erster Text** der WhatsApp-Nachricht:
+  „Guten Tag, ich habe eine Frage zu Ihren Leistungen."
+- **Absatz „Versand der Anfrage"** im Abschnitt Kontaktformular: nennt Resend als
+  Auftragsverarbeiter. Vor Freischaltung des Formulars sind ein
+  Auftragsverarbeitungsvertrag nach Art. 28 DSGVO und die Grundlage für die
+  Drittlandsübermittlung zu klären.
+
+Die Telefonnummer **0172 3001489** ist bestätigt und steht jetzt in Impressum,
+Datenschutzerklärung, Kontaktseite und in den strukturierten Daten. Die E-Mail-Adresse
+ist weiterhin ein Platzhalter und wird deshalb nirgends verlinkt.

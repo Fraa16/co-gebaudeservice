@@ -89,3 +89,37 @@ test('every revealed section is visible without JavaScript', async ({ browser })
   expect(hidden, 'sections hidden with JS disabled').toEqual([]);
   await context.close();
 });
+
+test('the deployed Build Output config carries the security headers', () => {
+  /* Adding the Vercel adapter for /api/kontakt moved the deploy onto the Build Output
+     API, where Vercel reads .vercel/output/config.json — which the adapter writes with
+     no headers of its own. If vercel.json alone were relied on, the CSP, HSTS and the
+     rest would quietly stop being sent in production while every local test still
+     passed. scripts/inject-vercel-headers.mjs copies them across at build time; this
+     asserts they actually arrived, and that they are matched before the filesystem is
+     consulted (a header route after `handle: filesystem` never sees a static page). */
+  const config = JSON.parse(readFileSync('.vercel/output/config.json', 'utf8')) as {
+    routes: { src?: string; handle?: string; headers?: Record<string, string>; continue?: boolean }[];
+  };
+
+  const filesystemAt = config.routes.findIndex((r) => r.handle === 'filesystem');
+  expect(filesystemAt, 'no filesystem handle in the Build Output config').toBeGreaterThan(-1);
+
+  const cspRouteAt = config.routes.findIndex((r) => r.headers?.['Content-Security-Policy']);
+  expect(cspRouteAt, 'no CSP route in the Build Output config').toBeGreaterThan(-1);
+  expect(cspRouteAt, 'the CSP route must come before the filesystem handle').toBeLessThan(filesystemAt);
+
+  const route = config.routes[cspRouteAt]!;
+  expect(route.continue, 'a header route must continue matching').toBe(true);
+  expect(route.headers!['Content-Security-Policy']).toBe(csp);
+
+  for (const key of [
+    'Strict-Transport-Security',
+    'X-Frame-Options',
+    'X-Content-Type-Options',
+    'Referrer-Policy',
+    'Permissions-Policy',
+  ]) {
+    expect(route.headers, `${key} missing from the Build Output config`).toHaveProperty(key);
+  }
+});
