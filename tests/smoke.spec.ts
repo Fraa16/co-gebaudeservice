@@ -52,3 +52,45 @@ test('the page never scrolls horizontally', async ({ page }) => {
     expect(overflow, `${route} horizontal overflow`).toBeLessThanOrEqual(1);
   }
 });
+
+test('the nav never offers one destination under two names', async ({ page }) => {
+  /* "Kontakt" and "Angebot anfordern" both pointed at /kontakt, so the nav had two
+     entries for one place and the CTA promised an action while delivering a page. */
+  await page.goto('/leistungen');
+  const hrefs = await page
+    .locator('.site-header__inline a, .site-header__cta')
+    .evaluateAll((els) => els.map((e) => e.getAttribute('href')!));
+
+  expect(hrefs.length).toBeGreaterThan(2);
+  expect(new Set(hrefs).size, `duplicate nav destinations: ${hrefs.join(', ')}`).toBe(hrefs.length);
+});
+
+test('a link that promises an action lands on the form, not on a page top', async ({ page }) => {
+  /* "Angebot anfordern", "Termin vereinbaren" and "Anfrage starten" are promises. Each
+     must land on the enquiry form itself — which means a fragment, and a fragment that
+     exists where it points. */
+  const ACTIONS = ['Angebot anfordern', 'Termin vereinbaren', 'Anfrage starten'];
+  const bad: string[] = [];
+
+  for (const route of ['/', '/leistungen', '/ueber-uns', '/leistungen/treppenhausreinigung']) {
+    await page.goto(route);
+    const links = await page.locator('a').evaluateAll((els, actions) =>
+      els
+        .map((e) => ({ text: (e.textContent ?? '').trim(), href: e.getAttribute('href') ?? '' }))
+        .filter((l) => actions.some((a: string) => l.text.startsWith(a))),
+      ACTIONS,
+    );
+
+    expect(links.length, `${route} has no action link to check`).toBeGreaterThan(0);
+    for (const { text, href } of links) {
+      if (!href.includes('#')) bad.push(`${route}: "${text}" -> ${href} (no section target)`);
+    }
+  }
+
+  // The target it names must actually be there.
+  await page.goto('/kontakt');
+  await expect(page.locator('#anfrage')).toBeAttached();
+  await expect(page.locator('#anfrage form')).toBeAttached();
+
+  expect(bad).toEqual([]);
+});

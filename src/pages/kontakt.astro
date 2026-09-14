@@ -57,7 +57,7 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
     </div>
   </section>
 
-  <section class="co-card co-card--white enquiry">
+  <section class="co-card co-card--white enquiry" id="anfrage" tabindex="-1">
     <div class="enquiry__aside">
       <p class="co-kicker"><span class="co-kicker__num">02</span> Anfrage</p>
       <h2 class="enquiry__title">Sagen Sie uns kurz, um welches Objekt es geht.</h2>
@@ -149,6 +149,11 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
 
   /* The form takes the card; the aside is deliberately slim. */
   .enquiry {
+    /* Jumped to from every "Angebot anfordern" link, so it has to clear the sticky
+       header when it lands. tabindex="-1" moves keyboard focus here too, rather than
+       only scrolling the page under it. */
+    scroll-margin-top: 108px;
+    outline: none;
     display: flex;
     flex-wrap: wrap;
     gap: clamp(26px, 4vw, 60px);

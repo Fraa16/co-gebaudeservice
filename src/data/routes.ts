@@ -7,7 +7,12 @@ const ANCHOR_ROUTES: Record<string, string> = {
   '#leistungen': '/leistungen',
   '#treppenhaus': '/leistungen/treppenhausreinigung',
   '#ablauf': '/#ablauf',
-  '#kontakt': '/kontakt',
+  /* Every CTA using this anchor is labelled with an action — "Angebot anfordern",
+     "Termin vereinbaren", "Anfrage starten" — so it lands on the enquiry form itself,
+     not at the top of the contact page. The nav's plain "Kontakt" link goes to the
+     page; otherwise the two would be the same destination under two names, which is
+     what made the CTA read as a contradiction. */
+  '#kontakt': '/kontakt#anfrage',
 };
 
 /** Sections that exist on the home page, so an in-page anchor stays in-page there. */

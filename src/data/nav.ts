@@ -13,7 +13,10 @@ export const primaryNav: NavItem[] = [
   { label: 'Leistungen', href: '/leistungen' }, // verbatim, content.json nav[0]
   { label: 'Über uns', href: '/ueber-uns' }, // draft — client review
   { label: 'Kontakt', href: '/kontakt' }, // verbatim, content.json contact.pill
-  { label: 'Angebot anfordern', href: '/kontakt', primary: true }, // verbatim, content.json nav[3]
+  /* The page for "Kontakt", the form for "Angebot anfordern". Both pointed at
+     /kontakt, so the nav offered one destination under two names and the CTA promised
+     an action while delivering a page. */
+  { label: 'Angebot anfordern', href: '/kontakt#anfrage', primary: true }, // verbatim, content.json nav[3]
 ];
 
 export const legalNav: NavItem[] = [
