@@ -130,11 +130,23 @@ const num = String(index + 1).padStart(2, '0');
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 8px;
-    max-width: 34ch;
   }
   .tile__title {
     font: 600 var(--co-h3-card-size) / 1.12 var(--co-font-heading);
     letter-spacing: var(--co-h3-tracking);
+    /* The measure belongs on the running text, not on the pair. It used to sit on
+       .tile__body — 34ch at the 15px body size, about 272px — which also capped the
+       40px feature heading, so "Treppenhausreinigung" could not fit on one line even
+       inside a 900px tile and global.css's overflow-wrap: break-word snapped it to
+       "Treppenhausre | inigung": mid-syllable, no hyphen, and it read as broken.
+       ch scales with this element's own font-size, so 24ch is ~480px here and holds
+       the longest service name on one line. */
+    max-width: 24ch;
+    /* Safety net only, for a genuinely narrow column: with lang="de" a browser that
+       ships German hyphenation breaks at a real boundary and shows the hyphen.
+       Headless Chromium carries no dictionary, so this cannot be relied on — the
+       max-width above is what actually fixes the feature tile. */
+    hyphens: auto;
   }
   .tile--feature .tile__title { font-size: clamp(26px, 3vw, 40px); }
   .tile__title a { color: inherit; }
@@ -146,6 +158,7 @@ const num = String(index + 1).padStart(2, '0');
   .tile__text {
     font: 400 15px/1.45 var(--co-font-body);
     color: var(--co-pale);
+    max-width: 34ch;
   }
   .tile--pale .tile__text { color: var(--co-deep-text); }
 

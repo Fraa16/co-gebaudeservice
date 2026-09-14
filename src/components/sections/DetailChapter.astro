@@ -33,6 +33,24 @@ const Heading = level === 1 ? 'h1' : 'h2';
     <div class="detail__text">
       {paragraphs.slice(1).map((p) => <p class="detail__para">{p}</p>)}
 
+      {
+        /* On the homepage the body paragraphs move up into the lede, which left this
+           column holding nothing but two buttons beside a 360px photo — a void with
+           the CTAs floating in the middle of it. The scope list is the substance a
+           reader wants at exactly this point ("what do I actually get?"), and it is
+           already in the data. */
+        condensed && (
+          <div class="detail__scope">
+            <p class="co-kicker">{detail.infoCard.label}</p>
+            <ul class="detail__scope-list">
+              {detail.infoCard.items.map((item) => (
+                <li class="detail__scope-item">{item}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
       <div class="detail__actions">
         {
           detail.ctas.map((cta) => (
@@ -100,12 +118,29 @@ const Heading = level === 1 ? 'h1' : 'h2';
   .detail__text { flex: 1 1 min(460px, 100%); min-width: 0; }
   .detail__aside { flex: 1 1 min(440px, 100%); min-width: 0; }
 
-  /* Condensed (home): the body paragraphs live in the lede above, so the text column
-     holds only the CTAs. Let it sit on one row with the photo taking the rest, rather
-     than reserving a half-width column that renders as a void. */
-  .is-condensed { align-items: center; }
-  .is-condensed .detail__text { flex: 0 1 auto; }
-  .is-condensed .detail__aside { flex: 1 1 min(560px, 100%); }
+  /* Condensed (home): the text column carries the scope list, so both sides have
+     weight and the row aligns at the top rather than centring two buttons in a void. */
+  .is-condensed .detail__text { flex: 1 1 min(380px, 100%); }
+  .is-condensed .detail__aside { flex: 1 1 min(480px, 100%); }
+
+  .detail__scope {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    width: 100%;
+  }
+  .detail__scope-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .detail__scope-item {
+    padding-block: 11px;
+    border-top: var(--co-rule);
+    font: 400 16px/1.4 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  .detail__scope-item:first-child { border-top: 0; padding-top: 0; }
   .detail__text {
     display: flex;
     flex-direction: column;

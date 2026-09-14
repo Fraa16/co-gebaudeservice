@@ -230,3 +230,55 @@ test('hairline dividers do not survive a wrap into a stacked column', async ({ p
   }
   expect(bad).toEqual([]);
 });
+
+test('no heading is narrower than its longest word', async ({ page }) => {
+  /* German compounds are long, and global.css sets overflow-wrap: break-word on
+     headings — so any heading whose box is narrower than its longest word gets that
+     word snapped mid-syllable with no hyphen. It shipped on the feature tile, where a
+     34ch measure meant for 15px body text also capped a 40px heading:
+     "Treppenhausre | inigung" inside a 900px tile. hyphens: auto is not a fix, since
+     it needs a hyphenation dictionary the browser may not carry. */
+  const bad: string[] = [];
+
+  for (const width of [380, 924, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of ['/', '/leistungen', '/ueber-uns', '/kontakt']) {
+      await page.goto(route);
+      const hits = await page.evaluate(() => {
+        const probe = document.createElement('span');
+        probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;left:-9999px';
+        document.body.appendChild(probe);
+
+        const out: string[] = [];
+        for (const el of document.querySelectorAll<HTMLElement>('h1, h2, h3')) {
+          const text = (el.textContent ?? '').trim();
+          if (!text) continue;
+          const rect = el.getBoundingClientRect();
+          if (rect.width < 1) continue;
+
+          const cs = getComputedStyle(el);
+          probe.style.font = cs.font || `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+          probe.style.letterSpacing = cs.letterSpacing;
+
+          const longest = text.split(/\s+/).reduce((a, b) => (b.length > a.length ? b : a), '');
+          probe.textContent = longest;
+          const needed = probe.getBoundingClientRect().width;
+
+          // The content box, minus padding, is what the word actually has to fit in.
+          const avail =
+            rect.width - parseFloat(cs.paddingLeft || '0') - parseFloat(cs.paddingRight || '0');
+
+          // 1px of slack for sub-pixel rounding.
+          if (needed > avail + 1) {
+            out.push(`${el.tagName.toLowerCase()}.${[...el.classList][0] ?? ''} "${longest}" needs ${Math.round(needed)}px, has ${Math.round(avail)}px`);
+          }
+        }
+        probe.remove();
+        return [...new Set(out)];
+      });
+      for (const h of hits) bad.push(`${width}px ${route}: ${h}`);
+    }
+  }
+
+  expect(bad).toEqual([]);
+});
