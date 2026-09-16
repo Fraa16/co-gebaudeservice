@@ -18,7 +18,14 @@ const jsonLd = buildGraph({
     { name: 'Leistungen', path: '/leistungen' },
     { name: 'Treppenhausreinigung', path },
   ],
-  extra: [serviceNode('Treppenhausreinigung', path, seo.description)],
+  extra: [
+    serviceNode({
+      slug: 'treppenhausreinigung',
+      name: 'Treppenhausreinigung',
+      description: seo.description,
+      url: path,
+    }),
+  ],
 });
 ---
 

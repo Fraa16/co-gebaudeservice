@@ -15,7 +15,21 @@ export const company = {
 
   area: content.company.area,
   areaLong: content.company.areaLong,
-  areaServed: ['Nagold', 'Kreis Calw'],
+  /** Where the work actually happens: the towns, then the district they sit in.
+   *  This is the single source for the Einsatzgebiet chips on /ueber-uns, the FAQ
+   *  answer, and areaServed in the structured-data graph — the towns used to exist
+   *  only as a hard-coded array inside ueber-uns.astro, so the graph claimed two
+   *  places while the page named six.
+   *  TODO(client): confirm the towns — draft, see CONTENT-REVIEW.md §3. */
+  areaServed: [
+    'Nagold',
+    'Altensteig',
+    'Wildberg',
+    'Haiterbach',
+    'Rohrdorf',
+    'Ebhausen',
+    'Kreis Calw',
+  ],
 
   address: {
     verified: true,

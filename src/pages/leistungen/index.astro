@@ -4,15 +4,22 @@ import PageHero from '../../components/sections/PageHero.astro';
 import ServiceIndex from '../../components/sections/ServiceIndex.astro';
 import ServiceRow from '../../components/sections/ServiceRow.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
+import Faq from '../../components/sections/Faq.astro';
 import { allServices } from '../../data/services';
 import { pages } from '../../data/pages';
+import { faq } from '../../data/faq';
 import { pageSeo } from '../../data/seo';
-import { buildGraph } from '../../lib/jsonld';
+import { buildGraph, serviceCatalog, faqNode } from '../../lib/jsonld';
 
 /** Rhythm: catalogue. Pale factual opening → typographic index of all eight →
  *  alternating editorial rows inside one document card → closing band.
  *  Deliberately no bento mosaic and no contact form: those belong to the homepage. */
 const seo = pageSeo.leistungen;
+
+/* All eight services reach structured data from here. Seven have no page of their own,
+   so before this the graph advertised one service on a site that sells eight. */
+const catalog = serviceCatalog('/leistungen', allServices);
+
 const jsonLd = buildGraph({
   path: '/leistungen',
   title: seo.title,
@@ -22,6 +29,8 @@ const jsonLd = buildGraph({
     { name: 'Start', path: '/' },
     { name: 'Leistungen', path: '/leistungen' },
   ],
+  offerCatalogId: catalog.id,
+  extra: [...catalog.nodes, faqNode('/leistungen', faq)],
 });
 
 const page = pages.leistungen;
@@ -46,6 +55,8 @@ const meta = [{ label: 'Leistungen', value: String(allServices.length) }, ...pag
   <section class="co-card co-card--white leistungen__detail">
     {allServices.map((service, i) => <ServiceRow service={service} index={i} />)}
   </section>
+
+  <Faq kickerNum="02" />
 
   <CtaBand
     heading={page.cta.heading}

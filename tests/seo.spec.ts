@@ -115,3 +115,68 @@ test('a linked contact detail matches the text shown for it', async ({ page }) =
     }
   }
 });
+
+test('every service the site sells reaches structured data', async ({ page }) => {
+  /* Only Treppenhausreinigung had a Service node, because it is the one service with a
+     page of its own — so the graph advertised one service on a site that sells eight.
+     The catalogue on /leistungen is the source for all of them now. */
+  await page.goto('/leistungen');
+  const graph = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+  )['@graph'] as Record<string, unknown>[];
+
+  const services = graph.filter((n) => n['@type'] === 'Service');
+  const rendered = await page.locator('.service-row__main h2, .service-index__title').allTextContents();
+  const names = new Set(services.map((s) => String(s.name)));
+
+  expect(services.length, 'a Service node per service').toBeGreaterThanOrEqual(8);
+  for (const title of rendered.map((t) => t.trim()).filter(Boolean)) {
+    expect(names, `"${title}" is on the page but not in the graph`).toContain(title);
+  }
+
+  const catalog = graph.find((n) => n['@type'] === 'OfferCatalog');
+  expect(catalog, 'an OfferCatalog listing them').toBeTruthy();
+  expect((catalog!.itemListElement as unknown[]).length).toBe(services.length);
+});
+
+test('areaServed names every town the page claims', async ({ page }) => {
+  /* The six towns lived in markup only, so the graph claimed two places while
+     /ueber-uns named six. Both read from company.areaServed now. */
+  await page.goto('/ueber-uns');
+  const chips = (await page.locator('.about__ort').allTextContents()).map((t) => t.trim());
+  expect(chips.length, 'the Einsatzgebiet chips').toBeGreaterThan(3);
+
+  const graph = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+  )['@graph'] as Record<string, unknown>[];
+  const org = graph.find((n) => String(n['@type']).includes('Organization'))!;
+  const served = (org.areaServed as { name: string }[]).map((a) => a.name);
+
+  for (const chip of chips) {
+    expect(served, `"${chip}" is shown as an Einsatzgebiet but not in areaServed`).toContain(chip);
+  }
+});
+
+test('the FAQ markup never advertises an answer the page does not show', async ({ page }) => {
+  /* Rich results built from text a visitor cannot find is exactly what Google
+     penalises, so the rendered list and the FAQPage node come from one source. */
+  await page.goto('/leistungen');
+  const graph = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+  )['@graph'] as Record<string, unknown>[];
+
+  const faq = graph.find((n) => n['@type'] === 'FAQPage');
+  expect(faq, 'a FAQPage node on /leistungen').toBeTruthy();
+
+  const questions = (faq!.mainEntity as { name: string; acceptedAnswer: { text: string } }[]);
+  const shownQ = (await page.locator('.faq__q-text').allTextContents()).map((t) => t.trim());
+  const shownA = (await page.locator('.faq__a').allTextContents()).map((t) => t.trim());
+
+  expect(questions.length).toBe(shownQ.length);
+  for (const q of questions) {
+    expect(shownQ, `question "${q.name}" is in the markup but not on the page`).toContain(q.name);
+    expect(shownA, `the answer to "${q.name}" is in the markup but not on the page`).toContain(
+      q.acceptedAnswer.text,
+    );
+  }
+});

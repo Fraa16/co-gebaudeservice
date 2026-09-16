@@ -51,10 +51,10 @@ export const pages = {
     factsKicker: 'In Zahlen',
     areaKicker: 'Einsatzgebiet',
     areaTitle: 'Kurze Wege, auch beim Winterdienst.',
-    /** The Einsatzgebiet, and the only list of towns anywhere. Now in the data layer it
-     *  also feeds areaServed in the structured-data graph.
-     *  TODO(client): confirm these places — draft, see CONTENT-REVIEW.md §3. */
-    orte: ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebhausen'],
+    /** The Einsatzgebiet chips. Derived from company.areaServed so the page, the FAQ
+     *  answer and the structured data can never disagree about where the work happens;
+     *  the district itself is not a chip. */
+    orte: company.areaServed.filter((a) => !a.startsWith('Kreis')),
     cta: {
       /** Was a fourth copy of "Objekt ansehen, Angebot erhalten." */
       heading: 'Wir sehen uns Ihr Objekt an.',

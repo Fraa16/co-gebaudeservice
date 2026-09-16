@@ -13,7 +13,7 @@ const abs = (path: string) => new URL(path, site.url).href.replace(/\/$/, '') ||
  *  Placeholder NAP is never emitted: an entity built from a fake phone number gets
  *  cross-referenced against every other citation of the business, and inconsistent NAP
  *  is the fastest way to damage local ranking. Each field is gated on its own flag. */
-function organization(): Thing {
+function organization(offerCatalogId?: string): Thing {
   const hasAddress = company.address.verified;
 
   const node: Thing = {
@@ -23,12 +23,20 @@ function organization(): Thing {
     url: site.url,
     logo: { '@type': 'ImageObject', url: abs('/logo.svg') },
     image: abs('/og/default.png'),
+    /* A Landkreis is an AdministrativeArea; the towns inside it are Cities. Emitting
+       everything as AdministrativeArea would have been wrong the moment the town list
+       arrived. */
     areaServed: company.areaServed.map((name) => ({
-      '@type': 'AdministrativeArea',
+      '@type': name.startsWith('Kreis') || name.startsWith('Landkreis') ? 'AdministrativeArea' : 'City',
       name,
     })),
     knowsLanguage: 'de',
   };
+
+  /* Only on the page that actually emits the catalog — referencing an @id that is not
+     in this page's graph would leave a dangling reference, which tests/seo.spec.ts
+     rejects. */
+  if (offerCatalogId) node.hasOfferCatalog = { '@id': offerCatalogId };
 
   if (hasAddress) {
     node.address = {
@@ -65,6 +73,8 @@ export interface GraphOptions {
   description: string;
   pageType?: 'WebPage' | 'ContactPage' | 'AboutPage' | 'CollectionPage';
   breadcrumbs?: { name: string; path: string }[];
+  /** Links Organization to an OfferCatalog emitted in `extra` on this same page. */
+  offerCatalogId?: string;
   extra?: Thing[];
 }
 
@@ -74,13 +84,14 @@ export function buildGraph({
   description,
   pageType = 'WebPage',
   breadcrumbs,
+  offerCatalogId,
   extra = [],
 }: GraphOptions): Thing {
   const url = abs(path);
 
   const graph: Thing[] = [
     website(),
-    organization(),
+    organization(offerCatalogId),
     {
       '@type': pageType,
       '@id': `${url}#webpage`,
@@ -111,15 +122,81 @@ export function buildGraph({
   return { '@context': 'https://schema.org', '@graph': graph };
 }
 
-/** A Service node for a service that has its own page. */
-export function serviceNode(name: string, path: string, description: string): Thing {
-  return {
-    '@type': 'Service',
-    '@id': `${abs(path)}#service`,
+const areaServedNodes = () =>
+  company.areaServed.map((name) => ({
+    '@type': name.startsWith('Kreis') || name.startsWith('Landkreis') ? 'AdministrativeArea' : 'City',
     name,
-    description,
-    serviceType: name,
+  }));
+
+/** Stable across pages: /leistungen and a service's own page describe the same thing,
+ *  so they must not invent two identifiers for it. */
+const serviceId = (slug: string) => `${site.url}/#service-${slug}`;
+
+/** A Service node. `url` is set only when the service has a page of its own. */
+export function serviceNode(opts: {
+  slug: string;
+  name: string;
+  description: string;
+  url?: string;
+}): Thing {
+  const node: Thing = {
+    '@type': 'Service',
+    '@id': serviceId(opts.slug),
+    name: opts.name,
+    description: opts.description,
+    serviceType: opts.name,
     provider: { '@id': ORG_ID },
-    areaServed: company.areaServed.map((n) => ({ '@type': 'AdministrativeArea', name: n })),
+    areaServed: areaServedNodes(),
+  };
+  if (opts.url) node.url = abs(opts.url);
+  return node;
+}
+
+/**
+ * The whole catalogue: an OfferCatalog plus one Service node per entry.
+ *
+ * Seven of the eight services have no page of their own, so without this they were
+ * invisible to structured data — the graph advertised one service on a site that sells
+ * eight. Returns the catalog id alongside the nodes so the caller can pass it to
+ * buildGraph and have Organization point at it.
+ */
+export function serviceCatalog(
+  path: string,
+  services: readonly { slug: string; title: string; text: string; href?: string }[],
+): { id: string; nodes: Thing[] } {
+  const id = `${abs(path)}#catalog`;
+  const nodes = services.map((s) =>
+    serviceNode({ slug: s.slug, name: s.title, description: s.text, url: s.href }),
+  );
+
+  return {
+    id,
+    nodes: [
+      {
+        '@type': 'OfferCatalog',
+        '@id': id,
+        name: `Leistungen von ${company.name}`,
+        itemListElement: services.map((s, i) => ({
+          '@type': 'Offer',
+          position: i + 1,
+          itemOffered: { '@id': serviceId(s.slug) },
+        })),
+      },
+      ...nodes,
+    ],
+  };
+}
+
+/** FAQPage. Built from the same list the page renders, so the markup can never
+ *  advertise an answer the reader cannot see. */
+export function faqNode(path: string, entries: readonly { q: string; a: string }[]): Thing {
+  return {
+    '@type': 'FAQPage',
+    '@id': `${abs(path)}#faq`,
+    mainEntity: entries.map((e) => ({
+      '@type': 'Question',
+      name: e.q,
+      acceptedAnswer: { '@type': 'Answer', text: e.a },
+    })),
   };
 }

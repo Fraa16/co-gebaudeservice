@@ -210,3 +210,34 @@ Die bisher fest im Seitenaufbau stehenden Texte liegen jetzt in `src/data/pages.
 Das ändert nichts am Inhalt, macht die Zeilen aber an einer Stelle änderbar — bisher
 waren sie über mehrere Dateien verteilt. `npm run lint:seo` prüft bei jedem Build, dass
 Titel und Beschreibungen in der von Google dargestellten Länge bleiben.
+
+---
+
+## 11. Häufige Fragen (neuer Abschnitt auf „Leistungen")
+
+`src/data/faq.ts`
+
+**Alles Entwurf.** Sieben Fragen mit Antworten, als aufklappbare Liste auf der Seite
+„Leistungen". Derselbe Text wird zusätzlich als strukturierte Daten (`FAQPage`)
+ausgegeben, damit Google die Antworten direkt in den Suchergebnissen anzeigen kann.
+
+**Wichtig zur Prüfung:** Jede Antwort wiederholt nur, was auf der Website ohnehin schon
+steht — Einsatzgebiet, Turnus, Festpreis nach Besichtigung, Rückmeldung in zwei
+Werktagen, Winterdienst nach Gemeindesatzung, eigenes Personal. Es wurde **nichts
+Neues behauptet**: keine Vertragslaufzeit, kein Preis, keine Garantie, keine
+Versicherung. Sollte eine dieser Aussagen so nicht stimmen, bitte melden — sie steht
+dann auch an anderer Stelle falsch auf der Website.
+
+1. In welchen Orten arbeiten Sie?
+2. In welchem Turnus wird gereinigt?
+3. Was kostet die Reinigung?
+4. Wie schnell bekomme ich ein Angebot?
+5. Übernehmen Sie auch den Winterdienst?
+6. Arbeiten Sie mit eigenem Personal?
+7. Für welche Objekte arbeiten Sie?
+
+Dazu die Abschlusszeile „Ihre Frage ist nicht dabei? **Fragen Sie uns direkt**" mit
+Verweis auf die Kontaktseite.
+
+Die erste Antwort nennt die Orte automatisch aus der hinterlegten Liste — wird die
+Ortsliste geändert, ändert sich die Antwort mit.

@@ -313,3 +313,27 @@ test('no two sections on a page claim the same number', async ({ page }) => {
 
   expect(bad).toEqual([]);
 });
+
+test('the FAQ answers are reachable without JavaScript', async ({ browser }) => {
+  /* CLAUDE.md rule 10: content must never depend on a script to be visible. The FAQ is
+     a <details> for exactly this reason — and its answers are also the FAQPage markup,
+     so an answer a visitor cannot open would be a rich result built on text that is
+     not on the page. */
+  const ctx = await browser.newContext({ viewport: { width: 924, height: 800 }, javaScriptEnabled: false });
+  const page = await ctx.newPage();
+  await page.goto('/leistungen');
+
+  const items = page.locator('.faq__item');
+  const count = await items.count();
+  expect(count, 'FAQ entries on /leistungen').toBeGreaterThan(3);
+
+  // Closed to begin with, so the section stays scannable.
+  await expect(items.first().locator('.faq__a')).toBeHidden();
+
+  // Opening is a browser behaviour, not a scripted one.
+  await items.first().locator('.faq__q').click();
+  await expect(items.first().locator('.faq__a')).toBeVisible();
+  expect((await items.first().locator('.faq__a').textContent())?.trim().length ?? 0).toBeGreaterThan(40);
+
+  await ctx.close();
+});

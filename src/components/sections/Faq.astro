@@ -1,0 +1,168 @@
+---
+import { faq, faqFooter } from '../../data/faq';
+
+/** Häufige Fragen.
+ *
+ *  <details>/<summary> rather than a scripted accordion: the answers are the content,
+ *  and CLAUDE.md rule 10 says content must never depend on JavaScript to be visible.
+ *  This also means Google reads every answer whether or not it is open, which is the
+ *  point of pairing it with FAQPage markup. */
+interface Props {
+  kickerNum?: string;
+  kicker?: string;
+  heading?: string;
+}
+const {
+  kickerNum = '02',
+  kicker = 'Häufige Fragen',
+  heading = 'Was Hausverwaltungen meistens fragen.',
+} = Astro.props;
+---
+
+<section class="co-card co-card--white faq">
+  <div class="faq__head co-reveal">
+    <div class="faq__head-top">
+      <p class="co-kicker"><span class="co-kicker__num">{kickerNum}</span> {kicker}</p>
+      <h2 class="faq__title">{heading}</h2>
+    </div>
+
+    <p class="faq__more">
+      {faqFooter.text}{' '}
+      <a class="faq__more-link co-link-sweep" href={faqFooter.link.href}>{faqFooter.link.label}</a>
+    </p>
+  </div>
+
+  <div class="faq__list">
+    {
+      faq.map((entry) => (
+        <details class="faq__item co-reveal">
+          <summary class="faq__q">
+            <span class="faq__q-text">{entry.q}</span>
+            <span class="faq__sign" aria-hidden="true" />
+          </summary>
+          <p class="faq__a">{entry.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .faq {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(26px, 4vw, 64px);
+    align-items: flex-start;
+  }
+  /* The editorial split the rest of the site uses: heading in one column, the running
+     content in the other. space-between so the closing line sits at the foot of that
+     column rather than leaving its lower half blank beside a long list. */
+  .faq__head {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+    flex: 1 1 min(300px, 100%);
+    min-width: 0;
+    align-self: stretch;
+  }
+  /* The kicker and the heading travel together at the top; only the closing line is
+     pushed to the foot. Without this, space-between stranded the heading mid-column. */
+  .faq__head-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .faq__more {
+    margin: 0;
+    border-top: var(--co-rule);
+    padding-top: 18px;
+    font: 400 16px/1.5 var(--co-font-body);
+    color: var(--co-muted);
+  }
+  .faq__more-link {
+    font-weight: 600;
+    color: var(--co-ink);
+  }
+  .faq__more-link:hover { color: var(--co-blue); }
+  .faq__title {
+    font: 700 clamp(24px, 2.8vw, 38px) / 1.08 var(--co-font-heading);
+    letter-spacing: var(--co-h2-tracking);
+    max-width: 16ch;
+  }
+
+  .faq__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    flex: 2 1 min(440px, 100%);
+    min-width: 0;
+  }
+
+  .faq__item {
+    border-top: var(--co-rule);
+  }
+  .faq__item:last-child {
+    border-bottom: var(--co-rule);
+  }
+
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    /* A comfortable target: the whole row opens the answer, not just the text. */
+    min-height: 62px;
+    padding: 14px 0;
+    cursor: pointer;
+    list-style: none;
+    font: 600 clamp(16px, 1.4vw, 19px) / 1.35 var(--co-font-body);
+    color: var(--co-ink);
+  }
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+  .faq__q:hover {
+    color: var(--co-blue);
+  }
+
+  /* A plus that becomes a minus. Drawn from two bars so it needs no icon font. */
+  .faq__sign {
+    position: relative;
+    flex: none;
+    width: 18px;
+    height: 18px;
+  }
+  .faq__sign::before,
+  .faq__sign::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 2px;
+    border-radius: var(--co-radius-pill);
+    background: var(--co-blue);
+    transition: transform 200ms ease, opacity 160ms ease;
+  }
+  .faq__sign::after {
+    transform: rotate(90deg);
+  }
+  [open] .faq__sign::after {
+    transform: rotate(0deg);
+  }
+
+  .faq__a {
+    margin: 0;
+    padding: 0 0 22px;
+    /* Keeps the answer inside a readable measure — tests/responsive.spec.ts holds
+       running prose to 95ch. */
+    max-width: 66ch;
+    font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);
+    color: var(--co-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__sign::before,
+    .faq__sign::after {
+      transition: none;
+    }
+  }
+</style>
