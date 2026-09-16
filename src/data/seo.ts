@@ -39,7 +39,7 @@ export const pageSeo = {
        one page whose whole subject is where the work happens. */
     title: 'Über uns — Gebäudeservice aus Nagold',
     description:
-      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf und Ebhausen — eigenes Personal, feste Objektbetreuer, vereinbarter Turnus.',
+      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg — eigenes Personal, feste Objektbetreuer.',
   },
   kontakt: {
     title: 'Angebot anfordern — Gebäudeservice Nagold',

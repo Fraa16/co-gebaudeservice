@@ -241,3 +241,34 @@ Verweis auf die Kontaktseite.
 
 Die erste Antwort nennt die Orte automatisch aus der hinterlegten Liste — wird die
 Ortsliste geändert, ändert sich die Antwort mit.
+
+---
+
+## 12. Einsatzgebiet erweitert — zehn Orte
+
+`src/data/company.ts` · wirkt auf „Über uns", FAQ und strukturierte Daten
+
+Anlass: Anlage des Google-Unternehmensprofils. Dort sind 20 Einzugsgebiete eingetragen
+(Maximum). Auf der Website wären 20 Ortsnamen unlesbar, deshalb die zehn wichtigsten:
+
+**Nagold · Ebhausen · Rohrdorf · Haiterbach · Egenhausen · Wildberg · Altensteig ·
+Mötzingen · Jettingen · Herrenberg**
+
+Die ersten sieben liegen im Landkreis Calw, die letzten drei im Gäu (Landkreis
+Böblingen) — von Nagold aus näher als der halbe eigene Landkreis.
+
+`TODO(client)`: Bitte bestätigen, dass Oguz in allen zehn Orten tatsächlich arbeitet.
+Die Liste steuert gleichzeitig die Chips auf „Über uns", die erste FAQ-Antwort und das
+Feld `areaServed` in den strukturierten Daten — ein Ort, den er nicht bedient, wäre
+damit an drei Stellen zugleich falsch.
+
+Mitgezogen wurden drei Texte, die Orte ausdrücklich nennen:
+
+- **FAQ-Antwort 1** — endet jetzt auf „sowie im übrigen Kreis Calw und im angrenzenden
+  Gäu" statt nur „Kreis Calw", weil die Liste jetzt zwei Landkreise berührt.
+- **Über uns, Absatz 3** — nennt zusätzlich „im Gäu rund um Mötzingen, Jettingen und
+  Herrenberg".
+- **Seitenbeschreibung „Über uns"** — „… und im Gäu bis Herrenberg".
+
+Nicht aufgenommen: der Landkreis Böblingen als Ganzes. Dort werden drei Gemeinden
+bedient, nicht die restlichen rund fünfzig.

@@ -16,7 +16,7 @@ export const ueberUns = {
       draft: true,
     },
     {
-      text: 'Wir arbeiten im Umkreis von Nagold — unter anderem in Altensteig, Wildberg, Haiterbach, Rohrdorf und Ebhausen. Kurze Wege bedeuten, dass wir auch bei Winterdienst und kurzfristigen Einsätzen zuverlässig vor Ort sind.',
+      text: 'Wir arbeiten im Umkreis von Nagold — unter anderem in Altensteig, Wildberg, Haiterbach, Rohrdorf und Ebhausen, dazu im Gäu rund um Mötzingen, Jettingen und Herrenberg. Kurze Wege bedeuten, dass wir auch bei Winterdienst und kurzfristigen Einsätzen zuverlässig vor Ort sind.',
       draft: true,
     },
   ],

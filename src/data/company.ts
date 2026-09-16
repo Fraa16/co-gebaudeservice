@@ -22,12 +22,20 @@ export const company = {
    *  places while the page named six.
    *  TODO(client): confirm the towns — draft, see CONTENT-REVIEW.md §3. */
   areaServed: [
+    // Kernring um Nagold, Landkreis Calw
     'Nagold',
-    'Altensteig',
-    'Wildberg',
-    'Haiterbach',
-    'Rohrdorf',
     'Ebhausen',
+    'Rohrdorf',
+    'Haiterbach',
+    'Egenhausen',
+    'Wildberg',
+    'Altensteig',
+    // Gäu, Landkreis Böblingen — näher als der halbe eigene Landkreis
+    'Mötzingen',
+    'Jettingen',
+    'Herrenberg',
+    // Der Landkreis selbst. Böblingen steht bewusst nicht dabei: dort werden drei
+    // Gemeinden bedient, nicht der ganze Kreis.
     'Kreis Calw',
   ],
 

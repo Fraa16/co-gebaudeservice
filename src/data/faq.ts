@@ -25,7 +25,7 @@ const orte = company.areaServed.filter((a) => !a.startsWith('Kreis')).join(', ')
 export const faq: readonly FaqEntry[] = [
   {
     q: 'In welchen Orten arbeiten Sie?',
-    a: `In ${orte} sowie im übrigen Kreis Calw. Kurze Wege sind der Grund, warum wir auch beim Winterdienst und bei kurzfristigen Einsätzen zuverlässig vor Ort sind.`,
+    a: `In ${orte} sowie im übrigen Kreis Calw und im angrenzenden Gäu. Kurze Wege sind der Grund, warum wir auch beim Winterdienst und bei kurzfristigen Einsätzen zuverlässig vor Ort sind.`,
   },
   {
     q: 'In welchem Turnus wird gereinigt?',
