@@ -1,4 +1,3 @@
-import type { contactSchema as ContactSchema } from '../../lib/contact-schema';
 
 /** The validator is ~19 kB of zod for four field checks. Loading it with the page put
  *  that on every visitor, including the ones who never touch the form, so it is

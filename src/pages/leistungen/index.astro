@@ -5,7 +5,7 @@ import ServiceIndex from '../../components/sections/ServiceIndex.astro';
 import ServiceRow from '../../components/sections/ServiceRow.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
 import { allServices } from '../../data/services';
-import { company } from '../../data/company';
+import { pages } from '../../data/pages';
 import { pageSeo } from '../../data/seo';
 import { buildGraph } from '../../lib/jsonld';
 
@@ -24,19 +24,19 @@ const jsonLd = buildGraph({
   ],
 });
 
-const meta = [
-  { label: 'Leistungen', value: String(allServices.length) },
-  { label: 'Einsatzgebiet', value: company.areaLong },
-  { label: 'Abrechnung', value: 'Festpreis pro Monat' },
-] as const;
+const page = pages.leistungen;
+
+/** The service count is derived, not written down, so it cannot drift from the
+ *  catalogue. The rest of the row is copy and lives in src/data/pages.ts. */
+const meta = [{ label: 'Leistungen', value: String(allServices.length) }, ...page.meta];
 ---
 
 <BaseLayout {...seo} path="/leistungen" jsonLd={jsonLd}>
   <PageHero
-    pill="Leistungen"
+    pill={page.pill}
     pillNum="01"
-    heading="Alles rund ums Objekt, aus einer Hand."
-    lead="Einzeln beauftragbar oder als Paket im Dauerauftrag. Turnus, Umfang und Erreichbarkeit legen wir vorab schriftlich fest."
+    heading={page.h1}
+    lead={page.lead}
     size="display"
     meta={meta}
   />
@@ -48,8 +48,8 @@ const meta = [
   </section>
 
   <CtaBand
-    heading="Mehrere Objekte oder ein Sonderfall?"
-    text="Wir sehen uns das Objekt an und kalkulieren einen Turnus zum Festpreis."
+    heading={page.cta.heading}
+    text={page.cta.text}
     cta={{ label: 'Angebot anfordern', href: '/kontakt#anfrage' }}
     secondary={{ label: 'Über uns', href: '/ueber-uns' }}
   />

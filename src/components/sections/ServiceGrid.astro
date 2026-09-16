@@ -6,6 +6,7 @@ import ServiceCard from './ServiceCard.astro';
 import ServicesCtaCard from './ServicesCtaCard.astro';
 import Button from '../ui/Button.astro';
 import type { Service } from '../../data/services';
+import { pages } from '../../data/pages';
 
 type LinkResolver = (service: Service) => string | undefined;
 
@@ -35,7 +36,7 @@ const RECIPE = [
   <header class="leistungen__head">
     <div class="leistungen__head-text co-reveal">
       <p class="co-kicker"><span class="co-kicker__num">01</span> Leistungen</p>
-      <h2 class="leistungen__title">Alles rund ums Objekt, aus einer Hand.</h2>
+      <h2 class="leistungen__title">{pages.home.servicesHeading}</h2>
     </div>
     <Button href="/leistungen" variant="quiet" arrow class="co-reveal">Alle acht Leistungen</Button>
   </header>

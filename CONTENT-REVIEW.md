@@ -164,3 +164,49 @@ Neu hinzugekommen, beides **Entwurf und rechtlich zu prüfen:**
 Die Telefonnummer **0172 3001489** ist bestätigt und steht jetzt in Impressum,
 Datenschutzerklärung, Kontaktseite und in den strukturierten Daten. Die E-Mail-Adresse
 ist weiterhin ein Platzhalter und wird deshalb nirgends verlinkt.
+
+---
+
+## 10. Suchmaschinen-Texte: Titel, Überschriften und Ortsangaben
+
+`src/data/seo.ts` · `src/data/pages.ts` · `src/data/content.json` · `src/data/ueber-uns.ts`
+
+**Alles in diesem Abschnitt ist Entwurf.** Geändert wurde aus zwei Gründen: keine
+einzige Hauptüberschrift der Website nannte einen Ort, und drei Überschriften kamen auf
+mehreren Seiten doppelt vor.
+
+### Hauptüberschriften (h1)
+
+| Seite | vorher | jetzt |
+|---|---|---|
+| Start | Gepflegte Objekte, zuverlässig und zum festen Turnus. | Gepflegte Objekte **in Nagold**, zuverlässig und zum festen Turnus. |
+| Leistungen | Alles rund ums Objekt, aus einer Hand. *(dieselbe Zeile wie auf der Startseite)* | Acht Leistungen für Objekte **in Nagold und im Kreis Calw**. |
+| Über uns | Eigenes Personal, feste Objektbetreuer. | Eigenes Personal, feste Objektbetreuer **in Nagold**. |
+| Kontakt | Objekt ansehen, Angebot erhalten. *(Zeile kam auf drei Seiten vor)* | Angebot erhalten — für Objekte **in Nagold**. |
+
+Die Überschrift der Treppenhaus-Seite bleibt unverändert: sie beginnt bereits mit dem
+gesuchten Begriff, und der Ort steht im Seitentitel.
+
+### Weitere geänderte Zeilen
+
+- Abschluss-Band **Leistungen**: „Mehrere Objekte oder ein Sonderfall?" →
+  „Mehrere Objekte im Kreis Calw?" (die alte Zeile steht weiterhin auf der Startseite)
+- Abschluss-Band **Über uns**: war eine vierte Wiederholung von „Objekt ansehen,
+  Angebot erhalten." → „Wir sehen uns Ihr Objekt an."
+
+### Seitentitel und Beschreibungen
+
+Alle acht Seitentitel und Beschreibungen in `src/data/seo.ts` wurden neu geschrieben.
+Jeder Titel nennt jetzt Nagold oder den Kreis Calw, sofern es zur Seite passt. Der Titel
+„Über uns" bestand vorher aus zwei Wörtern und nutzte 28 von 75 möglichen Zeichen.
+
+Die Beschreibung der Seite **Über uns** nennt jetzt alle sechs Orte — Nagold,
+Altensteig, Wildberg, Haiterbach, Rohrdorf und Ebhausen. `TODO(client)`: Diese Ortsliste
+ist weiterhin ein Entwurf und sollte bestätigt werden.
+
+### Technisch, nicht inhaltlich
+
+Die bisher fest im Seitenaufbau stehenden Texte liegen jetzt in `src/data/pages.ts`.
+Das ändert nichts am Inhalt, macht die Zeilen aber an einer Stelle änderbar — bisher
+waren sie über mehrere Dateien verteilt. `npm run lint:seo` prüft bei jedem Build, dass
+Titel und Beschreibungen in der von Google dargestellten Länge bleiben.

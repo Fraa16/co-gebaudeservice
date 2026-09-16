@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactForm from '../components/sections/ContactForm.astro';
 import Timeline from '../components/sections/Timeline.astro';
 import { company, contactRoutes } from '../data/company';
+import { pages } from '../data/pages';
 import { contact, detail } from '../data/content';
 import { pageSeo } from '../data/seo';
 import { buildGraph } from '../lib/jsonld';
@@ -26,6 +27,7 @@ const jsonLd = buildGraph({
 /** An unverified detail still renders — it is part of the design — but is not linked
  *  and never reaches structured data. See src/data/company.ts. */
 const routes = contactRoutes;
+const page = pages.kontakt;
 const phone = contactRoutes.find((route) => route.label === 'Telefon');
 ---
 
@@ -34,7 +36,7 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
     <div class="reach__head">
       <div class="reach__head-main">
         <p class="co-kicker"><span class="co-kicker__num">01</span> {contact.pill}</p>
-        <h1 class="co-display reach__title">{contact.h2}</h1>
+        <h1 class="co-display reach__title">{page.h1}</h1>
       </div>
       <p class="reach__lead">{contact.text}</p>
     </div>
@@ -59,20 +61,20 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
 
   <section class="co-card co-card--white enquiry" id="anfrage" tabindex="-1">
     <div class="enquiry__aside">
-      <p class="co-kicker"><span class="co-kicker__num">02</span> Anfrage</p>
-      <h2 class="enquiry__title">Sagen Sie uns kurz, um welches Objekt es geht.</h2>
+      <p class="co-kicker"><span class="co-kicker__num">02</span> {page.enquiryKicker}</p>
+      <h2 class="enquiry__title">{page.enquiryHeading}</h2>
 
       <dl class="enquiry__facts">
         <div class="enquiry__fact">
-          <dt class="enquiry__fact-label">Rückmeldung</dt>
-          <dd class="enquiry__fact-value">Innerhalb von zwei Werktagen</dd>
+          <dt class="enquiry__fact-label">{page.facts.rueckmeldung.label}</dt>
+          <dd class="enquiry__fact-value">{page.facts.rueckmeldung.value}</dd>
         </div>
         <div class="enquiry__fact">
-          <dt class="enquiry__fact-label">Turnus</dt>
+          <dt class="enquiry__fact-label">{page.facts.turnusLabel}</dt>
           <dd class="enquiry__fact-value">{detail.infoCard.facts[0]?.value}</dd>
         </div>
         <div class="enquiry__fact">
-          <dt class="enquiry__fact-label">Einsatzgebiet</dt>
+          <dt class="enquiry__fact-label">{page.facts.gebietLabel}</dt>
           <dd class="enquiry__fact-value">{company.areaLong}</dd>
         </div>
       </dl>

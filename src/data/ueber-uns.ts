@@ -5,7 +5,7 @@ import { detail } from './content';
 
 export const ueberUns = {
   pill: 'Über uns',
-  h1: 'Eigenes Personal, feste Objektbetreuer.', // draft
+  h1: 'Eigenes Personal, feste Objektbetreuer in Nagold.', // draft
   lead: 'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw.', // draft
 
   paragraphs: [

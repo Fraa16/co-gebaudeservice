@@ -7,6 +7,7 @@ import CtaBand from '../components/sections/CtaBand.astro';
 import Photo from '../components/ui/Photo.astro';
 import DraftNote from '../components/ui/DraftNote.astro';
 import { ueberUns } from '../data/ueber-uns';
+import { pages } from '../data/pages';
 import { getPhoto } from '../data/photos';
 import { company } from '../data/company';
 import { pageSeo } from '../data/seo';
@@ -27,8 +28,7 @@ const jsonLd = buildGraph({
   ],
 });
 
-/** TODO(client): confirm these places — draft, see CONTENT-REVIEW.md §3. */
-const orte = ['Nagold', 'Altensteig', 'Wildberg', 'Haiterbach', 'Rohrdorf', 'Ebhausen'];
+const page = pages.ueberUns;
 
 /** Only the slots that actually hold a photograph. */
 const bandPhotos = ueberUns.photoBand.filter((slot) => getPhoto(slot).image);
@@ -72,9 +72,9 @@ const bandPhotos = ueberUns.photoBand.filter((slot) => getPhoto(slot).image);
   }
 
   <Statement
-    kicker="Arbeitsweise"
+    kicker={page.statementKicker}
     kickerNum="02"
-    statement="Dieselben Gesichter im Haus, ein Ansprechpartner für die Verwaltung."
+    statement={page.statement}
     paragraphs={ueberUns.paragraphs}
   >
     <DraftNote what="Absätze 2 und 3, Überschrift, Einleitung und die Ortsliste dieser Seite" />
@@ -87,24 +87,24 @@ const bandPhotos = ueberUns.photoBand.filter((slot) => getPhoto(slot).image);
   </Statement>
 
   <section class="co-card co-card--ink co-grain about__facts">
-    <p class="co-kicker"><span class="co-kicker__num">03</span> In Zahlen</p>
+    <p class="co-kicker"><span class="co-kicker__num">03</span> {page.factsKicker}</p>
     <StatStrip stats={ueberUns.stats} />
   </section>
 
   <section class="co-card co-card--white about__area">
     <div class="about__area-head co-reveal">
-      <p class="co-kicker"><span class="co-kicker__num">04</span> Einsatzgebiet</p>
-      <h2 class="about__area-title">Kurze Wege, auch beim Winterdienst.</h2>
+      <p class="co-kicker"><span class="co-kicker__num">04</span> {page.areaKicker}</p>
+      <h2 class="about__area-title">{page.areaTitle}</h2>
       <p class="about__area-text">{company.areaLong}</p>
     </div>
     <ul class="about__orte co-reveal">
-      {orte.map((ort) => <li class="about__ort">{ort}</li>)}
+      {page.orte.map((ort) => <li class="about__ort">{ort}</li>)}
     </ul>
   </section>
 
   <CtaBand
-    heading="Objekt ansehen, Angebot erhalten."
-    text="Kein Vertrag ohne Objektbesichtigung. Wir melden uns innerhalb von zwei Werktagen."
+    heading={page.cta.heading}
+    text={page.cta.text}
     cta={{ label: 'Angebot anfordern', href: '/kontakt#anfrage' }}
     secondary={{ label: 'Alle Leistungen', href: '/leistungen' }}
   />
