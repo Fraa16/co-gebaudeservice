@@ -53,6 +53,28 @@ function organization(offerCatalogId?: string): Thing {
   if (company.phone.verified && company.phone.e164) node.telephone = company.phone.e164;
   if (company.email.verified) node.email = company.email.display;
 
+  /* Three more local signals, each gated on its own flag for the same reason as the
+     NAP: a wrong opening time or a coordinate on the wrong street is worse than a
+     missing one. They appear the moment the client confirms them. */
+  if (company.hours.verified && company.hours.spec.length) {
+    node.openingHoursSpecification = company.hours.spec.map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.days,
+      opens: h.opens,
+      closes: h.closes,
+    }));
+  }
+  if (company.geo.verified) {
+    node.geo = {
+      '@type': 'GeoCoordinates',
+      latitude: company.geo.latitude,
+      longitude: company.geo.longitude,
+    };
+  }
+  if (company.priceRange.verified && company.priceRange.value) {
+    node.priceRange = company.priceRange.value;
+  }
+
   return node;
 }
 
@@ -197,6 +219,40 @@ export function faqNode(path: string, entries: readonly { q: string; a: string }
       '@type': 'Question',
       name: e.q,
       acceptedAnswer: { '@type': 'Answer', text: e.a },
+    })),
+  };
+}
+
+/**
+ * HowTo for the four-step process, built from the same steps the page renders.
+ *
+ * Worth being straight about what this does and does not buy: Google retired HowTo
+ * rich results from search in 2023, so this produces no visual rich result there. It
+ * is still valid, machine-readable process data — which is what AI engines synthesise
+ * from, and what a voice assistant can read back for "wie läuft das ab". That is the
+ * reason it is here, not a rich snippet.
+ */
+export function howToNode(
+  path: string,
+  opts: {
+    name: string;
+    description: string;
+    steps: readonly { num: string; title: string; text: string }[];
+  },
+): Thing {
+  const url = abs(path);
+  return {
+    '@type': 'HowTo',
+    '@id': `${url}#howto`,
+    name: opts.name,
+    description: opts.description,
+    inLanguage: site.locale,
+    step: opts.steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.title,
+      text: s.text,
+      url: `${url}#ablauf`,
     })),
   };
 }

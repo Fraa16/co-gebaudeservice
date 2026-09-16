@@ -9,10 +9,22 @@ import Process from '../components/sections/Process.astro';
 import ContactSection from '../components/sections/ContactSection.astro';
 import { homeServices, type Service } from '../data/services';
 import { pageSeo } from '../data/seo';
-import { buildGraph } from '../lib/jsonld';
+import { buildGraph, howToNode } from '../lib/jsonld';
+import { processContent } from '../data/content';
 
 const seo = pageSeo.home;
-const jsonLd = buildGraph({ path: '/', title: seo.title, description: seo.description });
+const jsonLd = buildGraph({
+  path: '/',
+  title: seo.title,
+  description: seo.description,
+  extra: [
+    howToNode('/', {
+      name: processContent.h2,
+      description: processContent.lead,
+      steps: processContent.steps,
+    }),
+  ],
+});
 ---
 
 <BaseLayout {...seo} path="/" jsonLd={jsonLd}>

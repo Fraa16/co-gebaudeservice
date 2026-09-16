@@ -180,3 +180,51 @@ test('the FAQ markup never advertises an answer the page does not show', async (
     );
   }
 });
+
+test('the HowTo markup matches the steps the page renders', async ({ page }) => {
+  /* Google retired HowTo rich results in 2023, so this buys no visual snippet — it is
+     machine-readable process data for AI engines and voice. That only holds if it
+     describes what is actually on the page, so the node is built from the same steps
+     the section renders. */
+  await page.goto('/');
+  const graph = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+  )['@graph'] as Record<string, unknown>[];
+
+  const howTo = graph.find((n) => n['@type'] === 'HowTo');
+  expect(howTo, 'a HowTo node on the homepage').toBeTruthy();
+
+  const steps = howTo!.step as { name: string; text: string }[];
+  const rendered = (await page.locator('.step__title').allTextContents())
+    .map((t) => t.trim())
+    .filter(Boolean);
+
+  expect(steps.length, 'four steps').toBe(4);
+  for (const s of steps) {
+    expect(rendered, `step "${s.name}" is in the markup but not on the page`).toContain(s.name);
+  }
+});
+
+test('an unconfirmed local signal never reaches the graph', async ({ page }) => {
+  /* openingHoursSpecification, geo and priceRange are gated exactly like the phone and
+     e-mail were: a wrong opening time sends somebody to a locked door and a guessed
+     coordinate puts the business on the wrong street. Each appears only once its own
+     flag in src/data/company.ts is set — this asserts the gate, not a fixed answer, so
+     it keeps testing as each one is confirmed. */
+  await page.goto('/');
+  const graph = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+  )['@graph'] as Record<string, unknown>[];
+  const org = graph.find((n) => String(n['@type']).includes('Organization'))!;
+
+  // Whatever is present must be substantive — never an empty or zero placeholder.
+  if (org.openingHoursSpecification) {
+    expect((org.openingHoursSpecification as unknown[]).length).toBeGreaterThan(0);
+  }
+  if (org.geo) {
+    const g = org.geo as { latitude: number; longitude: number };
+    expect(g.latitude, 'a placeholder coordinate must never be emitted').not.toBe(0);
+    expect(g.longitude, 'a placeholder coordinate must never be emitted').not.toBe(0);
+  }
+  if (org.priceRange) expect(String(org.priceRange).length).toBeGreaterThan(0);
+});

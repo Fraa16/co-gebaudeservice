@@ -66,6 +66,34 @@ export const company = {
     display: content.company.email,
   },
 
+  /** Opening hours. "Wann hat ... offen" is one of the most common voice queries and
+   *  the graph cannot answer it today. Gated like every other contact detail, for the
+   *  same reason: a wrong opening time sends somebody to a locked door, which is worse
+   *  than no answer at all.
+   *  TODO(client): Erreichbarkeit angeben — z. B. Mo–Fr 07:00–17:00. Bereitschaft für
+   *  den Winterdienst ggf. gesondert. */
+  hours: {
+    verified: false,
+    spec: [] as readonly { days: readonly string[]; opens: string; closes: string }[],
+  },
+
+  /** Coordinates of the business address, for local and map surfaces. Gated because a
+   *  guessed coordinate puts the business on the wrong street, and a town-centre
+   *  approximation is a guess.
+   *  TODO(client): exakte Koordinaten der Anschrift (z. B. aus Google Maps ablesen). */
+  geo: {
+    verified: false,
+    latitude: 0,
+    longitude: 0,
+  },
+
+  /** Schema.org priceRange, e.g. "€€". Gated: it is a claim about pricing.
+   *  TODO(client): freigeben, falls gewünscht. */
+  priceRange: {
+    verified: false,
+    value: '',
+  },
+
   legal: {
     rechtsform: 'Einzelunternehmen',
     /** TODO(client): USt-IdNr. oder, falls keine vorliegt, die Steuernummer. */

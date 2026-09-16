@@ -37,7 +37,10 @@ const {
       faq.map((entry) => (
         <details class="faq__item co-reveal">
           <summary class="faq__q">
-            <span class="faq__q-text">{entry.q}</span>
+            {/* An h3, not a span: the question belongs in the heading outline that
+                search engines read for snippets. It was invisible there before —
+                the FAQPage markup carried it, but the document structure did not. */}
+            <h3 class="faq__q-text">{entry.q}</h3>
             <span class="faq__sign" aria-hidden="true" />
           </summary>
           <p class="faq__a">{entry.a}</p>
@@ -105,6 +108,13 @@ const {
     border-bottom: var(--co-rule);
   }
 
+  /* The heading inherits the summary's type rather than the browser's h3 defaults,
+     so promoting it changed the document outline and nothing about how it looks. */
+  .faq__q-text {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+  }
   .faq__q {
     display: flex;
     align-items: center;
