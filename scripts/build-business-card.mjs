@@ -169,125 +169,111 @@ const css = (L) => `
   .panel--back { background: ${INK}; color: ${WHITE}; }
 
   /* Front ---------------------------------------------------------------- */
-  /* The signature is its own block, not the head of the left column. Inside the column
-     its fixed 37 mm fought the contact block for width on the narrower layout, and the
-     two do not even sit at the same height — the lockup is at the top, the contact at
-     the bottom. Out here it takes the full width and the columns take what they need. */
-  .lockup { width: 37mm; display: block; }
+  /* Everything hangs off one left edge. The earlier version split the face into two
+     tidy columns with a hairline and a footer row underneath — which is the layout
+     every business-card generator produces, and it read like one. */
+  .panel--front { justify-content: space-between; }
 
-  /* The site's editorial split, on paper: one column carries the identity from the top,
-     the other the running detail from the bottom. Pinning everything to the bottom
-     instead left a dead band straight across the middle. */
-  .front__body { flex: 1 1 auto; display: flex; align-items: stretch; gap: 4mm; min-height: 0; }
-  .front__who { flex: 1 1 auto; min-width: 0; padding-top: 5.5mm; }
-  .name {
+  /* 34 mm, not 40. The three blocks on this face summed to 38 of the 42 mm the tighter
+     layout leaves, so space-between had under 2 mm per gap to work with and the whole
+     column crowded against the top. The air has to be earned first. */
+  .lockup { width: 34mm; display: block; }
+
+  .front__call { display: block; }
+  /* The site's voice is scale contrast — 80px display against 11px kickers, about 8:1.
+     The first card ran 11.5pt against 5.6pt, barely 2:1, which is why every element
+     looked equally important and therefore inert. This is the number the card is kept
+     for, so it gets the display size and everything else gets out of its way. */
+  .tel {
     font-family: Archivo, sans-serif;
     font-weight: 700;
-    font-size: 11.5pt;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+    font-size: 16pt;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: ${INK};
   }
-  .role {
-    margin-top: 1.1mm;
-    font-size: 5.6pt;
-    font-weight: 600;
-    letter-spacing: 0.17em;
-    text-transform: uppercase;
-    color: ${MUTED};
-  }
-
-  .front__contact {
-    flex: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    text-align: right;
-    line-height: 1.6;
-  }
-  /* The number is the single thing a card is kept for, so it gets the weight. Saying
-     "Telefon · WhatsApp" once beats printing the same eleven digits twice. */
-  .front__contact .tel { font-size: 10pt; line-height: 1.1; }
-  .front__contact .tel b { font-weight: 600; letter-spacing: -0.01em; }
-  .front__contact .via {
-    margin-top: 0.7mm;
-    font-size: 5.2pt;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: ${MUTED};
-  }
-  .front__contact .mail { margin-top: 1.5mm; font-size: 6.8pt; }
-
-  .rule { height: 0.18mm; background: ${RULE}; margin: 3mm 0 2.4mm; }
-  .front__foot {
-    display: flex;
-    justify-content: space-between;
-    gap: 3mm;
-    font-size: 6.2pt;
-    color: ${MUTED};
-  }
-  .front__foot .site { font-weight: 600; color: ${INK}; }
-
-  /* Back ----------------------------------------------------------------- */
-  /* Budgeted against the tighter of the two layouts: karten leaves 42 mm of height, and
-     head 6.5 + gap 2.2 + list 13.4 + foot 17.6 is just under 40. flaechig gets the same
-     block with 5 mm more air. Two earlier cuts were wrong in this exact place — one
-     summed to 46.7 in a 47 mm box and printed the first row of the list through the
-     mark's wave, the other bought the space back off the QR's quiet zone. */
-  .back__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 4mm; }
-  .mark { width: 9mm; display: block; }
-  .kicker {
-    font-size: 5.2pt;
+  /* Under the number, not above it. Above, it landed directly beneath the logo's own
+     "HAUSMEISTER & REINIGUNG" and the two letterspaced caps lines read as one block. */
+  .kicker-line {
+    margin-top: 1.6mm;
+    font-size: 5pt;
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: ${CYAN};
-    text-align: right;
-    padding-top: 0.5mm;
+    color: ${MUTED};
+  }
+  .kicker-line b { color: ${CYAN}; font-weight: 600; }
+
+  .front__details {
+    font-size: 6.5pt;
+    line-height: 1.45;
+    color: ${MUTED};
+  }
+  .front__details .who {
+    font-weight: 600;
+    font-size: 7.4pt;
+    color: ${INK};
+  }
+  .front__details .site { font-weight: 600; color: ${INK}; }
+
+  /* Back ----------------------------------------------------------------- */
+  .panel--back { position: relative; }
+
+  /* The site puts an oversized mark behind its ink sections and lets it run off the
+     edge — 190px numerals at 0.14, a 130px wordmark at 0.11. Same move, same weight. */
+  .ghost {
+    position: absolute;
+    right: -13mm;
+    bottom: -9mm;
+    width: 50mm;
+    opacity: 0.13;
+    pointer-events: none;
   }
 
+  .back__inner { position: relative; display: flex; flex-direction: column; height: 100%; }
+
+  .back__head { display: flex; align-items: baseline; justify-content: space-between; gap: 4mm; }
+  /* Cyan, so the accent still lands on this face now that the separators are gone. */
+  .back__head .kicker-line { margin: 0; color: ${CYAN}; }
+
+  /* A dense typographic block, not a bulleted list — two columns of dotted items was
+     the other thing that made the first card look generated.
+     Set as a wrapping row with real gaps rather than a run separated by middots: with
+     separators, three of the four lines ended on one, which reads as a mistake. Nothing
+     to strand this way, and each item stays unbreakable. */
   .services {
-    margin-top: 2.2mm;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 3.5mm;
-    row-gap: 0.9mm;
-    font-size: 6.3pt;
-    line-height: 1.2;
+    margin-top: 3.4mm;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 4.2mm;
+    row-gap: 2.6mm;
+    font-size: 7pt;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    color: ${WHITE};
   }
-  .services li { list-style: none; display: flex; align-items: baseline; gap: 1.5mm; }
-  .services .dot {
-    flex: none;
-    width: 0.85mm;
-    height: 0.85mm;
-    border-radius: 50%;
-    background: ${CYAN};
-    transform: translateY(-0.15mm);
-  }
+  .services span { white-space: nowrap; }
 
   .back__foot {
     margin-top: auto;
-    padding-top: 2.4mm;
-    border-top: 0.18mm solid rgba(255, 255, 255, 0.22);
     display: flex;
-    /* Centred, not bottom-aligned: the QR is twice the height of the two lines beside
-       it, and aligning their baselines left a hole under the rule. */
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 4mm;
   }
-  .back__where { font-size: 6.3pt; line-height: 1.5; color: ${ICE}; }
-  .back__where .site { display: block; font-weight: 600; font-size: 6.9pt; color: ${WHITE}; }
+  .back__where { font-size: 6.2pt; line-height: 1.5; color: ${ICE}; }
+  .back__where .site { display: block; font-weight: 600; font-size: 7.6pt; color: ${WHITE}; }
 
   /* The QR sits on white: inverted codes read unreliably. The panel is the code plus
-     four modules of quiet zone on each side — see QR_PANEL_MM. Rounded, because that is
-     the site's card language at card scale. */
+     four modules of quiet zone on each side — see QR_PANEL_MM. */
   .qr {
     flex: none;
     width: ${QR_PANEL_MM.toFixed(2)}mm;
     height: ${QR_PANEL_MM.toFixed(2)}mm;
     background: ${WHITE};
-    border-radius: 1.6mm;
+    border-radius: 1.4mm;
     display: grid;
     place-items: center;
   }
@@ -299,41 +285,37 @@ const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style
 <section class="card"><div class="panel panel--front">
   <img class="lockup" src="${dataSvg('public/logo.svg')}" alt="">
 
-  <div class="front__body">
-    <div class="front__who">
-      <p class="name">${owner.name}</p>
-      <p class="role">${owner.role}</p>
-    </div>
-    <div class="front__contact">
-      <div class="tel"><b>${phone}</b></div>
-      <div class="via">Telefon &middot; WhatsApp</div>
-      <div class="mail">${email}</div>
-    </div>
+  <div class="front__call">
+    <p class="tel">${phone}</p>
+    <p class="kicker-line">Telefon <b>&middot;</b> WhatsApp</p>
   </div>
 
-  <div class="rule"></div>
-  <div class="front__foot">
-    <span>${address}</span>
+  <p class="front__details">
+    <span class="who">${owner.name}</span>, ${owner.role}<br>
+    ${email}<br>
+    ${address}<br>
     <span class="site">${site}</span>
-  </div>
+  </p>
 </div></section>
 
 <section class="card"><div class="panel panel--back">
-  <div class="back__head">
-    <img class="mark" src="${dataSvg('public/mark-invert.svg')}" alt="">
-    <p class="kicker">Leistungen</p>
-  </div>
+  <img class="ghost" src="${dataSvg('public/mark-invert.svg')}" alt="" aria-hidden="true">
+  <div class="back__inner">
+    <div class="back__head">
+      <p class="kicker-line">Leistungen</p>
+    </div>
 
-  <ul class="services">
-    ${allServices.map((s) => `<li><span class="dot"></span>${s}</li>`).join('\n    ')}
-  </ul>
-
-  <div class="back__foot">
-    <p class="back__where">
-      ${areaLong}
-      <span class="site">${site}</span>
+    <p class="services">
+      ${allServices.map((s) => `<span>${s.toUpperCase()}</span>`).join('\n      ')}
     </p>
-    <div class="qr"><img src="${qrData}" alt=""></div>
+
+    <div class="back__foot">
+      <p class="back__where">
+        ${areaLong}
+        <span class="site">${site}</span>
+      </p>
+      <div class="qr"><img src="${qrData}" alt=""></div>
+    </div>
   </div>
 </div></section>
 
