@@ -153,6 +153,47 @@ async function page(file, index, dpi = 200) {
   return buf;
 }
 
+/** Decode the QR out of the *finished* file.
+ *
+ *  The card generator already gates on this, but it gates on its own render. By the
+ *  time a file reaches a printer it has been through glyph outlining, an RGB to CMYK
+ *  conversion and two pdfwrite passes, and none of that was ever checked against the
+ *  code. A QR that stops scanning is only discovered on printed cards.
+ *
+ *  Decoded from a crop of the bottom-right quarter of the trim area rather than the
+ *  whole page: jsQR hunts finder patterns across everything it is given and the crop
+ *  marks near the sheet edge were enough to distract it, which reads as a broken code
+ *  when the code is fine. A phone is pointed at the symbol, not at the sheet. */
+async function qrSurvives(file, trim) {
+  const { default: jsQR } = await import('jsqr');
+  const expected = 'https://co-gebaeudeservice.de';
+
+  for (const [dpi, blur] of [[300, 0], [200, 0.8]]) {
+    const png = `${OUT}/.qr.png`;
+    execFileSync('gs', [
+      '-dNOPAUSE', '-dBATCH', '-dQUIET', '-sDEVICE=png16m', `-r${dpi}`,
+      '-dFirstPage=2', '-dLastPage=2', `-sOutputFile=${png}`, file,
+    ]);
+    const px = dpi / 72; // the render is in points, like the boxes
+    let pipe = sharp(png).extract({
+      left: Math.round((trim[0] + (trim[2] - trim[0]) / 2) * px),
+      top: Math.round((trim[1] + (trim[3] - trim[1]) / 2) * px),
+      width: Math.round(((trim[2] - trim[0]) / 2) * px),
+      height: Math.round(((trim[3] - trim[1]) / 2) * px),
+    });
+    if (blur) pipe = pipe.blur(blur);
+    const { data, info } = await pipe.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const found = jsQR(new Uint8ClampedArray(data), info.width, info.height);
+    rmSync(png);
+    if (found?.data !== expected) {
+      throw new Error(
+        `${file}: the QR no longer decodes at ${dpi} dpi (blur ${blur}) — got ${found?.data ?? 'nothing'}`,
+      );
+    }
+  }
+  return 'QR lesbar bei 300 und 200 dpi mit Weichzeichner';
+}
+
 /** Mean absolute difference per channel, 0–255. */
 async function diff(a, b) {
   const [x, y] = await Promise.all([a, b]);
@@ -195,8 +236,10 @@ for (const [name, src] of Object.entries(SOURCES)) {
     if (i === 0) console.log(`  ${name.padEnd(9)} Seite 1 Abweichung ${d.toFixed(2)}/255`);
     else console.log(`  ${' '.repeat(9)} Seite 2 Abweichung ${d.toFixed(2)}/255`);
   }
+  const qr = await qrSurvives(dest, trim);
   console.log(
-    `  ${' '.repeat(9)} TrimBox ${(trim[2] - trim[0]) / MM} × ${(trim[3] - trim[1]) / MM} mm, ` +
-      'CMYK, ohne Schriften',
+    `  ${' '.repeat(9)} TrimBox ${((trim[2] - trim[0]) / MM).toFixed(2)} × ` +
+      `${((trim[3] - trim[1]) / MM).toFixed(2)} mm, CMYK, ohne Schriften`,
   );
+  console.log(`  ${' '.repeat(9)} ${qr}`);
 }

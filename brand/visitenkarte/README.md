@@ -94,6 +94,17 @@ die **Ruhezone** — vier Module auf jeder Seite, aus der Modulanzahl berechnet 
 geschätzt. Das Script bricht ab, wenn es seinen eigenen Code aus dem fertigen Bild
 nicht wiederfindet.
 
+Geprüft wird an **zwei Stellen**: der Kartengenerator dekodiert seinen eigenen Code aus
+dem gerenderten Bild, und `build-print-pdf.mjs` dekodiert ihn noch einmal aus der
+**fertigen Druckdatei** — nach Kurvenwandlung, CMYK und zwei Ghostscript-Läufen. Die
+zweite Prüfung fehlte zuerst, und genau dazwischen hätte ein Schaden unbemerkt
+entstehen können.
+
+Dekodiert wird aus einem Ausschnitt, nicht von der ganzen Seite: jsQR sucht
+Finder-Muster überall und ließ sich von den Schnittmarken am Blattrand ablenken, was
+wie ein kaputter Code aussieht, obwohl er in Ordnung ist. Ein Handy zielt auf das
+Symbol, nicht auf den Bogen.
+
 **Vor dem Druck:** die Domain muss erreichbar sein. Ein gedruckter QR-Code lässt sich
 nicht nachbessern.
 
