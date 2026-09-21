@@ -103,6 +103,10 @@ const PAGE_H = TRIM_H + BLEED * 2; // 61
  *  minimum; the guillotine has a tolerance of about 1 mm either way. */
 const SAFE = 4;
 
+/** The margin the full-bleed layout actually holds, as opposed to the minimum it must
+ *  not break. SAFE is a limit; typesetting to a limit is what makes a card look tight. */
+const FLAT_PAD = 6;
+
 /* Ink from brand/, not from the site tokens. On paper the logo sits directly on a large
  * navy field, which is the one place the two navies would read as a mistake — so the
  * field takes the logo's own value. See brand/README.md. */
@@ -123,11 +127,16 @@ const LAYOUTS = {
      32 px on a laptop reads about like 5 mm does in the hand; proportional scaling
      gives 2 mm, which stops reading as rounded at all. */
   karten: { inset: 2.5, radius: 5, pad: 4, border: true },
-  flaechig: { inset: 0, radius: 0, pad: SAFE, border: false },
+  /* pad: SAFE would be the minimum — nothing important inside 4 mm of the cut — but a
+     minimum is not a margin. At SAFE the type sat exactly on the safety line and the
+     card read tighter than the rounded version it replaced, which had the panel inset
+     on top of its padding and so kept 6.5 mm of air. FLAT_PAD restores that, and keeps
+     2 mm of tolerance above the line instead of spending it all. */
+  flaechig: { inset: 0, radius: 0, pad: FLAT_PAD, border: false },
   /* The marks variant has to match whichever layout is actually being printed, or the
      two deliverables in druck/ would be different cards. flaechig is the one the client
      chose: colour to the cut edge, square corners. */
-  'flaechig-schnittmarken': { inset: 0, radius: 0, pad: SAFE, border: false, marks: true },
+  'flaechig-schnittmarken': { inset: 0, radius: 0, pad: FLAT_PAD, border: false, marks: true },
 };
 
 /** The content box a layout leaves, in mm. Both must hold the back face. */
