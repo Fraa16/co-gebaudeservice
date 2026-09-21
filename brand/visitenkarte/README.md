@@ -110,6 +110,9 @@ nicht nachbessern.
 
 ## Vorschauen in diesem Ordner
 
-`karten-*` ist die Empfehlung, `flaechig-*` die Alternative, `*-kontrolle.png` zeigt
+`flaechig-*` ist die gedruckte Fassung: Farbe bis zur Schnittkante, gerade Ecken.
+`karten-*` ist die Alternative mit gerundetem Panel auf hellem Grund, die nicht mehr in
+`druck/` landet — die Rundung war gedruckt, nicht geschnitten, und eine Druckerei hätte
+sie als Stanzanweisung lesen und hindurchschneiden können. `*-kontrolle.png` zeigt
 Schnittkante und Sicherheitsabstand, `ecken-gestanzt.png` die flächige Variante mit
-3 mm gestanzten Ecken, `vergleich.png` alles nebeneinander.
+3 mm gestanzten Ecken als kostenpflichtige Option, `vergleich.png` alles nebeneinander.

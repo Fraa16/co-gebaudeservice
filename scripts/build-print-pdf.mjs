@@ -203,13 +203,18 @@ async function diff(a, b) {
   return sum / x.data.length;
 }
 
-/* Only the recommended layout reaches the print folder. The flat variant stays in the
- * parent directory as a design alternative: a folder handed to a printer abroad should
- * contain one artwork, not a choice they might make for us. */
+/* Only the chosen layout reaches the print folder. The rounded-panel variant stays in
+ * the parent directory as a design alternative: a folder handed to a printer abroad
+ * should contain one artwork, not a choice they might make for us.
+ *
+ * flaechig is that layout as of the client's decision: the colour runs to the cut edge
+ * and the corners are square. The rounded panel it replaces was printed rounding on a
+ * straight-cut card, which a printer could have mistaken for a die-cut instruction and
+ * then cut through. */
 const SOURCES = {
-  'CO-Visitenkarte-CMYK': 'brand/visitenkarte/visitenkarte-karten-druck.pdf',
+  'CO-Visitenkarte-CMYK': 'brand/visitenkarte/visitenkarte-flaechig-druck.pdf',
   'CO-Visitenkarte-CMYK-Schnittmarken':
-    'brand/visitenkarte/visitenkarte-karten-schnittmarken-druck.pdf',
+    'brand/visitenkarte/visitenkarte-flaechig-schnittmarken-druck.pdf',
 };
 
 for (const [name, src] of Object.entries(SOURCES)) {

@@ -8,18 +8,23 @@
  * number is exactly the failure `contactRoutes` was introduced to stop, just on paper
  * where it cannot be corrected after printing.
  *
- * Two layouts, because the website's rounded-card identity reaches paper two ways:
+ * The website's rounded-card identity reaches paper two ways, and the client chose the
+ * second:
  *
  *   karten     The page structure itself — a rounded panel floating on the ground, the
  *              ground showing as a frame. That is what the site *is*: cards on
- *              `--co-page`, not a rounded page. Costs nothing at the printer, and the
- *              dark side stops bleeding off the edge, so guillotine drift cannot leave
- *              a white sliver along a navy border and handling cannot wear one.
- *   flaechig   Colour to the edge. Becomes one of the site's cards only if the printer
- *              die-cuts the corners, which is a paid extra on every German print shop.
+ *              `--co-page`, not a rounded page. Kept as a design alternative and in
+ *              vergleich.png, no longer what goes to the printer: the rounding was
+ *              printed onto a straight-cut card, which a print shop could read as a
+ *              die-cut instruction and then cut through.
+ *   flaechig   Colour to the cut edge, square corners. What is printed. The front is
+ *              navy across all four corners, so nothing frames it and guillotine drift
+ *              shows as a slightly narrower margin rather than as a white sliver.
  *
- * Both are generated. `ecken-gestanzt.png` previews what the die-cut would look like on
- * the flat layout, so the paid option can be judged before it is paid for.
+ * All three are generated — flaechig also with crop marks, because the two files in
+ * druck/ must be the same card. `ecken-gestanzt.png` previews what die-cut corners
+ * would look like on the flat layout, so that paid extra can be judged before it is
+ * paid for; there is deliberately no print file for it.
  *
  * Output, in brand/visitenkarte/ — see the README there for what the printer needs.
  */
@@ -119,7 +124,10 @@ const LAYOUTS = {
      gives 2 mm, which stops reading as rounded at all. */
   karten: { inset: 2.5, radius: 5, pad: 4, border: true },
   flaechig: { inset: 0, radius: 0, pad: SAFE, border: false },
-  'karten-schnittmarken': { inset: 2.5, radius: 5, pad: 4, border: true, marks: true },
+  /* The marks variant has to match whichever layout is actually being printed, or the
+     two deliverables in druck/ would be different cards. flaechig is the one the client
+     chose: colour to the cut edge, square corners. */
+  'flaechig-schnittmarken': { inset: 0, radius: 0, pad: SAFE, border: false, marks: true },
 };
 
 /** The content box a layout leaves, in mm. Both must hold the back face. */
