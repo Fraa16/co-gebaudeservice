@@ -419,7 +419,10 @@ const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style
     </div>
 
     <div class="contact">
-      <p class="via">Telefon &middot; WhatsApp</p>
+      <!-- "Telefon · WhatsApp" stood here and named two of the four lines below it
+           while reading as the heading for all of them. The block is the contact
+           block, so it says so. -->
+      <p class="via">Kontakt</p>
       <p class="tel">${phone}</p>
       <p>${email}</p>
       <p>${address}</p>
