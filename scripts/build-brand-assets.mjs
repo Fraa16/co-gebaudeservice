@@ -1,173 +1,223 @@
 /**
- * Generates the logo SVGs and the full favicon set, then rasterises the PNGs.
- * Text is converted to outlines so the SVGs carry no font dependency.
+ * Turns the four delivered logo files in `brand/` into every asset the site serves.
  *
- * One-shot: the outputs are committed. Re-run only when the mark changes:
- *   npm i --no-save fontkit @fontsource/archivo @fontsource/source-sans-3
+ * The client supplies the artwork; this script only *conditions* it. Nothing here
+ * draws a shape or picks a colour — if the mark is wrong, the fix belongs in `brand/`,
+ * not in this file. (It used to construct the old placeholder mark from font outlines;
+ * that mark is gone.)
+ *
+ * Re-run after replacing anything in brand/:
  *   node scripts/build-brand-assets.mjs
  *
- * Construction rules from the CI sheet (design/prototypes/ci-sheet.dc.html):
- *   "Der Bogen steht für den Wisch- und Reinigungszug und verbindet die beiden
- *    Buchstaben. Schutzraum: mindestens die Höhe des 'C' auf allen Seiten.
- *    Mindestbreite der horizontalen Variante 90 px, der Bildmarke 24 px."
+ * What conditioning means, and why each step is needed:
+ *
+ *  1. **Tight viewBox.** Every delivered file declares a 1500×1500 canvas with the
+ *     artwork floating somewhere inside it. Shipped as-is, a 38px header logo would
+ *     draw a 14px lockup adrift in a 38px square. The ink bounding box is measured by
+ *     rasterising the file and scanning the alpha channel, so it is the real extent of
+ *     the drawing rather than whatever clip rectangle the exporter happened to write.
+ *
+ *  2. **Namespaced ids.** All four files use the same clipPath ids (`a`…`f`). Two of
+ *     them on one page — the header lockup and a footer mark, say — and the second
+ *     silently steals the first's clip. Each file gets its own prefix.
+ *
+ *  3. **No width/height.** With both present the browser ignores the CSS box and the
+ *     logo renders at 2000px. Removing them lets the aspect ratio come from the
+ *     viewBox, which is what every consumer here wants.
+ *
+ * The pair for one artwork is cropped to the *same* box, so `logo.svg` and
+ * `logo-invert.svg` swap without the mark shifting by a pixel.
  */
-import { createRequire } from 'node:module';
-const fontkit = createRequire(import.meta.url)('fontkit');
 import sharp from 'sharp';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 
-const INK = '#03045E';
-const CYAN = '#00B4D8';
-const ICE = '#90E0EF';
-const WHITE = '#FFFFFF';
+/* svgo roughly halves the exports, which carry six decimal places of precision on a
+ * 1500-unit canvas. It is not a declared dependency — this script is one-shot and its
+ * outputs are committed, so a missing optimiser must not be able to break a build.
+ * Without it the assets are correct, just larger. */
+let optimize = null;
+try {
+  ({ optimize } = await import('svgo'));
+} catch {
+  console.warn('svgo not installed — writing unoptimised SVGs');
+}
 
-const ARCHIVO_700 = 'node_modules/@fontsource/archivo/files/archivo-latin-700-normal.woff2';
-const SOURCE_600 = 'node_modules/@fontsource/source-sans-3/files/source-sans-3-latin-600-normal.woff2';
+/** @param {string} svg @param {boolean} keepStyles */
+function shrink(svg, { keepStyles = false } = {}) {
+  if (!optimize) return svg;
+  return optimize(svg, {
+    multipass: true,
+    floatPrecision: 2,
+    plugins: [
+      {
+        name: 'preset-default',
+        params: { overrides: keepStyles ? { inlineStyles: false, minifyStyles: false } : {} },
+      },
+    ],
+  }).data;
+}
 
-/** Lay out a string and return its outline path plus metrics, in font units (Y up). */
-function outline(fontPath, text, letterSpacingEm = 0) {
-  const font = fontkit.openSync(fontPath);
-  const run = font.layout(text);
-  const tracking = letterSpacingEm * font.unitsPerEm;
-  let d = '';
-  let x = 0;
-  const bbox = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
-  for (const glyph of run.glyphs) {
-    const p = glyph.path.translate(x, 0);
-    const b = p.bbox;
-    if (Number.isFinite(b.minX)) {
-      bbox.minX = Math.min(bbox.minX, b.minX);
-      bbox.minY = Math.min(bbox.minY, b.minY);
-      bbox.maxX = Math.max(bbox.maxX, b.maxX);
-      bbox.maxY = Math.max(bbox.maxY, b.maxY);
+/** The site ground. Icon formats that cannot be transparent sit on this, so a home
+ *  screen or a tab bar shows the mark as the design intends: ink and cyan on light. */
+const GROUND = '#E7EDF3';
+/** Only for the manifest's theme_color, which is a browser-chrome colour, not artwork. */
+const THEME = '#03045E';
+
+const SOURCES = {
+  lockup: { onLight: 'brand/lockup-on-light.svg', onDark: 'brand/lockup-on-dark.svg' },
+  mark: { onLight: 'brand/mark-on-light.svg', onDark: 'brand/mark-on-dark.svg' },
+};
+
+const LABEL = 'CO Gebäudeservice';
+
+/** Ink bounding box in user units, by rendering 1:1 with the viewBox and scanning alpha.
+ *  Anything under the threshold is antialiasing spill, not drawing. */
+async function inkBox(file) {
+  const source = readFileSync(file);
+  const box = viewBox(source.toString('utf8'));
+  const { data, info } = await sharp(source)
+    .resize(Math.round(box.w), Math.round(box.h), {
+      fit: 'fill',
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (let y = 0; y < info.height; y++) {
+    for (let x = 0; x < info.width; x++) {
+      if (data[(y * info.width + x) * 4 + 3] > 8) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
     }
-    d += p.toSVG() + ' ';
-    x += glyph.advanceWidth + tracking;
   }
-  return { d: d.trim(), advance: x - tracking, upm: font.unitsPerEm, bbox };
+  if (!Number.isFinite(minX)) throw new Error(`${file} appears to be blank`);
+  return { x: box.x + minX, y: box.y + minY, w: maxX - minX + 1, h: maxY - minY + 1 };
 }
 
-/** Wrap a font-unit path in a group that scales it to `size` px and flips Y. */
-function glyphGroup({ d, upm, bbox }, size, tx, ty, fill) {
-  const s = size / upm;
-  // Place the cap-height top at ty.
-  const top = bbox.maxY * s;
-  return `<g transform="translate(${round(tx)} ${round(ty + top)}) scale(${round(s, 6)} ${round(-s, 6)})"><path d="${d}" fill="${fill}"/></g>`;
+function viewBox(svg) {
+  const m = /viewBox="([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)"/.exec(svg);
+  if (!m) throw new Error('no viewBox');
+  return { x: +m[1], y: +m[2], w: +m[3], h: +m[4] };
 }
 
-const round = (n, p = 3) => Number(n.toFixed(p));
-
-/** The Bildmarke: rounded square, the cleaning swoosh, "CO" on top. */
-function mark({ size = 64, bg = INK, letters = WHITE, swoosh = CYAN, radius }) {
-  const co = outline(ARCHIVO_700, 'CO');
-  const r = radius ?? round(size * (12 / 38)); // --co-radius-logo at the prototype's 38px
-  const letterSize = size * 0.37; // matches the header mark
-  const scaled = (letterSize / co.upm);
-  const textW = (co.bbox.maxX - co.bbox.minX) * scaled;
-  const capH = co.bbox.maxY * scaled;
-  const tx = (size - textW) / 2 - co.bbox.minX * scaled;
-  const ty = (size - capH) / 2;
-
-  // The prototype's arc, expressed in the 38-unit space and scaled to `size`.
-  const k = size / 38;
-  const arc = `M${round(-3 * k)} ${round(29 * k)} C ${round(8 * k)} ${round(14 * k)}, ${round(21 * k)} ${round(35 * k)}, ${round(44 * k)} ${round(10 * k)}`;
-
-  return `<rect width="${size}" height="${size}" rx="${r}" fill="${bg}"/>
-  <path d="${arc}" stroke="${swoosh}" stroke-width="${round(3.6 * k)}" fill="none" stroke-linecap="round"/>
-  ${glyphGroup(co, letterSize, tx, ty, letters)}`;
+/** The `<defs>`/body of one file, with its ids prefixed so two can share a document. */
+function body(file, prefix) {
+  const svg = readFileSync(file, 'utf8');
+  const inner = svg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+  return inner
+    .replace(/\bid="([^"]+)"/g, (_, id) => `id="${prefix}${id}"`)
+    .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${prefix}${id})`);
 }
 
-function svg(width, height, body) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="CO Gebäudeservice">\n  ${body}\n</svg>\n`;
-}
-
-/** Horizontal lockup: mark + "CO" + cyan rule + "GEBÄUDESERVICE". */
-function horizontal({ onDark = false } = {}) {
-  const size = 64;
-  const gap = 18;
-  const co = outline(ARCHIVO_700, 'CO');
-  const word = outline(SOURCE_600, 'GEBÄUDESERVICE', 0.18);
-
-  const coSize = 34;
-  const coScale = coSize / co.upm;
-  // Width from the advance, not the ink bbox: the bbox omits the final glyph's
-  // right side bearing and the tracking, which clipped the wordmark.
-  const coW = co.advance * coScale;
-
-  const wordSize = 11;
-  const wordScale = wordSize / word.upm;
-  const wordW = word.advance * wordScale;
-
-  const textX = size + gap;
-  const textW = Math.max(coW, wordW);
-  const width = Math.ceil(textX + textW + 2);
-  // The text column (CO + rule + label) is a little taller than the mark, so the
-  // canvas follows the text and the mark is centred against it.
-  const textTop = 4;
-  const ruleY = textTop + coSize * 1.02;
-  const labelTop = ruleY + 10;
-  const height = Math.max(size, Math.ceil(labelTop + wordSize * 1.1));
-  const markY = Math.max(0, (height - size) / 2);
-
-  const inkFill = onDark ? WHITE : INK;
-  const ruleFill = onDark ? ICE : CYAN;
-  const labelFill = onDark ? ICE : INK;
-
-  return svg(
-    width,
-    height,
-    [
-      `<g transform="translate(0 ${round(markY)})">${mark({
-        size,
-        bg: onDark ? WHITE : INK,
-        letters: onDark ? INK : WHITE,
-        swoosh: CYAN,
-      })}</g>`,
-      glyphGroup(co, coSize, textX - co.bbox.minX * coScale, textTop, inkFill),
-      `<rect x="${textX}" y="${round(ruleY)}" width="${round((co.bbox.maxX - co.bbox.minX) * coScale)}" height="2" rx="1" fill="${ruleFill}"/>`,
-      glyphGroup(word, wordSize, textX - word.bbox.minX * wordScale, round(labelTop), labelFill),
-    ].join('\n  '),
+/** One artwork, one colourway, cropped to `box`. */
+function conditioned(file, box, prefix, extraAttrs = '') {
+  const vb = `${round(box.x)} ${round(box.y)} ${round(box.w)} ${round(box.h)}`;
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" role="img"` +
+    ` aria-label="${LABEL}"${extraAttrs}>${body(file, prefix)}</svg>\n`
   );
+}
+
+const round = (n) => Number(n.toFixed(2));
+
+/** A square crop of `box`, centred on it.
+ *
+ *  `side` is a framing decision, not a measurement. The mark is 1.38:1 — an interlocked
+ *  CO with a wave running wider than the letters — so a square that contains all of it
+ *  leaves the CO at 55% of the tile height and mush at 16px. Squaring on the *letters*
+ *  instead lets the wave's two tips run off the edges, where at icon sizes it reads as
+ *  an underline rather than a clipped shape, and buys the CO a sixth of its height back.
+ *  Re-look at this fraction if the mark is ever redrawn. */
+const ICON_CROP = 0.928; // of the mark's full width — i.e. the width of the CO itself
+
+function squared(box, sideRatio = 1) {
+  const side = box.w * sideRatio;
+  return {
+    x: box.x + box.w / 2 - side / 2,
+    y: box.y + box.h / 2 - side / 2,
+    w: side,
+    h: side,
+  };
 }
 
 mkdirSync('public/og', { recursive: true });
 
-// --- SVGs ------------------------------------------------------------------
-const markSvg = svg(64, 64, mark({ size: 64 }));
-const markSvgOnDark = svg(64, 64, mark({ size: 64, bg: WHITE, letters: INK, swoosh: CYAN }));
+const lockupBox = await inkBox(SOURCES.lockup.onLight);
+const markBox = await inkBox(SOURCES.mark.onLight);
+const iconBox = squared(markBox, ICON_CROP);
 
-writeFileSync('public/favicon.svg', markSvg);
-writeFileSync('public/mark.svg', markSvg);
-writeFileSync('public/mark-invert.svg', markSvgOnDark);
-writeFileSync('public/logo.svg', horizontal());
-writeFileSync('public/logo-invert.svg', horizontal({ onDark: true }));
+// --- SVGs ------------------------------------------------------------------
+writeFileSync('public/logo.svg', shrink(conditioned(SOURCES.lockup.onLight, lockupBox, 'l-')));
+writeFileSync('public/logo-invert.svg', shrink(conditioned(SOURCES.lockup.onDark, lockupBox, 'li-')));
+writeFileSync('public/mark.svg', shrink(conditioned(SOURCES.mark.onLight, markBox, 'm-')));
+writeFileSync('public/mark-invert.svg', shrink(conditioned(SOURCES.mark.onDark, markBox, 'mi-')));
+
+/* The favicon carries both colourways and switches on the tab bar's own theme. The mark
+ * has no ground of its own, so a single navy version vanishes in a dark tab — and a
+ * ground bolted on here would invent a container the logo does not have. An SVG loaded
+ * as an icon renders its own <style>, and the document's CSP does not reach into it. */
+const faviconVb = iconBox;
+writeFileSync(
+  'public/favicon.svg',
+  shrink(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${round(faviconVb.x)} ${round(
+    faviconVb.y,
+  )} ${round(faviconVb.w)} ${round(faviconVb.h)}" role="img" aria-label="${LABEL}">` +
+    `<style>.on-dark{display:none}@media (prefers-color-scheme:dark){` +
+    `.on-light{display:none}.on-dark{display:inline}}</style>` +
+    `<g class="on-light">${body(SOURCES.mark.onLight, 'fl-')}</g>` +
+      `<g class="on-dark">${body(SOURCES.mark.onDark, 'fd-')}</g>` +
+      `</svg>\n`,
+    { keepStyles: true },
+  ),
+);
 
 // --- Rasters ---------------------------------------------------------------
-const buf = Buffer.from(markSvg);
-const png = (size) => sharp(buf, { density: 384 }).resize(size, size).png({ compressionLevel: 9 });
+/* PNG icons cannot follow the tab theme, so they take the ground the artwork was drawn
+ * for. Rasterising from the conditioned SVG rather than the 1500px original keeps the
+ * mark filling the tile instead of sitting in a third of it. */
+const iconSvg = Buffer.from(
+  conditioned(SOURCES.mark.onLight, iconBox, 'i-', ' width="512" height="512"'),
+);
+const png = (size) =>
+  sharp(iconSvg, { density: 512 })
+    .resize(size, size)
+    .flatten({ background: GROUND })
+    .png({ compressionLevel: 9 });
 
 await png(96).toFile('public/favicon-96.png');
 await png(192).toFile('public/icon-192.png');
 await png(512).toFile('public/icon-512.png');
+await png(180).toFile('public/apple-touch-icon.png');
 
-// Apple wants an opaque square with no transparency and no rounding of its own.
-await sharp(buf, { density: 384 })
-  .resize(180, 180)
-  .flatten({ background: INK })
-  .png({ compressionLevel: 9 })
-  .toFile('public/apple-touch-icon.png');
-
-// Maskable: the mark inset into the safe zone on a solid ground.
-await sharp({
-  create: { width: 512, height: 512, channels: 4, background: INK },
-})
-  .composite([{ input: await png(320).toBuffer(), gravity: 'centre' }])
+/* Maskable: Android crops to a circle inscribed in the middle 80%, so the mark is inset
+ * into that safe zone rather than run to the edges. */
+await sharp({ create: { width: 512, height: 512, channels: 4, background: GROUND } })
+  .composite([
+    {
+      input: await sharp(iconSvg, { density: 512 })
+        .resize(328, 328)
+        .png()
+        .toBuffer(),
+      gravity: 'centre',
+    },
+  ])
   .png({ compressionLevel: 9 })
   .toFile('public/icon-512-maskable.png');
 
-// favicon.ico (16/32/48 in one file)
-const ico = await sharp(buf, { density: 384 }).resize(48, 48).png().toBuffer();
-writeFileSync('public/favicon.ico', await toIco([ico]));
+// favicon.ico, for the browsers that still ask for one.
+writeFileSync(
+  'public/favicon.ico',
+  await toIco([await png(48).toBuffer(), await png(32).toBuffer(), await png(16).toBuffer()]),
+);
 
 writeFileSync(
   'public/site.webmanifest',
@@ -178,8 +228,8 @@ writeFileSync(
       lang: 'de',
       start_url: '/',
       display: 'standalone',
-      background_color: '#E7EDF3',
-      theme_color: INK,
+      background_color: GROUND,
+      theme_color: THEME,
       icons: [
         { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
         { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -217,4 +267,22 @@ async function toIco(pngs) {
   return Buffer.concat(parts);
 }
 
-console.log('brand assets written to public/');
+/** The aspect ratios the components need, so Logo.astro never hard-codes a number that
+ *  a redraw would silently invalidate. */
+writeFileSync(
+  'src/data/brand-assets.json',
+  JSON.stringify(
+    {
+      note: 'Generated by scripts/build-brand-assets.mjs — do not edit by hand.',
+      lockup: { width: round(lockupBox.w), height: round(lockupBox.h) },
+      mark: { width: round(markBox.w), height: round(markBox.h) },
+    },
+    null,
+    2,
+  ) + '\n',
+);
+
+console.log(
+  `brand assets written — lockup ${round(lockupBox.w)}×${round(lockupBox.h)}, ` +
+    `mark ${round(markBox.w)}×${round(markBox.h)}`,
+);

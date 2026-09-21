@@ -1,81 +1,128 @@
 ---
-/** The CO mark: rounded square, the cleaning swoosh, and "CO".
- *  CI sheet: "Der Bogen steht für den Wisch- und Reinigungszug und verbindet die beiden
- *  Buchstaben." Mindestbreite der Bildmarke 24 px. */
+import assets from '../../data/brand-assets.json';
+
+/** The delivered logo, in the variant that fits the space.
+ *
+ *  Two artworks, each in two colourways, all four conditioned by
+ *  `scripts/build-brand-assets.mjs` from the files in `brand/`:
+ *
+ *    lockup  the full signature — CO monogram, roofline, "Gebäudeservice" and the
+ *            descriptor. 2.78:1, and the descriptor is 9% of its height, so below
+ *            roughly 50px that bottom line stops being type and becomes texture.
+ *    mark    the short logo (the client's "logo2"), the interlocked CO over the wave.
+ *            1.38:1, legible down to favicon sizes. Same artwork as the favicon.
+ *
+ *  `variant="auto"` shows the mark until the page column can hold the lockup — the same
+ *  660px container query the header uses to unfold its navigation, so the logo grows at
+ *  the moment the header stops being a phone header. A container query, not a media
+ *  query: CLAUDE.md rule 5.
+ *
+ *  Rendered as <img> rather than inline SVG on purpose. The artwork carries the brand's
+ *  own hex values, which have no business being tokens (they are not theme colours, and
+ *  a token would imply the logo follows the palette rather than the other way round),
+ *  and one cached file serves the header, the footer and every page.
+ */
 interface Props {
+  /** 'auto' swaps mark → lockup at the header's own breakpoint. */
+  variant?: 'auto' | 'lockup' | 'mark';
   tone?: 'onLight' | 'onDark';
-  size?: number;
-  wordmark?: boolean;
+  /** Rendered height of the lockup, in px. */
+  height?: number;
+  /** Rendered height of the mark. Only used by 'auto' and 'mark'. */
+  markHeight?: number;
   href?: string;
   class?: string;
 }
 
-const { tone = 'onLight', size = 38, wordmark = true, href, class: cls } = Astro.props;
+const {
+  variant = 'auto',
+  tone = 'onLight',
+  height = 52,
+  markHeight = 32,
+  href,
+  class: cls,
+} = Astro.props;
 
-const markBg = tone === 'onLight' ? 'var(--co-ink)' : 'var(--co-white)';
-const letterFill = tone === 'onLight' ? 'var(--co-white)' : 'var(--co-ink)';
-const swoosh = tone === 'onLight' ? 'var(--co-cyan)' : 'var(--co-ice)';
-const labelColor = tone === 'onLight' ? 'var(--co-ink)' : 'var(--co-white)';
+const invert = tone === 'onDark';
+const box = (art: { width: number; height: number }, h: number) => ({
+  width: Math.round((art.width / art.height) * h),
+  height: h,
+});
 
+const lockup = {
+  src: invert ? '/logo-invert.svg' : '/logo.svg',
+  ...box(assets.lockup, height),
+};
+const mark = {
+  src: invert ? '/mark-invert.svg' : '/mark.svg',
+  ...box(assets.mark, markHeight),
+};
+
+const label = 'CO Gebäudeservice';
 const Tag = href ? 'a' : 'span';
+
+/* The wrapper carries the accessible name, so the images are decorative. With
+   variant="auto" both are in the DOM and one is display:none — two alt texts would
+   announce the company twice on the widths where the hidden one is still exposed. */
+const wrapperAttrs = href
+  ? ({ href, 'aria-label': `${label} — zur Startseite` } as const)
+  : ({ role: 'img', 'aria-label': label } as const);
 ---
 
-<Tag
-  class:list={['logo', cls]}
-  href={href}
-  aria-label={href ? 'CO Gebäudeservice — zur Startseite' : undefined}
->
-  <span class="logo__mark" style={`--mark-size:${size}px;--mark-bg:${markBg}`}>
-    <svg class="logo__swoosh" viewBox="0 0 38 38" aria-hidden="true" focusable="false">
-      <path
-        d="M-3 29 C 8 14, 21 35, 44 10"
-        stroke={swoosh}
-        stroke-width="3.6"
-        fill="none"
-        stroke-linecap="round"
-      ></path>
-    </svg>
-    <span class="logo__letters" style={`--letter-fill:${letterFill}`}>CO</span>
-  </span>
-  {wordmark && <span class="logo__label" style={`--label-color:${labelColor}`}>CO Gebäudeservice</span>}
+<Tag class:list={['logo', `logo--${variant}`, cls]} {...wrapperAttrs}>
+  {
+    variant !== 'lockup' && (
+      <img
+        class="logo__art logo__art--mark"
+        src={mark.src}
+        width={mark.width}
+        height={mark.height}
+        style={`--logo-art-h:${mark.height}px`}
+        alt=""
+        decoding="async"
+      />
+    )
+  }
+  {
+    variant !== 'mark' && (
+      <img
+        class="logo__art logo__art--lockup"
+        src={lockup.src}
+        width={lockup.width}
+        height={lockup.height}
+        style={`--logo-art-h:${lockup.height}px`}
+        alt=""
+        decoding="async"
+      />
+    )
+  }
 </Tag>
 
 <style>
   .logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 11px;
   }
-  .logo__mark {
-    position: relative;
-    flex: none;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    width: var(--mark-size);
-    height: var(--mark-size);
-    background: var(--mark-bg);
-    border-radius: var(--co-radius-logo);
+  /* The height comes from the prop; the width follows the intrinsic ratio. The width and
+     height *attributes* are still set, which is what reserves the box before the file
+     arrives — but they are presentational hints and any author rule outranks them, so
+     the size has to be stated here too or the SVG would draw at its viewBox size. */
+  .logo__art {
+    display: block;
+    width: auto;
+    height: var(--logo-art-h);
   }
-  .logo__swoosh {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+
+  /* auto: the short logo until the page column has room for the signature. */
+  .logo--auto .logo__art--lockup {
+    display: none;
   }
-  .logo__letters {
-    position: relative;
-    font-family: var(--co-font-heading);
-    font-weight: 700;
-    font-size: calc(var(--mark-size) * 0.37);
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--letter-fill);
-  }
-  .logo__label {
-    font: 600 10px/1.2 var(--co-font-body);
-    letter-spacing: var(--co-logo-tracking);
-    text-transform: uppercase;
-    color: var(--label-color);
+  @container page (min-width: 660px) {
+    .logo--auto .logo__art--mark {
+      display: none;
+    }
+    .logo--auto .logo__art--lockup {
+      display: block;
+    }
   }
 </style>

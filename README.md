@@ -25,6 +25,7 @@ src/
   assets/photos/  photographs (one of seven so far — see PHOTOS.md)
 design/           the original handoff: prototypes, screenshots, tokens.json, the PDF
 scripts/          the two design-rule gates + the brand-asset generator
+brand/            the delivered logo vectors — source for everything in public/
 tests/            Playwright specs
 ```
 
