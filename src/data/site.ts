@@ -7,9 +7,20 @@ export const site = {
   locale: 'de-DE',
   lang: 'de',
 
-  /** The launch gate. Stays false until: real phone + email, legal sign-off, and a live
-   *  form endpoint. While false every page is noindex and robots.txt disallows all. */
-  indexable: env.PUBLIC_SITE_INDEXABLE === 'true',
+  /** The launch gate, open since the domain went live in September 2026. The default is
+   *  "index"; set PUBLIC_SITE_INDEXABLE="false" to shut it again, which puts every page
+   *  back to noindex and robots.txt back to Disallow.
+   *
+   *  It read `=== 'true'` while the site was unreleased, because the unsafe default
+   *  then was to be indexed by accident. Now the unsafe default is the opposite: a live
+   *  site that silently de-indexes itself because one deploy lost a variable drops out
+   *  of search with nothing on the page to show that it happened.
+   *
+   *  Preview deploys stay out of the index through the canonical tag rather than this
+   *  switch: every page names site.url as canonical, so a preview host serves pages
+   *  that point at the production origin. Set the variable to "false" on a preview
+   *  environment if a hard block is wanted. */
+  indexable: (env.PUBLIC_SITE_INDEXABLE ?? 'true') === 'true',
 
   /** Preview-only banners marking copy that has not been approved.
    *

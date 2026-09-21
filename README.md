@@ -40,7 +40,7 @@ tests/            Playwright specs
 | `/leistungen` | All eight services with scope lists |
 | `/leistungen/treppenhausreinigung` | The one service with established long-form copy |
 | `/ueber-uns` · `/kontakt` | |
-| `/impressum` · `/datenschutz` | Drafts — see *Before launch* |
+| `/impressum` · `/datenschutz` | Drafts — see *Launched, and what is still open* |
 
 Adding a second deep service page: give the service real copy, then create
 `src/content.config.ts` with a `glob()` loader over `src/content/leistungen/*.md` and
@@ -109,24 +109,42 @@ Push to GitHub; Vercel builds it with zero configuration (`vercel.json` only add
 security headers and cache control, which does not disturb framework detection). Pull
 requests get preview deployments. Environment variables are in `.env.example`.
 
-## Before launch
+## Launched, and what is still open
 
-`PUBLIC_SITE_INDEXABLE` stays `false` — every page `noindex`, `robots.txt` disallowing
-everything — until all of these are true:
+The site went live on `co-gebaeudeservice.de` in September 2026 and
+`PUBLIC_SITE_INDEXABLE` now defaults to `true`: every page is `index, follow` and
+`robots.txt` allows everything and names the sitemap. `tests/seo.spec.ts` asserts the
+meta tag and `robots.txt` agree, because they are written in two different files from
+one flag and a site that says `index` in the head while `robots.txt` says `Disallow`
+is invisible in a way nobody notices for weeks.
 
-1. **Real phone number and e-mail** in `src/data/company.ts`, with `verified: true`.
-   The phone is done (0172 3001489); **the e-mail is still a placeholder.** Until a
-   field is verified it renders visibly but is not linked and never reaches structured
-   data: publishing a placeholder NAP is worse than publishing none, because the entity
-   gets cross-referenced against every other citation of the business.
-2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
-   Steuerberater, and every `TODO(client)` filled in.
-3. **The contact form actually sends.** The endpoint exists; it needs the four
-   environment variables above and the Resend domain verified. A public page that says
-   *"wir melden uns innerhalb von zwei Werktagen"* while dropping the enquiry costs a
-   customer who would otherwise have phoned.
-4. **The six outstanding photographs** — `PHOTOS.md`. The hero photo's stock licence
-   needs confirming too.
-5. **The domain confirmed** and set as `PUBLIC_SITE_URL`.
+Still open, in the order it costs something:
 
-Then flip the flag and submit the sitemap in Search Console.
+1. **The contact form does not send yet.** `PUBLIC_FORM_ENDPOINT` is unset, so a valid
+   submit is *refused* with `contact.form.offlineNotice` and the form points at Telefon
+   and WhatsApp. That refusal is deliberate: until the four variables above are set,
+   the one thing the form must never do is answer *"wir melden uns innerhalb von zwei
+   Werktagen"* for an enquiry nothing received. Set the endpoint plus the three
+   server-side variables, verify the Resend domain, and the notice disappears on its
+   own — no other change needed.
+2. **`info@co-gebaeudeservice.de` has to exist.** `company.email.verified` is `true`,
+   so the address is linked as `mailto:` and sits in the structured-data graph. If the
+   mailbox is not live on the domain, set the flag back to `false`: a bouncing address
+   in the graph is worse than none, because the entity gets cross-referenced against
+   every other citation of the business.
+3. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
+   Steuerberater, and every `TODO(client)` filled in. The Datenschutzerklärung already
+   names Resend; the Art. 28 contract and the third-country basis are still open.
+4. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap-index.xml`.
+   Indexing does not start on its own just because `robots.txt` now allows it.
+5. **The nine outstanding photographs** — `PHOTOS.md`. The hero photo's stock licence
+   needs confirming too. Empty slots render a branded `BrandPanel`, so nothing looks
+   broken meanwhile.
+6. **The remaining `TODO(client)` fields** in `src/data/company.ts`: opening hours,
+   exact coordinates, `priceRange`, USt-IdNr. or Steuernummer, and confirmation of the
+   ten towns in `areaServed`. Each is gated, so the graph stays silent rather than
+   guessing.
+
+`www` must redirect to the apex in Vercel, not the other way round: the canonical URLs,
+the sitemap, the OG tags and the printed QR code on the business card all name
+`co-gebaeudeservice.de` without `www`.

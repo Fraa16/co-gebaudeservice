@@ -4,7 +4,19 @@ import { contact } from '../../data/content';
 import { allServices } from '../../data/services';
 import { site } from '../../data/site';
 
-const { fields, submitLabel, successMessage } = contact.form;
+const { fields, submitLabel, successMessage, offlineNotice } = contact.form;
+
+/** Whether an enquiry can actually be delivered.
+ *
+ *  With PUBLIC_FORM_ENDPOINT unset the submit used to resolve locally and show
+ *  "Danke, wir melden uns innerhalb von zwei Werktagen" — the one answer this form must
+ *  never give, because the visitor leaves satisfied and the enquiry does not exist. It
+ *  was harmless while the site was noindex and unreachable; it stopped being harmless
+ *  the moment the domain went live. So the state is stated up front, before anyone
+ *  fills six fields, and the notice travels to the script, which refuses the submit
+ *  instead of confirming it. Setting the endpoint removes both without any other
+ *  change here. */
+const canSend = site.formEndpoint !== '';
 
 /** content.json still lists the original five services here, so the form offered five
  *  chips on a site that advertises eight — someone wanting Kellerreinigung had nowhere
@@ -24,8 +36,17 @@ const message = field('message');
   class="co-card--l contact-form"
   data-contact-form
   data-endpoint={site.formEndpoint}
+  data-offline-notice={canSend ? undefined : offlineNotice}
   novalidate
 >
+  {
+    !canSend && (
+      <p class="contact-form__offline" data-form-offline>
+        {offlineNotice}
+      </p>
+    )
+  }
+
   <div class="contact-form__pair">
     <label class="contact-form__field">
       <span class="co-field-label">{text.label}{text.required && <span aria-hidden="true"> *</span>}</span>
@@ -179,6 +200,22 @@ const message = field('message');
     padding: 14px 16px;
     font: 500 15px/1.4 var(--co-font-body);
     color: var(--co-ink);
+  }
+  /* Sits above the fields rather than below the button: it is only useful before
+     someone starts typing. White on the form's mist ground so it reads as a notice
+     and not as the confirmation, which is the pale panel above. */
+  .contact-form__offline {
+    background: var(--co-white);
+    border: var(--co-rule);
+    border-radius: var(--co-radius-input);
+    padding: 14px 16px;
+    font: 400 14px/1.5 var(--co-font-body);
+    color: var(--co-deep-text);
+    text-wrap: pretty;
+    /* The form column is as wide as the content allows, and at 1920px this paragraph
+       measured 147ch — responsive.spec.ts holds running prose to 95. 14px type makes ch
+       narrow, so the cap has to be well under the limit rather than at it. */
+    max-width: 60ch;
   }
   .co-field-error:empty {
     display: none;

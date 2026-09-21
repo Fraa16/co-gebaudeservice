@@ -46,24 +46,68 @@ test.describe('enquiry form', () => {
     await expect(page.locator('[data-form-success]')).toBeHidden();
   });
 
-  test('a valid submit shows the success message from content.json', async ({ page }) => {
+  /** Fill the form the way a person would, slowly enough to clear the timing trap. */
+  const fillValidly = async (page: import('@playwright/test').Page) => {
     await page.fill('[name="name"]', 'Maria Muster');
     await page.fill('[name="email"]', 'maria@example.de');
     await page.fill('[name="message"]', 'Wohnobjekt mit 12 Einheiten, Turnus wöchentlich.');
     await page.check('[name="consent"]');
     await page.getByRole('button', { name: 'Treppenhausreinigung' }).click();
-
     // The honeypot's timing check rejects submissions faster than a human.
     await page.waitForTimeout(3200);
     await page.getByRole('button', { name: 'Anfrage senden' }).click();
+  };
+
+  test('a valid submit posts the enquiry and shows the success message', async ({ page }) => {
+    /* This build has no PUBLIC_FORM_ENDPOINT, so the success path is not reachable by
+       filling the form: without an endpoint the form now refuses instead (see the test
+       below). Point it at the endpoint and answer the request here, so what is
+       asserted is the path that actually runs once Resend is configured — the old
+       version of this test passed against a submit that sent nothing at all. */
+    let posted: Record<string, unknown> | null = null;
+    await page.route('**/api/kontakt', async (route) => {
+      posted = JSON.parse(route.request().postData() ?? '{}');
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+    await page
+      .locator('[data-contact-form]')
+      .evaluate((el: HTMLElement) => (el.dataset.endpoint = '/api/kontakt'));
+
+    await fillValidly(page);
 
     await expect(page.locator('[data-form-success]')).toBeVisible();
-    /* Read from the data, not retyped here. The test's own name says "from
+    /* Read from the data, not retyped here. The test's own name said "from
        content.json", but it held a second copy of the sentence, so the editorial pass
        that rewrote the copy broke the test rather than being checked by it. */
     await expect(page.locator('[data-form-success]')).toHaveText(
       content.contact.form.successMessage,
     );
+    expect(posted, 'the enquiry reached the endpoint').not.toBeNull();
+    expect(posted!.name).toBe('Maria Muster');
+    expect(posted!.email).toBe('maria@example.de');
+  });
+
+  test('without a delivery endpoint the form refuses instead of confirming', async ({ page }) => {
+    /* The regression this exists for: with PUBLIC_FORM_ENDPOINT unset the submit used
+       to fall through to "Danke, wir melden uns innerhalb von zwei Werktagen" while
+       sending nothing anywhere. On a noindex site nobody could find that; once the
+       domain went live it became a way to lose a customer silently. */
+    const endpoint = await page.locator('[data-contact-form]').getAttribute('data-endpoint');
+    test.skip(!!endpoint, 'an endpoint is configured, so the refusal path cannot run');
+
+    const notice = content.contact.form.offlineNotice;
+    await expect(
+      page.locator('[data-form-offline]'),
+      'the state is stated before anyone fills six fields',
+    ).toHaveText(notice);
+
+    await fillValidly(page);
+
+    await expect(
+      page.locator('[data-form-success]'),
+      'a confirmation for an enquiry nothing received',
+    ).toBeHidden();
+    await expect(page.locator('[data-error-for="message"]')).toHaveText(notice);
   });
 
   test('chips are operable by keyboard', async ({ page }) => {

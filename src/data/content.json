@@ -246,6 +246,7 @@
       "consentNote": "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zu.",
       "submitLabel": "Anfrage senden",
       "successMessage": "Danke, wir melden uns innerhalb von zwei Werktagen.",
+      "offlineNotice": "Das Kontaktformular wird derzeit eingerichtet. Bitte nutzen Sie vorerst Telefon oder WhatsApp, damit Ihre Anfrage uns sicher erreicht.",
       "$note": "The prototype's success text is a prototype notice; use successMessage above in production."
     }
   },

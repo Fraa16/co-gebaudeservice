@@ -70,11 +70,36 @@ test('a contact detail is linked only if it also appears in structured data', as
   }
 });
 
-test('the site stays noindex until the launch gate opens', async ({ page, request }) => {
+test('the launch gate is open and both halves of it agree', async ({ page, request }) => {
+  /* This asserted noindex while the site was unreleased. The gate opened when the
+     domain went live, and the assertion has to move with it rather than be deleted:
+     the meta tag and robots.txt are set in two different files from one flag, and a
+     site that says "index" in the head while robots.txt says Disallow is invisible in
+     a way nobody notices for weeks. */
   await page.goto('/');
-  const robots = await page.locator('meta[name="robots"]').getAttribute('content');
-  expect(robots).toContain('noindex');
-  expect(await (await request.get('/robots.txt')).text()).toContain('Disallow: /');
+  expect(await page.locator('meta[name="robots"]').getAttribute('content')).toBe(
+    'index, follow, max-image-preview:large',
+  );
+
+  const robots = await (await request.get('/robots.txt')).text();
+  expect(robots).toContain('Allow: /');
+  expect(robots, 'robots.txt must not still disallow the site').not.toContain('Disallow: /');
+  expect(robots, 'robots.txt names the sitemap once indexing is on').toContain(
+    '/sitemap-index.xml',
+  );
+});
+
+test('the pages that must stay out of the index still say so', async ({ page }) => {
+  /* Opening the gate flips a default, so every page that relies on an explicit
+     noindex has to be re-checked against it — the legal pages pass the flag by hand
+     in LegalLayout, and the OG source route sets the meta tag itself. */
+  for (const route of ['/impressum', '/datenschutz', '/og/default']) {
+    await page.goto(route);
+    expect(
+      await page.locator('meta[name="robots"]').getAttribute('content'),
+      route,
+    ).toContain('noindex');
+  }
 });
 
 test('breadcrumbs appear on every page below root', async ({ page }) => {

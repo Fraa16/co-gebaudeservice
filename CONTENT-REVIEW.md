@@ -438,3 +438,25 @@ eine Ankündigungsfrist — was immer zutrifft, gehört als neunte häufige Frag
 
 **Das Wort „Einzelunternehmen" kommt im Kundentext nicht mehr vor.** Es steht im
 Impressum, weil es dort hingehört, und sonst nirgends.
+
+## 13. Hinweis im Kontaktformular, 21. September 2026
+
+Ein neuer Satz, `contact.form.offlineNotice` in `src/data/content.json`:
+
+> Das Kontaktformular wird derzeit eingerichtet. Bitte nutzen Sie vorerst Telefon oder
+> WhatsApp, damit Ihre Anfrage uns sicher erreicht.
+
+**Warum er da ist.** Solange der Versand über Resend nicht eingerichtet ist, konnte das
+Formular eine Anfrage annehmen, „Danke, wir melden uns innerhalb von zwei Werktagen"
+anzeigen und die Anfrage verwerfen. Auf einer Seite, die niemand finden konnte, war das
+folgenlos. Mit der Freigabe der Domain wurde daraus der teuerste mögliche Fehler: ein
+Interessent geht zufrieden weg und ruft niemanden mehr an.
+
+Der Satz steht jetzt über den Feldern, bevor jemand sechs Angaben macht, und ein
+gültiges Absenden wird mit demselben Satz abgelehnt statt bestätigt. Beides verschwindet
+automatisch, sobald `PUBLIC_FORM_ENDPOINT` gesetzt ist; es ist also ein Text mit
+Ablaufdatum und braucht nur so lange eine Freigabe, wie der Versand offen ist.
+
+**Zur Abstimmung:** ob „wird derzeit eingerichtet" so stehen bleiben soll oder ob der
+Kunde eine neutralere Formulierung bevorzugt. Die Alternative wäre, das Formular bis zur
+Freischaltung ganz auszublenden und nur Telefon, WhatsApp und Anschrift zu zeigen.

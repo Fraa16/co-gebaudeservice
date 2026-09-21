@@ -6,8 +6,9 @@ let validatorPromise: Promise<typeof import('../../lib/contact-schema')> | null 
 const loadValidator = () => (validatorPromise ??= import('../../lib/contact-schema'));
 
 /** The only client JS on the site: chip toggling, German validation messages, and the
- *  submit seam. When the Resend endpoint lands, data-endpoint is set and the same
- *  payload is POSTed instead of resolving locally — nothing else here changes. */
+ *  submit seam. data-endpoint decides what a valid submit does: POST it, or refuse it
+ *  with data-offline-notice. There is no third path, and in particular no path that
+ *  confirms an enquiry nothing received. */
 
 const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
 
@@ -110,40 +111,60 @@ if (form) {
     }
 
     const endpoint = form.dataset.endpoint;
-    if (endpoint) {
-      let res: Response;
-      try {
-        res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          // The traps travel with the payload: the endpoint re-checks them, because a
-          // bot can POST to it without ever loading the form.
-          body: JSON.stringify({ ...parsed.data, website: raw('website'), elapsedMs }),
-        });
-      } catch {
-        showError('message', 'Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.');
-        return;
-      }
+    if (!endpoint) {
+      /* No delivery route configured: refuse rather than confirm. This branch used to
+         fall through to the success panel, which told the visitor "wir melden uns"
+         about an enquiry that was never sent anywhere — the single worst thing this
+         form can do, because the customer stops looking for another way to reach us.
+         The form already carries the same sentence above the fields, so nobody gets
+         here uninformed; it is repeated at the button because a submit that appears to
+         do nothing is its own kind of broken.
 
-      if (!res.ok) {
-        // 422 means the server disagreed with the client about a field. That should be
-        // impossible — both parse with the same schema — so surface it on the field
-        // rather than hiding it behind a generic message.
-        if (res.status === 422) {
-          const detail = await res.json().catch(() => null);
-          const fields = (detail?.fields ?? []) as { path: string; message: string }[];
-          for (const f of fields) showError(f.path, f.message);
-          form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
-          return;
-        }
-        showError(
-          'message',
-          res.status === 429
-            ? 'Zu viele Anfragen. Bitte versuchen Sie es in einer Minute erneut.'
-            : 'Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.',
-        );
+         Written into the error slot directly rather than through showError, which also
+         sets aria-invalid: nothing the visitor typed is wrong, so telling a screen
+         reader the message field is invalid would be a second untruth. The slot is
+         already the textarea's aria-describedby target, so it is announced where it
+         is relevant. */
+      const slot = form.querySelector<HTMLElement>('[data-error-for="message"]');
+      if (slot) {
+        slot.textContent = form.dataset.offlineNotice ?? '';
+        slot.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+      return;
+    }
+
+    let res: Response;
+    try {
+      res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        // The traps travel with the payload: the endpoint re-checks them, because a
+        // bot can POST to it without ever loading the form.
+        body: JSON.stringify({ ...parsed.data, website: raw('website'), elapsedMs }),
+      });
+    } catch {
+      showError('message', 'Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.');
+      return;
+    }
+
+    if (!res.ok) {
+      // 422 means the server disagreed with the client about a field. That should be
+      // impossible — both parse with the same schema — so surface it on the field
+      // rather than hiding it behind a generic message.
+      if (res.status === 422) {
+        const detail = await res.json().catch(() => null);
+        const fields = (detail?.fields ?? []) as { path: string; message: string }[];
+        for (const f of fields) showError(f.path, f.message);
+        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
         return;
       }
+      showError(
+        'message',
+        res.status === 429
+          ? 'Zu viele Anfragen. Bitte versuchen Sie es in einer Minute erneut.'
+          : 'Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.',
+      );
+      return;
     }
 
     form.reset();

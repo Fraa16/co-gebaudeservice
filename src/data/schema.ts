@@ -85,6 +85,9 @@ export const contentSchema = z.object({
       consentNote: z.string(),
       submitLabel: z.string(),
       successMessage: z.string(),
+      /** Shown in place of the confirmation while PUBLIC_FORM_ENDPOINT is unset, so the
+       *  form never answers "wir melden uns" for an enquiry it has no way to deliver. */
+      offlineNotice: z.string(),
     }),
   }),
   footer: z.object({
