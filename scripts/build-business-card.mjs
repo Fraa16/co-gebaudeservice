@@ -135,6 +135,43 @@ const contentBox = (L) => ({
 const MARK_ZONE = 5;
 const MARK_LEN = 3.5;
 
+/** How much larger than life the page is laid out before being scaled back down.
+ *
+ *  Chromium rounds every glyph advance up to a whole CSS pixel. At the sizes on a
+ *  business card that is a large error: 7.4pt is about 9.9 CSS px, an average advance
+ *  about 4.5, so rounding adds up to half a pixel per letter. Measured on
+ *  "co-gebaeudeservice.de", the word came out 1641 px wide at 1x against 1353 px at
+ *  4x — 21 per cent too wide, and the surplus lands unevenly, which is what made the
+ *  gap after "geba" look like a mistake. The rest of the card had it too; the domain
+ *  is only where it is easiest to see, because "ae" is a pair German text never has.
+ *
+ *  Laying out at 4x and emitting with scale 1/4 divides the error by four. It is
+ *  enough: at 8x the gap sequence moves by 0.7 per mille of the word width, i.e. it
+ *  has converged. The PNG previews get the same treatment for free — they used to be
+ *  upsampled from a 344 px screenshot to 1075 px at 300 dpi, and are now downsampled
+ *  from 1376 px. */
+const RENDER_SCALE = 4;
+
+/** Multiply every absolute length in a stylesheet by RENDER_SCALE.
+ *
+ *  The stylesheet uses mm and pt for every absolute length and nothing else, so this
+ *  is total: em, percentages and unitless numbers are relative and must not move.
+ *
+ *  Two things are held out. The contents of url(), because a data URI's base64 can
+ *  contain a run like "12pt" and scaling that would corrupt the image. And the @page
+ *  rule, which describes the paper rather than the drawing: enlarging it too made
+ *  Chromium first fit the oversized page box onto the sheet and then apply the print
+ *  scale on top, so the card came out at a sixteenth and the QR check caught it. */
+const upscale = (sheet) =>
+  sheet
+    .split(/(url\([^)]*\)|@page\s*\{[^}]*\})/)
+    .map((part, i) =>
+      i % 2
+        ? part
+        : part.replace(/(\d+(?:\.\d+)?)(mm|pt)\b/g, (_, n, unit) => `${+n * RENDER_SCALE}${unit}`),
+    )
+    .join('');
+
 const css = (L) => `
   @font-face { font-family: Archivo; src: url('${FONTS.archivo}') format('woff2'); font-weight: 100 900; }
   @font-face { font-family: Source; src: url('${FONTS.body}') format('woff2'); font-weight: 200 900; }
@@ -370,7 +407,7 @@ const marks = (L) => {
   return out.join('');
 };
 
-const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style>${css(L)}</style><body>
+const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style>${upscale(css(L))}</style><body>
 
 <section class="sheet">${marks(L)}<div class="card"><div class="panel panel--front">
   <img class="lockup" src="${dataSvg('public/logo-invert.svg')}" alt="">
@@ -498,9 +535,17 @@ for (const [name, L] of Object.entries(LAYOUTS)) {
   await page.goto(`file://${tmp}`);
   await page.evaluate(() => document.fonts.ready);
 
+  /* The page size is given here rather than read from @page, because the stylesheet
+     now carries the RENDER_SCALE-times size and the PDF has to come out at the real
+     one. Chromium lays the page out at width/scale, which is exactly the enlarged
+     size the stylesheet describes, and then scales the result back down. */
+  const sheetW = L.marks ? PAGE_W + MARK_ZONE * 2 : PAGE_W;
+  const sheetH = L.marks ? PAGE_H + MARK_ZONE * 2 : PAGE_H;
   await page.pdf({
     path: `${OUT}/visitenkarte-${name}-druck.pdf`,
-    preferCSSPageSize: true,
+    width: `${sheetW}mm`,
+    height: `${sheetH}mm`,
+    scale: 1 / RENDER_SCALE,
     printBackground: true,
   });
   await face(0, `${OUT}/${name}-vorne.png`);
