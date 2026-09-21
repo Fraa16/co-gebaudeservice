@@ -318,7 +318,7 @@ danach, weil Antwortmaschinen den ersten Satz zitieren.
 4. Wie schnell bekomme ich ein Angebot?
 5. Kann ich einzelne Leistungen beauftragen?
 6. Übernehmen Sie auch den Winterdienst?
-7. Arbeiten Sie mit eigenem Personal?
+7. Wer kommt in mein Objekt?
 8. Für welche Objekte arbeiten Sie?
 
 **Bitte prüfen:** Frage 3 nennt als Kalkulationsgrundlage Flächen, Zahl der
@@ -334,8 +334,7 @@ An jeden Titel wird „ | CO Gebäudeservice" angehängt.
 |---|---|---|
 | Start | Gebäudereinigung und Hausmeisterservice in Nagold | Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Fester Turnus, ein Ansprechpartner. |
 | Leistungen | Reinigung und Hausmeisterservice in Nagold | Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften in Nagold und im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst. |
-| Treppenhausreinigung | Treppenhausreinigung in Nagold und Kreis Calw | Unterhaltsreinigung von Treppen, Fluren und Eingangsbereichen in Nagold und im Kreis Calw. Wöchentlich oder 14-tägig, mit eigenem Personal und festem Objektbetreuer. |
-| Über uns | Über uns: Gebäudeservice aus Nagold | CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Eigenes Personal, feste Objektbetreuer. |
+| Über uns | Über uns: Gebäudeservice aus Nagold | CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Inhaber Oguz Cakir übernimmt die Objekte selbst. |
 | Kontakt | Angebot anfordern: Gebäudeservice Nagold | Objektbesichtigung in Nagold oder im Kreis Calw vereinbaren und ein Angebot zum Festpreis erhalten. Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag. |
 | Impressum | Impressum | Anbieterkennzeichnung nach § 5 DDG für CO Gebäudeservice, Oguz Cakir, Schietinger Str. 28 in 72202 Nagold. Kontaktdaten und rechtliche Hinweise. |
 | Datenschutz | Datenschutzerklärung | Informationen zur Verarbeitung personenbezogener Daten nach Art. 13 DSGVO auf der Website von CO Gebäudeservice in Nagold. |
@@ -357,3 +356,73 @@ anderen Text zeigt als die Website, ist schlimmer als keins.
 - **Ablauf, Schritt 3:** nennt jetzt das Leistungsverzeichnis.
 - **Bestätigung nach dem Absenden:** „Danke, wir melden uns innerhalb von zwei
   Werktagen." *(vorher mit Gedankenstrich)*
+
+---
+
+## 12. Struktur und Inhaltstiefe, 21. September 2026
+
+### Die Treppenhaus-Unterseite ist entfallen
+
+Die Website hat vier Seiten: Start, Leistungen, Über uns, Kontakt.
+`/leistungen/treppenhausreinigung` gibt es nicht mehr. Der Text der Seite ist nicht
+verloren, er stand ohnehin schon auf der Startseite und wird dort jetzt vollständig
+gezeigt statt gekürzt.
+
+### Warum überhaupt etwas geändert wurde
+
+Gemessen wurde, wie viele Wörter eine Suchmaschine auf jeder Seite tatsächlich findet:
+
+| Seite | vorher | Befund |
+|---|---|---|
+| Startseite | 427 | kein einziger erklärender Absatz |
+| Leistungen | 701 | acht Leistungen teilen sich rund 210 Wörter |
+| Über uns | 222 | die dünnste Seite, und es ist die Vertrauensseite |
+
+Acht Leistungen mit 26 Wörtern pro Leistung sind für eine Suche wie
+„Gartenpflege Nagold" kein Inhalt, sondern ein Registereintrag.
+
+### Neu: ein Absatz je Leistung
+
+`src/data/services.ts` — acht Absätze à 50 bis 70 Wörter, auf `/leistungen` unter dem
+jeweiligen Kurztext. Sie erklären das Handwerk: was zum Turnus gehört, warum, und in
+welchem Intervall es üblich ist. **Bitte gegenlesen, ob das Ihrer Arbeitsweise
+entspricht** — etwa, dass bei der Fensterreinigung Rahmen und Falze immer mitgehen,
+oder dass die Kellerreinigung in vielen Objekten zweimal jährlich reicht.
+
+### Über uns: neuer Ansatz
+
+Der Betrieb ist neu, ohne Kundenhistorie, mit einer Person. Der bisherige Text
+behauptete **eigenes Personal**, **feste Objektbetreuer** im Plural und eine
+**Vertretungsregelung bei Urlaub und Krankheit**. Nichts davon trifft zu. Es stand so
+im ursprünglichen Entwurf und wurde von dort übernommen, nicht erfunden, aber es musste
+raus.
+
+Der neue Text verschweigt die Größe nicht, weil die Größe das Argument ist: Wer den
+Auftrag vergibt, spricht mit der Person, die auch im Haus arbeitet. Behauptet wird
+nichts über die Vergangenheit, nur über die Methode, und die lässt sich beim ersten
+Termin überprüfen.
+
+- **Überschrift:** Ein fester Ansprechpartner für Objekte in Nagold.
+- **Einleitung:** CO Gebäudeservice ist das Einzelunternehmen von Oguz Cakir. Reinigung,
+  Hausmeisterdienst und Außenanlagen für Wohn- und Gewerbeobjekte in Nagold und im
+  Kreis Calw.
+- **Leitsatz:** Im Haus arbeitet immer dieselbe Person.
+- **Vier Absätze:** direkter Ansprechpartner · begrenzte Objektzahl mit festem
+  Wochentag · Besichtigung, Leistungsverzeichnis, ausgehängter Plan, Dokumentation ·
+  Einsatzgebiet und kurze Wege.
+
+### Die eine Angabe, die noch fehlt
+
+**Was passiert bei Urlaub oder Krankheit?** Das ist die erste Frage, die eine
+Hausverwaltung einem Einzelunternehmer stellt, und solange es keine Antwort gibt, kann
+keine auf der Website stehen. Eine Absprache mit einem Kollegen, ein Aushang im Objekt,
+eine Ankündigungsfrist — was immer zutrifft, gehört als neunte häufige Frage auf
+`/leistungen`.
+
+### Ebenfalls geändert
+
+- **Frage 7** hieß „Arbeiten Sie mit eigenem Personal?" und heißt jetzt
+  **„Wer kommt in mein Objekt?"** — Antwort: der Inhaber selbst.
+- Die Beschreibung der Über-uns-Seite für Suchmaschinen nennt statt „Eigenes Personal,
+  feste Objektbetreuer" jetzt „Inhaber Oguz Cakir übernimmt die Objekte selbst."
+- Der dritte Absatz der Treppenhaus-Passage auf der Startseite sagt dasselbe.

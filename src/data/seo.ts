@@ -29,17 +29,12 @@ export const pageSeo = {
     description:
       'Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften in Nagold und im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst.',
   },
-  treppenhausreinigung: {
-    title: 'Treppenhausreinigung in Nagold und Kreis Calw',
-    description:
-      'Unterhaltsreinigung von Treppen, Fluren und Eingangsbereichen in Nagold und im Kreis Calw. Wöchentlich oder 14-tägig, mit eigenem Personal und festem Objektbetreuer.',
-  },
   ueberUns: {
     /* Was the bare word "Über uns" — 28 of the 75 characters, and no place name on the
        one page whose whole subject is where the work happens. */
     title: 'Über uns: Gebäudeservice aus Nagold',
     description:
-      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Eigenes Personal, feste Objektbetreuer.',
+      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Inhaber Oguz Cakir übernimmt die Objekte selbst.',
   },
   kontakt: {
     title: 'Angebot anfordern: Gebäudeservice Nagold',

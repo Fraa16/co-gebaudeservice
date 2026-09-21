@@ -6,7 +6,10 @@ import { detail } from '../../data/content';
 import { resolveHref } from '../../data/routes';
 
 interface Props {
-  /** Home shows one paragraph and no info card; the service page shows everything. */
+  /** Was how the homepage showed one paragraph while the deep service page showed all
+   *  three. That page is gone: the site is four pages, so the homepage is now the only
+   *  place this chapter exists and it renders in full. The prop stays because the
+   *  component still supports it, but nothing passes it. */
   condensed?: boolean;
   level?: 1 | 2;
   id?: string;

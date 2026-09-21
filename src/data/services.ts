@@ -9,12 +9,18 @@ export interface Service {
   chip: string;
   title: string;
   text: string;
+  /** The one paragraph that explains the service. Eight services sharing 210 words of
+   *  one-liners was the site's real content problem: for a search like
+   *  "Gartenpflege Nagold" a chip plus four bullets is an index entry, not a page. */
+  detail: string;
   /** Bullet list shown on /leistungen. */
   scope: string[];
   turnus: string;
   icon: IconName;
   photoSlot: string;
-  /** Deep page, when the service has earned one. */
+  /** Deep page, if one exists. None do: the site is four pages, and the
+   *  Treppenhaus chapter lives on the homepage. Kept because ServiceGrid still
+   *  accepts it, so a future page needs no component change. */
   href?: string;
   /** Copy not yet approved by the client — see CONTENT-REVIEW.md. */
   draft: boolean;
@@ -29,13 +35,17 @@ const slugify = (s: string) =>
 
 /** Per-service detail that content.json has no field for. Scope lists are draft copy
  *  except Treppenhausreinigung's, which comes from content.json detail.infoCard.items. */
-const EXTRA: Record<string, Pick<Service, 'scope' | 'turnus' | 'icon'>> = {
+const EXTRA: Record<string, Pick<Service, 'detail' | 'scope' | 'turnus' | 'icon'>> = {
   Treppenhausreinigung: {
+    detail:
+      'Die Unterhaltsreinigung im Treppenhaus entscheidet, wie ein Objekt wahrgenommen wird, und sie ist der häufigste Anlass für Beschwerden. Gereinigt werden Treppen, Podeste und Flure feucht, dazu Handläufe, Geländer, Lichtschalter und der Eingangsbereich mit Fußmatten. Arbeiten wie Treppenhausfenster, Lampen und Sockelleisten fallen ein- bis zweimal im Jahr an und stehen mit im Leistungsverzeichnis.',
     scope: detail.infoCard.items, // verbatim
     turnus: detail.infoCard.facts[0]?.value ?? '',
     icon: 'treppe',
   },
   Fensterreinigung: {
+    detail:
+      'Glasflächen an Treppenhausfenstern, Eingangstüren und Fassaden im Erdgeschoss. Zum Turnus gehören immer Rahmen, Falze und Fensterbänke: Glas allein sieht nach kurzer Zeit wieder schmutzig aus, wenn der Schmutz im Rahmen bleibt. Zweimal im Jahr ist der übliche Rhythmus. An Eingangstüren und stark genutzten Durchgängen ist ein kürzeres Intervall sinnvoll.',
     scope: [
       'Glasflächen innen und außen',
       'Rahmen, Falze und Fensterbänke',
@@ -46,6 +56,8 @@ const EXTRA: Record<string, Pick<Service, 'scope' | 'turnus' | 'icon'>> = {
     icon: 'fenster',
   },
   Hausmeisterdienst: {
+    detail:
+      'Der Hausmeisterdienst hält das Objekt zwischen den Reinigungsterminen im Blick. Dazu gehören Kontrollgänge durch Keller, Technikräume und Außenbereich, Kleinreparaturen wie der Lampenwechsel, das Stellen und Zurückführen der Tonnen sowie Ablesungen und die Begleitung von Handwerkern. Was auffällt, wird gemeldet, bevor daraus ein Schaden wird.',
     scope: [
       'Regelmäßige Kontrollgänge im Objekt',
       'Kleinreparaturen und Lampenwechsel',
@@ -56,6 +68,8 @@ const EXTRA: Record<string, Pick<Service, 'scope' | 'turnus' | 'icon'>> = {
     icon: 'hausmeister',
   },
   Gartenpflege: {
+    detail:
+      'Grünpflege an Wohnanlagen von März bis November: Rasen mähen, Hecken und Sträucher schneiden, Beete von Unkraut freihalten, im Herbst Laub räumen. Der Grünschnitt wird abgefahren und entsorgt. Der Turnus richtet sich nach Fläche und Jahreszeit, im Mai wird häufiger gemäht als im September.',
     scope: [
       'Rasen mähen, vertikutieren und düngen',
       'Hecken und Sträucher schneiden',
@@ -66,6 +80,8 @@ const EXTRA: Record<string, Pick<Service, 'scope' | 'turnus' | 'icon'>> = {
     icon: 'garten',
   },
   Winterdienst: {
+    detail:
+      'Räumen und Streuen auf Gehwegen, Zufahrten und Eingängen. Wann geräumt werden muss, regelt die Satzung der jeweiligen Gemeinde, und sie unterscheidet sich von Ort zu Ort. Die Saison läuft von November bis März, mit Bereitschaft an Werk- und Feiertagen. Jeder Einsatz wird mit Datum und Uhrzeit dokumentiert, damit die Verwaltung einen Nachweis hat.',
     scope: [
       'Räumen und Streuen nach Gemeindesatzung',
       'Gehwege, Zufahrten und Eingänge',
@@ -88,7 +104,6 @@ const verbatim: Service[] = designServices.map((s) => {
     text: s.text,
     ...extra,
     photoSlot: s.slot,
-    href: s.title === 'Treppenhausreinigung' ? '/leistungen/treppenhausreinigung' : undefined,
     draft: false,
     source: 'content.json',
   };
@@ -104,6 +119,8 @@ const drafted: Service[] = [
     slug: 'kellerreinigung',
     chip: 'Nach Bedarf',
     title: 'Kellerreinigung',
+    detail:
+      'Kellergänge, Vorräume, Waschküche und Trockenraum werden gekehrt und feucht gewischt, dazu Lichtschalter, Geländer und Türen. In vielen Objekten reicht ein größerer Durchgang zweimal im Jahr. Wo Fahrräder, Kinderwagen und Lagerflächen für Betrieb sorgen, ist ein festes Intervall sinnvoll.',
     text: 'Kellergänge, Abstellbereiche und Trockenräume kehren und feucht wischen.',
     scope: [
       'Kellergänge und Vorräume kehren',
@@ -121,6 +138,8 @@ const drafted: Service[] = [
     slug: 'aussenreinigung',
     chip: 'Nach Turnus',
     title: 'Außenreinigung',
+    detail:
+      'Gehwege, Zuwegungen, Hofflächen und Stellplätze kehren, Laub und Unkraut aus den Fugen entfernen, Außentreppen und Eingangsbereiche mitnehmen. Die Außenflächen sind das, was ein Besucher zuerst sieht, und im Herbst der Bereich mit dem größten Aufwand. Üblich ist wöchentlich oder 14-tägig, im Herbst dichter.',
     text: 'Gehwege, Hofflächen und Stellplätze kehren, Laub und Unkraut entfernen.',
     scope: [
       'Gehwege und Zuwegungen kehren',
@@ -138,6 +157,8 @@ const drafted: Service[] = [
     slug: 'muelltonnendienst',
     chip: 'Zum Abfuhrtermin',
     title: 'Mülltonnendienst',
+    detail:
+      'Tonnen zum Abfuhrtermin herausstellen und danach zurückführen, den Müllstandsplatz kehren und die Tonnen bei Bedarf reinigen. Der Turnus folgt dem Abfuhrkalender der Gemeinde. Für Objekte ohne Hausmeister vor Ort ist das die Leistung, die im Alltag am häufigsten fehlt.',
     text: 'Tonnen herausstellen und zurückführen, Müllstandsplatz sauber halten.',
     scope: [
       'Tonnen zum Abfuhrtermin herausstellen',

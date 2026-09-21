@@ -47,7 +47,7 @@ export const pages = {
 
   ueberUns: {
     statementKicker: 'Arbeitsweise',
-    statement: 'Dieselben Gesichter im Haus, ein Ansprechpartner für die Verwaltung.',
+    statement: 'Im Haus arbeitet immer dieselbe Person.',
     factsKicker: 'In Zahlen',
     areaKicker: 'Einsatzgebiet',
     areaTitle: 'Kurze Wege, auch beim Winterdienst.',

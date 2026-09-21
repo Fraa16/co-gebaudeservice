@@ -34,6 +34,8 @@ const flipped = index % 2 === 1;
 
     <p class="service-row__text">{service.text}</p>
 
+    <p class="service-row__detail">{service.detail}</p>
+
     <p class="service-row__turnus">
       <span class="service-row__turnus-label">Turnus</span>
       {service.turnus}
@@ -97,11 +99,23 @@ const flipped = index % 2 === 1;
     font: 600 clamp(24px, 2.8vw, 38px) / 1.08 var(--co-font-heading);
     letter-spacing: var(--co-h3-tracking);
   }
+  /* The lead sat at 42ch while the paragraph under it runs to 62, so the summary broke
+     to two lines above a wider block. A lead narrower than its own body reads as a
+     mistake; it now shares the measure and keeps only its larger type. */
   .service-row__text {
     font: 400 clamp(16px, 1.35vw, 19px) / 1.55 var(--co-font-body);
-    color: var(--co-muted);
-    max-width: 42ch;
+    color: var(--co-ink);
+    max-width: 62ch;
   }
+  /* The paragraph that makes the row a page rather than an index entry. Measure held
+     under 70ch: tests/responsive.spec.ts caps running prose at 95ch. */
+  .service-row__detail {
+    max-width: 62ch;
+    font: 400 var(--co-body-size) / var(--co-body-lh) var(--co-font-body);
+    color: var(--co-muted);
+    text-wrap: pretty;
+  }
+
   .service-row__turnus {
     display: flex;
     flex-wrap: wrap;

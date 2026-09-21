@@ -5,7 +5,7 @@
 const ANCHOR_ROUTES: Record<string, string> = {
   '#hero': '/',
   '#leistungen': '/leistungen',
-  '#treppenhaus': '/leistungen/treppenhausreinigung',
+  '#treppenhaus': '/#treppenhaus',
   '#ablauf': '/#ablauf',
   /* Every CTA using this anchor is labelled with an action — "Angebot anfordern",
      "Termin vereinbaren", "Anfrage starten" — so it lands on the enquiry form itself,
@@ -16,7 +16,7 @@ const ANCHOR_ROUTES: Record<string, string> = {
 };
 
 /** Sections that exist on the home page, so an in-page anchor stays in-page there. */
-const HOME_ANCHORS = new Set(['#kontakt', '#ablauf', '#leistungen']);
+const HOME_ANCHORS = new Set(['#kontakt', '#ablauf', '#leistungen', '#treppenhaus']);
 
 export function resolveHref(href: string, currentPath = ''): string {
   if (!href.startsWith('#')) return href;

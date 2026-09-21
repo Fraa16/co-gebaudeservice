@@ -32,7 +32,7 @@ const jsonLd = buildGraph({
   <StatBand />
   <Schriftband />
   <ServiceGrid services={homeServices} linkTo={(s: Service) => s.href ?? `/leistungen#${s.slug}`} />
-  <DetailChapter condensed />
+  <DetailChapter />
   <Process currentPath="/" />
   <ContactSection />
 </BaseLayout>

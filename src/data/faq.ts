@@ -49,8 +49,8 @@ export const faq: readonly FaqEntry[] = [
     a: 'Ja, in der Saison von November bis März, mit Bereitschaft an Werk- und Feiertagen. Geräumt und gestreut wird nach der Satzung der jeweiligen Gemeinde. Jeder Einsatz wird dokumentiert, die Dokumentation dient der Verwaltung als Nachweis.',
   },
   {
-    q: 'Arbeiten Sie mit eigenem Personal?',
-    a: 'Ja. Jedes Objekt hat einen festen Objektbetreuer, dazu eine Vertretungsregelung bei Urlaub und Krankheit. Für die Verwaltung gibt es eine Ansprechperson, kein Callcenter.',
+    q: 'Wer kommt in mein Objekt?',
+    a: 'Der Inhaber, Oguz Cakir, selbst. CO Gebäudeservice ist ein Einzelunternehmen, und genau deshalb arbeitet in Ihrem Objekt immer dieselbe Person. Für die Verwaltung gibt es eine Ansprechperson, kein Callcenter.',
   },
   {
     q: 'Für welche Objekte arbeiten Sie?',
