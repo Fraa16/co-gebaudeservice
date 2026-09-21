@@ -334,7 +334,7 @@ An jeden Titel wird „ | CO Gebäudeservice" angehängt.
 |---|---|---|
 | Start | Gebäudereinigung und Hausmeisterservice in Nagold | Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Fester Turnus, ein Ansprechpartner. |
 | Leistungen | Reinigung und Hausmeisterservice in Nagold | Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften in Nagold und im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst. |
-| Über uns | Über uns: Gebäudeservice aus Nagold | CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Inhaber Oguz Cakir übernimmt die Objekte selbst. |
+| Über uns | Über uns: Gebäudeservice aus Nagold | CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach und im Gäu bis Herrenberg. Inhabergeführt, mit fester Objektbetreuung und einem Ansprechpartner. |
 | Kontakt | Angebot anfordern: Gebäudeservice Nagold | Objektbesichtigung in Nagold oder im Kreis Calw vereinbaren und ein Angebot zum Festpreis erhalten. Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag. |
 | Impressum | Impressum | Anbieterkennzeichnung nach § 5 DDG für CO Gebäudeservice, Oguz Cakir, Schietinger Str. 28 in 72202 Nagold. Kontaktdaten und rechtliche Hinweise. |
 | Datenschutz | Datenschutzerklärung | Informationen zur Verarbeitung personenbezogener Daten nach Art. 13 DSGVO auf der Website von CO Gebäudeservice in Nagold. |
@@ -397,19 +397,25 @@ behauptete **eigenes Personal**, **feste Objektbetreuer** im Plural und eine
 im ursprünglichen Entwurf und wurde von dort übernommen, nicht erfunden, aber es musste
 raus.
 
-Der neue Text verschweigt die Größe nicht, weil die Größe das Argument ist: Wer den
-Auftrag vergibt, spricht mit der Person, die auch im Haus arbeitet. Behauptet wird
-nichts über die Vergangenheit, nur über die Methode, und die lässt sich beim ersten
-Termin überprüfen.
+Der erste Versuch ersetzte das durch „Einzelunternehmen" und „Oguz Cakir übernimmt die
+Objekte selbst". Das ist zwar richtig, liest sich aber wie eine Offenlegung. Die
+Betriebsgröße ist nicht das, was eine Hausverwaltung einkauft, und sie zu nennen wirft
+die Frage auf, statt eine zu beantworten. Die Rechtsform steht jetzt nur noch dort, wo
+sie hingehört: im Impressum.
+
+Der Text spricht deshalb über das, was der Kunde bekommt: **ein Ansprechpartner von der
+Besichtigung bis zur laufenden Betreuung, dieselbe Person im Haus.** Beides stimmt bei
+jeder Betriebsgröße, beides ist beim ersten Termin überprüfbar, und nichts davon
+behauptet eine Vergangenheit, die es nicht gibt.
 
 - **Überschrift:** Ein fester Ansprechpartner für Objekte in Nagold.
-- **Einleitung:** CO Gebäudeservice ist das Einzelunternehmen von Oguz Cakir. Reinigung,
+- **Einleitung:** Inhabergeführter Gebäudeservice aus Nagold. Reinigung,
   Hausmeisterdienst und Außenanlagen für Wohn- und Gewerbeobjekte in Nagold und im
   Kreis Calw.
 - **Leitsatz:** Im Haus arbeitet immer dieselbe Person.
-- **Vier Absätze:** direkter Ansprechpartner · begrenzte Objektzahl mit festem
-  Wochentag · Besichtigung, Leistungsverzeichnis, ausgehängter Plan, Dokumentation ·
-  Einsatzgebiet und kurze Wege.
+- **Vier Absätze:** feste Betreuung und ein Ansprechpartner · fester Wochentag, nur so
+  viele Objekte wie zuverlässig bedienbar · Besichtigung, Leistungsverzeichnis,
+  ausgehängter Plan, Dokumentation · Einsatzgebiet und kurze Wege.
 
 ### Die eine Angabe, die noch fehlt
 
@@ -422,7 +428,13 @@ eine Ankündigungsfrist — was immer zutrifft, gehört als neunte häufige Frag
 ### Ebenfalls geändert
 
 - **Frage 7** hieß „Arbeiten Sie mit eigenem Personal?" und heißt jetzt
-  **„Wer kommt in mein Objekt?"** — Antwort: der Inhaber selbst.
-- Die Beschreibung der Über-uns-Seite für Suchmaschinen nennt statt „Eigenes Personal,
-  feste Objektbetreuer" jetzt „Inhaber Oguz Cakir übernimmt die Objekte selbst."
-- Der dritte Absatz der Treppenhaus-Passage auf der Startseite sagt dasselbe.
+  **„Wer kommt in mein Objekt?"** Die Antwort nennt die feste Zuordnung und begründet
+  sie damit, dass jemand, der ein Haus kennt, früher sieht, was zusätzlich ansteht.
+- Die Beschreibung der Über-uns-Seite für Suchmaschinen sagt statt „Eigenes Personal,
+  feste Objektbetreuer" jetzt „Inhabergeführt, mit fester Objektbetreuung und einem
+  Ansprechpartner."
+- Der dritte Absatz der Treppenhaus-Passage auf der Startseite sagt dasselbe: feste
+  Betreuung, ein Ansprechpartner, wer anruft erreicht jemanden, der das Objekt kennt.
+
+**Das Wort „Einzelunternehmen" kommt im Kundentext nicht mehr vor.** Es steht im
+Impressum, weil es dort hingehört, und sonst nirgends.

@@ -34,7 +34,7 @@ export const pageSeo = {
        one page whose whole subject is where the work happens. */
     title: 'Über uns: Gebäudeservice aus Nagold',
     description:
-      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Inhaber Oguz Cakir übernimmt die Objekte selbst.',
+      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach und im Gäu bis Herrenberg. Inhabergeführt, mit fester Objektbetreuung und einem Ansprechpartner.',
   },
   kontakt: {
     title: 'Angebot anfordern: Gebäudeservice Nagold',

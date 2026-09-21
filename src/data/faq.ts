@@ -50,7 +50,7 @@ export const faq: readonly FaqEntry[] = [
   },
   {
     q: 'Wer kommt in mein Objekt?',
-    a: 'Der Inhaber, Oguz Cakir, selbst. CO Gebäudeservice ist ein Einzelunternehmen, und genau deshalb arbeitet in Ihrem Objekt immer dieselbe Person. Für die Verwaltung gibt es eine Ansprechperson, kein Callcenter.',
+    a: 'Jedes Objekt wird fest zugeordnet, es arbeitet dort dieselbe Person. Das ist so gewollt: Wer ein Haus kennt, sieht früher, was zusätzlich ansteht, und wird von Mietern auch angesprochen. Für die Verwaltung gibt es einen Ansprechpartner, kein Callcenter.',
   },
   {
     q: 'Für welche Objekte arbeiten Sie?',

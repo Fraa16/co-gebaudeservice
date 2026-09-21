@@ -1,34 +1,40 @@
 /** The Über-uns page has no design and no copy in content.json. All of it is draft.
  *  See CONTENT-REVIEW.md.
  *
- *  Rewritten on 21 Sep 2026 once the client confirmed the shape of the business: new,
- *  no customers yet, no completed projects, one person. The previous copy claimed
- *  "eigenes Personal", "feste Objektbetreuer" in the plural and a "Vertretungsregelung
- *  bei Urlaub und Krankheit". None of that was true, and it had been carried over from
- *  the design draft rather than invented here, which is exactly how an untrue claim
- *  survives a copy review.
+ *  Rewritten on 21 Sep 2026, in two passes, and the second pass is the instructive one.
  *
- *  The replacement does not hide the size, because the size is the argument: a
- *  Hausverwaltung dealing with a sole trader knows who walks into the building. What it
- *  does not do is claim a track record. Everything below is either a fact from
- *  company.ts or a commitment about method that can be checked on the first visit.
+ *  The first pass fixed a truth problem: with one person, "eigenes Personal", "feste
+ *  Objektbetreuer" in the plural and a "Vertretungsregelung bei Urlaub und Krankheit"
+ *  were simply false. They had been carried over from the design draft rather than
+ *  invented here, which is exactly how an untrue claim survives a copy review.
+ *
+ *  But the replacement over-corrected into "Einzelunternehmen" and "Oguz Cakir
+ *  übernimmt die Objekte selbst", which is accurate and reads as a disclosure. Company
+ *  size is not what a Hausverwaltung is buying, and naming it invites the question
+ *  rather than answering one. The legal form belongs in the Impressum, which is where
+ *  it now lives and nowhere else.
+ *
+ *  So the page talks about what the customer actually receives: one contact from the
+ *  survey through to the running work, and the same person in the building. Both are
+ *  true at any headcount, both are checkable on the first visit, and neither claims a
+ *  track record the business does not have.
  *
  *  Still missing, and the one fact worth asking for: what happens during holiday or
- *  illness. It is the first thing a Hausverwaltung asks a sole trader, and there is no
- *  honest answer to write until the client has one. */
+ *  illness. It is the first thing a Hausverwaltung asks, and there is no honest answer
+ *  to write until the client has one. */
 
 export const ueberUns = {
   pill: 'Über uns',
   h1: 'Ein fester Ansprechpartner für Objekte in Nagold.',
-  lead: 'CO Gebäudeservice ist das Einzelunternehmen von Oguz Cakir. Reinigung, Hausmeisterdienst und Außenanlagen für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw.',
+  lead: 'Inhabergeführter Gebäudeservice aus Nagold. Reinigung, Hausmeisterdienst und Außenanlagen für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw.',
 
   paragraphs: [
     {
-      text: 'Wer den Auftrag vergibt, spricht mit der Person, die auch im Haus arbeitet. CO Gebäudeservice ist ein Einzelunternehmen, und Oguz Cakir übernimmt die Objekte selbst. Eine Rückfrage zum Treppenhaus geht damit nicht durch eine Zentrale, und im Objekt steht nicht jede Woche jemand anderes.',
+      text: 'Jedes Objekt wird fest betreut, und die Betreuung wechselt nicht. Wer den Auftrag vergibt, hat denselben Ansprechpartner bei der Besichtigung, beim Turnusplan und bei einer Rückfrage zum Treppenhaus. Im Objekt arbeitet dieselbe Person, Woche für Woche.',
       draft: true,
     },
     {
-      text: 'Die Zahl der betreuten Objekte ist bewusst begrenzt. Jedes Objekt bekommt einen festen Wochentag und einen Turnus, der vorab schriftlich steht. Für die Verwaltung ist damit planbar, wann gearbeitet wird, und für die Mieter nachvollziehbar, was geleistet wurde.',
+      text: 'Jedes Objekt bekommt einen festen Wochentag und einen Turnus, der vorab schriftlich steht. Wir nehmen nur so viele Objekte an, wie sich in diesem Rhythmus zuverlässig bedienen lassen. Für die Verwaltung ist damit planbar, wann gearbeitet wird, und für die Mieter nachvollziehbar, was geleistet wurde.',
       draft: true,
     },
     {
