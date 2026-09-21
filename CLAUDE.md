@@ -79,6 +79,11 @@ kickers, roughly 8:1.
    *there*, not in a component. Strings written for this build are marked `draft` and
    listed in `CONTENT-REVIEW.md` for sign-off. The tonality rule holds regardless: no
    added marketing language, no superlatives, no exclamation marks, no emoji.
+   **`npm run lint:copy` enforces the checkable half of it** over `src/data/`: no
+   parenthetical dash (a spaced em or en dash is the most reliable tell of generated
+   German; ranges like `Mo–Fr` and `14-tägig` are untouched), no empty marketing
+   phrases, no superlatives, no unverifiable tenure or volume claims. Comments and
+   thrown errors are exempt, since nobody reads those on the website.
 5. **Flex/grid with `gap`** for every group of siblings — never margin-spaced inline elements.
    Three rules that keep this fluid without breakpoints, all learned the hard way:
    a flex-basis must be `min(<px>, 100%)`, never a percentage (a percentage collapses

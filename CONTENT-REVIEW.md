@@ -108,7 +108,9 @@ Variante desselben Hinweises, falls er doch bleiben soll:
 > Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zur Bearbeitung der
 > Anfrage zu.
 
-## 6. Seitentitel und Suchmaschinen-Beschreibungen
+## 6. Seitentitel und Suchmaschinen-Beschreibungen *(überholt, siehe Abschnitt 11)*
+
+> Diese Tabelle gibt einen früheren Stand wieder. **Maßgeblich ist Abschnitt 11.**
 
 `src/data/seo.ts` — komplett neu, `content.json` enthält keine Titel.
 
@@ -272,3 +274,86 @@ Mitgezogen wurden drei Texte, die Orte ausdrücklich nennen:
 
 Nicht aufgenommen: der Landkreis Böblingen als Ganzes. Dort werden drei Gemeinden
 bedient, nicht die restlichen rund fünfzig.
+
+---
+
+## 11. Redaktionelle Überarbeitung, 21. September 2026
+
+**Das ist der maßgebliche Stand.** Abschnitt 6 und die h1-Tabelle in Abschnitt 10 geben
+frühere Fassungen wieder.
+
+Zwei Regeln sind ab jetzt Build-Gate (`npm run lint:copy`) statt Vorsatz: kein
+Gedankenstrich mit Leerzeichen drumherum, keine Floskeln, keine Superlative, keine
+unbelegten Behauptungen über Betriebsjahre oder Kundenzahlen. Bis-Striche wie `Mo–Fr`
+und `14-tägig` sind davon nicht betroffen.
+
+### Startseite
+
+- **Überschrift:** Gepflegte Objekte in Nagold, nach festem Reinigungsplan.
+  *(vorher „…, zuverlässig und zum festen Turnus." Das Adjektiv sagt nichts, das ein
+  Wettbewerber nicht auch behauptet; der Reinigungsplan ist überprüfbar.)*
+- **Unterzeile:** Treppenhausreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst
+  für Hausverwaltungen, Eigentümergemeinschaften und Gewerbeobjekte in Nagold und im
+  Kreis Calw.
+
+### Kurztexte der fünf Leistungen
+
+| Leistung | Text |
+|---|---|
+| Treppenhausreinigung | Treppen, Podeste, Flure und Eingangsbereiche im vereinbarten Turnus. |
+| Fensterreinigung | Glasflächen, Rahmen und Fensterbänke, innen wie außen. |
+| Hausmeisterdienst | Kontrollgänge, Kleinreparaturen und Müllmanagement im Objekt. |
+| Gartenpflege | Rasen, Hecken und Beete, dazu die Entsorgung des Grünschnitts. |
+| Winterdienst | Räumen und Streuen nach Gemeindesatzung, jeder Einsatz dokumentiert. |
+
+### Häufige Fragen
+
+Acht Fragen auf `/leistungen`, gleichzeitig als FAQ-Markup für Google und die
+KI-Suchmaschinen. Jede Antwort beginnt mit der Antwort und liefert die Begründung
+danach, weil Antwortmaschinen den ersten Satz zitieren.
+
+1. In welchen Orten arbeiten Sie?
+2. In welchem Turnus wird gereinigt?
+3. Was kostet die Treppenhausreinigung?
+4. Wie schnell bekomme ich ein Angebot?
+5. Kann ich einzelne Leistungen beauftragen?
+6. Übernehmen Sie auch den Winterdienst?
+7. Arbeiten Sie mit eigenem Personal?
+8. Für welche Objekte arbeiten Sie?
+
+**Bitte prüfen:** Frage 3 nennt als Kalkulationsgrundlage Flächen, Zahl der
+Wohneinheiten und Turnus. Frage 6 sagt, dass die Dokumentation jedes Winterdienst-
+Einsatzes der Verwaltung als Nachweis dient. Beides ist branchenüblich, aber es sind
+Aussagen über Ihre Arbeitsweise.
+
+### Seitentitel und Beschreibungen
+
+An jeden Titel wird „ | CO Gebäudeservice" angehängt.
+
+| Seite | Titel | Beschreibung |
+|---|---|---|
+| Start | Gebäudereinigung und Hausmeisterservice in Nagold | Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Fester Turnus, ein Ansprechpartner. |
+| Leistungen | Reinigung und Hausmeisterservice in Nagold | Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften in Nagold und im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst. |
+| Treppenhausreinigung | Treppenhausreinigung in Nagold und Kreis Calw | Unterhaltsreinigung von Treppen, Fluren und Eingangsbereichen in Nagold und im Kreis Calw. Wöchentlich oder 14-tägig, mit eigenem Personal und festem Objektbetreuer. |
+| Über uns | Über uns: Gebäudeservice aus Nagold | CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Eigenes Personal, feste Objektbetreuer. |
+| Kontakt | Angebot anfordern: Gebäudeservice Nagold | Objektbesichtigung in Nagold oder im Kreis Calw vereinbaren und ein Angebot zum Festpreis erhalten. Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag. |
+| Impressum | Impressum | Anbieterkennzeichnung nach § 5 DDG für CO Gebäudeservice, Oguz Cakir, Schietinger Str. 28 in 72202 Nagold. Kontaktdaten und rechtliche Hinweise. |
+| Datenschutz | Datenschutzerklärung | Informationen zur Verarbeitung personenbezogener Daten nach Art. 13 DSGVO auf der Website von CO Gebäudeservice in Nagold. |
+| 404 | Seite nicht gefunden | Die aufgerufene Seite existiert nicht. Zurück zur Startseite von CO Gebäudeservice, Gebäudereinigung und Hausmeisterservice in Nagold. |
+
+Diese Tabelle und die Fragenliste werden von `npm run lint:copy` gegen den Code
+geprüft. Abschnitt 6 war stillschweigend veraltet, und ein Freigabedokument, das einen
+anderen Text zeigt als die Website, ist schlimmer als keins.
+
+### Weitere geänderte Zeilen
+
+- **Kontakt, Hauptüberschrift:** Angebot für Ihr Objekt in Nagold.
+- **Leistungen, Einleitung:** „… legen wir vorab schriftlich fest" →
+  „… halten wir vorab im Leistungsverzeichnis fest."
+- **Über uns, Einleitung:** ergänzt um „Reinigung, Hausmeisterdienst und Außenanlagen
+  aus einer Hand."
+- **Über uns, Absatz 3:** „… zuverlässig vor Ort sind" → „Kurze Wege heißen: beim
+  Winterdienst und bei kurzfristigen Einsätzen sind wir schnell vor Ort."
+- **Ablauf, Schritt 3:** nennt jetzt das Leistungsverzeichnis.
+- **Bestätigung nach dem Absenden:** „Danke, wir melden uns innerhalb von zwei
+  Werktagen." *(vorher mit Gedankenstrich)*

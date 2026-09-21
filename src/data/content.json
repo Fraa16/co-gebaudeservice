@@ -1,5 +1,5 @@
 {
-  "$comment": "All site copy, verbatim from the design. German, formal Sie. Do not rewrite. Placeholder values are marked.",
+  "$comment": "All site copy. German, formal Sie. Was verbatim from the design; the editorial pass of 21 Sep 2026 rewrote the running text, so every string here is draft again and listed in CONTENT-REVIEW.md. Tonality is enforced by npm run lint:copy.",
   "company": {
     "name": "CO Gebäudeservice",
     "logoLabel": "CO Gebäudeservice",
@@ -33,8 +33,8 @@
   ],
   "hero": {
     "locationPill": "Nagold und Umgebung",
-    "h1": "Gepflegte Objekte in Nagold, zuverlässig und zum festen Turnus.",
-    "sub": "Reinigung und Hausmeisterdienste für Hausverwaltungen, Eigentümergemeinschaften und Gewerbeobjekte.",
+    "h1": "Gepflegte Objekte in Nagold, nach festem Reinigungsplan.",
+    "sub": "Treppenhausreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Hausverwaltungen, Eigentümergemeinschaften und Gewerbeobjekte in Nagold und im Kreis Calw.",
     "primaryCta": {
       "label": "Angebot anfordern",
       "href": "#kontakt"
@@ -55,35 +55,35 @@
       "slot": "r-l1",
       "chip": "Wöchentlich",
       "title": "Treppenhausreinigung",
-      "text": "Treppen, Flure, Kellergänge und Eingangsbereiche.",
+      "text": "Treppen, Podeste, Flure und Eingangsbereiche im vereinbarten Turnus.",
       "photo": "Treppenhaus"
     },
     {
       "slot": "r-l2",
       "chip": "2× im Jahr",
       "title": "Fensterreinigung",
-      "text": "Glas, Rahmen und Rollladenkästen, innen und außen.",
+      "text": "Glasflächen, Rahmen und Fensterbänke, innen wie außen.",
       "photo": "Fensterfront"
     },
     {
       "slot": "r-l3",
       "chip": "Fester Betreuer",
       "title": "Hausmeisterdienst",
-      "text": "Kontrollgänge, Kleinreparaturen, Müllmanagement.",
+      "text": "Kontrollgänge, Kleinreparaturen und Müllmanagement im Objekt.",
       "photo": "Hausmeister vor Ort"
     },
     {
       "slot": "r-l4",
       "chip": "März bis November",
       "title": "Gartenpflege",
-      "text": "Rasen, Hecken, Beete und Grünschnittentsorgung.",
+      "text": "Rasen, Hecken und Beete, dazu die Entsorgung des Grünschnitts.",
       "photo": "Außenanlage"
     },
     {
       "slot": "r-l5",
       "chip": "Mit Bereitschaft",
       "title": "Winterdienst",
-      "text": "Räumen und Streuen nach Satzung, dokumentiert.",
+      "text": "Räumen und Streuen nach Gemeindesatzung, jeder Einsatz dokumentiert.",
       "photo": "Winterdienst"
     }
   ],
@@ -100,9 +100,9 @@
     "pill": "Im Detail",
     "h2": "Treppenhausreinigung nach festem Reinigungsplan",
     "paragraphs": [
-      "Das Treppenhaus ist der erste Eindruck eines Objekts und gleichzeitig die Fläche, über die sich Mieter am häufigsten beschweren. Wir übernehmen die Unterhaltsreinigung im vereinbarten Turnus: Treppen und Podeste feucht wischen, Handläufe und Geländer reinigen, Aufzugskabine, Briefkastenanlage, Kellergänge und Eingangsbereich einschließlich Fußmatten.",
-      "Für jedes Objekt legen wir vorab schriftlich fest, was in welchem Intervall gereinigt wird. Wöchentlich, zweiwöchentlich oder nach Bedarf — inklusive der Arbeiten, die nur ein- bis zweimal im Jahr anfallen, etwa Fensterflächen im Treppenhaus, Lampen und Sockelleisten. Der Plan hängt im Objekt aus, damit Mieter und Verwaltung jederzeit nachvollziehen können, was geleistet wurde.",
-      "Wir arbeiten mit eigenem Personal und festen Objektbetreuern. Das heißt: dieselben Gesichter im Haus, ein direkter Ansprechpartner für die Verwaltung und eine Vertretungsregelung bei Urlaub und Krankheit."
+      "Das Treppenhaus ist der erste Eindruck eines Objekts und die Fläche, über die sich Mieter am häufigsten beschweren. Wir übernehmen die Unterhaltsreinigung im vereinbarten Turnus: Treppen und Podeste feucht wischen, Handläufe, Geländer und Lichtschalter reinigen, dazu Aufzugskabine, Briefkastenanlage, Kellergänge und den Eingangsbereich einschließlich Fußmatten.",
+      "Für jedes Objekt halten wir vorab schriftlich fest, was in welchem Intervall gereinigt wird: wöchentlich, 14-tägig oder nach Bedarf. Dazu kommen die Arbeiten, die nur ein- bis zweimal im Jahr anfallen, etwa Fensterflächen im Treppenhaus, Lampen und Sockelleisten. Der Reinigungsplan hängt im Objekt aus, damit Mieter und Verwaltung nachvollziehen können, was geleistet wurde.",
+      "Wir arbeiten mit eigenem Personal und festen Objektbetreuern. Das bedeutet dieselben Gesichter im Haus, einen direkten Ansprechpartner für die Verwaltung und eine Vertretungsregelung bei Urlaub und Krankheit."
     ],
     "ctas": [
       {
@@ -154,7 +154,7 @@
       {
         "num": "01",
         "title": "Anfrage",
-        "text": "Kurz Objekt, Anschrift und gewünschte Leistungen nennen — telefonisch oder über das Formular."
+        "text": "Kurz Objekt, Anschrift und gewünschte Leistungen nennen, telefonisch oder über das Formular."
       },
       {
         "num": "02",
@@ -176,7 +176,7 @@
   "contact": {
     "pill": "Kontakt",
     "h2": "Objekt ansehen, Angebot erhalten.",
-    "text": "Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag. Für dringende Fälle, etwa Winterdienst, erreichen Sie uns telefonisch.",
+    "text": "Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag für die Besichtigung. Bei dringenden Fällen wie Winterdienst erreichen Sie uns telefonisch.",
     "rows": [
       {
         "label": "Telefon",
@@ -245,7 +245,7 @@
       ],
       "consentNote": "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zu.",
       "submitLabel": "Anfrage senden",
-      "successMessage": "Danke — wir melden uns innerhalb von zwei Werktagen.",
+      "successMessage": "Danke, wir melden uns innerhalb von zwei Werktagen.",
       "$note": "The prototype's success text is a prototype notice; use successMessage above in production."
     }
   },

@@ -6,7 +6,7 @@ import { detail } from './content';
 export const ueberUns = {
   pill: 'Über uns',
   h1: 'Eigenes Personal, feste Objektbetreuer in Nagold.', // draft
-  lead: 'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw.', // draft
+  lead: 'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Reinigung, Hausmeisterdienst und Außenanlagen aus einer Hand.', // draft
 
   paragraphs: [
     // verbatim — content.json detail.paragraphs[2] reads as an about-us paragraph
@@ -16,7 +16,7 @@ export const ueberUns = {
       draft: true,
     },
     {
-      text: 'Wir arbeiten im Umkreis von Nagold — unter anderem in Altensteig, Wildberg, Haiterbach, Rohrdorf und Ebhausen, dazu im Gäu rund um Mötzingen, Jettingen und Herrenberg. Kurze Wege bedeuten, dass wir auch bei Winterdienst und kurzfristigen Einsätzen zuverlässig vor Ort sind.',
+      text: 'Wir arbeiten im Umkreis von Nagold, unter anderem in Altensteig, Wildberg, Haiterbach, Rohrdorf und Ebhausen, dazu im Gäu rund um Mötzingen, Jettingen und Herrenberg. Kurze Wege heißen: beim Winterdienst und bei kurzfristigen Einsätzen sind wir schnell vor Ort.',
       draft: true,
     },
   ],

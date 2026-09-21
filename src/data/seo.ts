@@ -22,12 +22,12 @@ export const pageSeo = {
   home: {
     title: 'Gebäudereinigung und Hausmeisterservice in Nagold',
     description:
-      'Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Fester Turnus, fester Ansprechpartner.',
+      'Treppenhausreinigung, Fensterreinigung, Hausmeisterdienst, Gartenpflege und Winterdienst für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Fester Turnus, ein Ansprechpartner.',
   },
   leistungen: {
     title: 'Reinigung und Hausmeisterservice in Nagold',
     description:
-      'Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften in Nagold und im Kreis Calw — von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst.',
+      'Acht Leistungen für Hausverwaltungen und Eigentümergemeinschaften in Nagold und im Kreis Calw: von der Treppenhausreinigung über den Hausmeisterdienst bis zum Winterdienst.',
   },
   treppenhausreinigung: {
     title: 'Treppenhausreinigung in Nagold und Kreis Calw',
@@ -37,19 +37,19 @@ export const pageSeo = {
   ueberUns: {
     /* Was the bare word "Über uns" — 28 of the 75 characters, and no place name on the
        one page whose whole subject is where the work happens. */
-    title: 'Über uns — Gebäudeservice aus Nagold',
+    title: 'Über uns: Gebäudeservice aus Nagold',
     description:
-      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg — eigenes Personal, feste Objektbetreuer.',
+      'CO Gebäudeservice betreut Wohn- und Gewerbeobjekte in Nagold, Altensteig, Wildberg, Haiterbach, Rohrdorf, Ebhausen und im Gäu bis Herrenberg. Eigenes Personal, feste Objektbetreuer.',
   },
   kontakt: {
-    title: 'Angebot anfordern — Gebäudeservice Nagold',
+    title: 'Angebot anfordern: Gebäudeservice Nagold',
     description:
       'Objektbesichtigung in Nagold oder im Kreis Calw vereinbaren und ein Angebot zum Festpreis erhalten. Wir melden uns innerhalb von zwei Werktagen mit einem Terminvorschlag.',
   },
   impressum: {
     title: 'Impressum',
     description:
-      'Anbieterkennzeichnung nach § 5 DDG für CO Gebäudeservice, Oguz Cakir, Schietinger Str. 28 in 72202 Nagold — Kontaktdaten und rechtliche Hinweise.',
+      'Anbieterkennzeichnung nach § 5 DDG für CO Gebäudeservice, Oguz Cakir, Schietinger Str. 28 in 72202 Nagold. Kontaktdaten und rechtliche Hinweise.',
   },
   datenschutz: {
     title: 'Datenschutzerklärung',

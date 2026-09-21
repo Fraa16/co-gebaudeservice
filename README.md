@@ -69,6 +69,8 @@ review:
   `border-radius` inside a component style block. Colour and radius live in tokens.
 - `npm run lint:tokens` diffs `src/styles/tokens.css` against `design/tokens.json`.
   Deliberate differences are listed with their reason in `scripts/check-tokens.mjs`.
+- `npm run lint:copy` holds `src/data/` to the tonality rule: no parenthetical dash, no
+  empty marketing phrases, no superlatives, no unverifiable claims.
 
 The test suite covers the rest: no breakpoints in the built CSS, no third-party
 requests, no placeholder contact details in structured data, zero axe violations, and a

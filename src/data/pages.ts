@@ -32,7 +32,7 @@ export const pages = {
     /** Was "Alles rund ums Objekt, aus einer Hand." — a duplicate of the homepage h2,
      *  and like every other h1 on the site it named no place. */
     h1: 'Acht Leistungen für Objekte in Nagold und im Kreis Calw.',
-    lead: 'Einzeln beauftragbar oder als Paket im Dauerauftrag. Turnus, Umfang und Erreichbarkeit legen wir vorab schriftlich fest.',
+    lead: 'Einzeln beauftragbar oder als Paket im Dauerauftrag. Turnus, Umfang und Erreichbarkeit halten wir vorab im Leistungsverzeichnis fest.',
     meta: [
       { label: 'Einsatzgebiet', value: company.areaLong },
       { label: 'Abrechnung', value: 'Festpreis pro Monat' },
@@ -66,7 +66,7 @@ export const pages = {
     /** The page's own h1. It used to reuse content.json's contact.h2, which is also the
      *  ContactSection heading on / and on the Treppenhaus page — so the contact page's
      *  h1 was a phrase two other pages already carried, and named no place. */
-    h1: 'Angebot erhalten — für Objekte in Nagold.',
+    h1: 'Angebot für Ihr Objekt in Nagold.',
     enquiryKicker: 'Anfrage',
     enquiryHeading: 'Sagen Sie uns kurz, um welches Objekt es geht.',
     facts: {

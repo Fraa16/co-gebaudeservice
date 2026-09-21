@@ -1,4 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+/* Read from the file rather than through src/data/content.ts: that module imports the
+   JSON, and Playwright's ESM loader refuses a JSON import without an import attribute
+   that Astro would then choke on. csp.spec.ts reads its inputs the same way. */
+const content = JSON.parse(readFileSync('src/data/content.json', 'utf8'));
 
 test.describe('enquiry form', () => {
   test.beforeEach(async ({ page }) => await page.goto('/kontakt'));
@@ -52,8 +58,11 @@ test.describe('enquiry form', () => {
     await page.getByRole('button', { name: 'Anfrage senden' }).click();
 
     await expect(page.locator('[data-form-success]')).toBeVisible();
+    /* Read from the data, not retyped here. The test's own name says "from
+       content.json", but it held a second copy of the sentence, so the editorial pass
+       that rewrote the copy broke the test rather than being checked by it. */
     await expect(page.locator('[data-form-success]')).toHaveText(
-      'Danke — wir melden uns innerhalb von zwei Werktagen.',
+      content.contact.form.successMessage,
     );
   });
 
