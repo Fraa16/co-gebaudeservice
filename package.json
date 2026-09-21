@@ -30,6 +30,7 @@
     "@astrojs/check": "^0.9.5",
     "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "1.56.1",
+    "qrcode": "^1.5.4",
     "typescript": "^5.9.3"
   },
   "overrides": {
