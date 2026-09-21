@@ -18,11 +18,12 @@ Siehe `vergleich.png`.
 
 **A — Karte auf Grund** (`visitenkarte-karten-druck.pdf`) — **die Empfehlung.**
 Eine gerundete Karte schwebt auf dem Website-Grund, der Grund bleibt als schmaler
-Rahmen sichtbar. Das ist die Struktur der Website selbst: sie ist nicht eine runde
+Rahmen sichtbar. Vorderseite in Navy mit der weißen Signatur, Rückseite hell mit den
+Leistungen. Das ist die Struktur der Website selbst: sie ist nicht eine runde
 Fläche, sondern Karten auf `--co-page`. Kostet bei der Druckerei nichts extra.
 
 Dazu ein praktischer Vorteil, der nichts mit Gestaltung zu tun hat: die dunkle Seite
-läuft nicht mehr bis an den Rand. Bei randabfallendem Dunkel zeigt schon ein halber
+läuft nicht bis an den Rand. Bei randabfallendem Dunkel zeigt schon ein halber
 Millimeter Schnittversatz einen weißen Streifen an der Kante, und abgegriffene Ecken
 werden später hell. Beides kann hier nicht passieren.
 
@@ -77,12 +78,15 @@ die eine Situation, in der die beiden Blautöne als Fehler gelesen würden. Begr
 Zeigt auf `https://co-gebaeudeservice.de`. 29 × 29 Module à 0,41 mm, also über der
 0,4-mm-Grenze, die Druckereien als Minimum angeben. Fehlerkorrektur M.
 
-Das weiße Feld hinter dem Code ist keine Dekoration, sondern die **Ruhezone**, und die
-Spezifikation verlangt dafür vier Module auf jeder Seite. Von Hand gesetzt waren es
-2,7 — sauber dekodierbar aus der Renderdatei und nicht mehr dekodierbar, sobald das
-Bild abgewertet wurde. Das wäre auf gedruckten Karten aufgefallen, nicht vorher. Die
-Feldgröße wird deshalb aus der Modulanzahl des erzeugten Symbols berechnet; wächst die
-URL über die Kapazität dieser Version hinaus, wächst das Feld mit.
+Der Code steht auf der hellen Rückseite, der Grund ist damit selbst die **Ruhezone** —
+die Spezifikation verlangt dafür vier freie Module auf jeder Seite. Der reservierte
+Bereich wird aus der Modulanzahl des erzeugten Symbols berechnet; wächst die URL über
+die Kapazität dieser Version hinaus, wächst er mit. Von Hand gesetzt waren es einmal
+nur 2,7 Module: sauber dekodierbar aus der Renderdatei und nicht mehr dekodierbar,
+sobald das Bild abgewertet wurde — das wäre erst auf gedruckten Karten aufgefallen.
+
+Die angeschnittene Geistermarke liegt bewusst über der **oberen** rechten Ecke. Unten
+rechts lag sie unter dem Code und tönte dessen Ruhezone.
 
 Das Script **bricht ab**, wenn es seinen eigenen QR aus dem fertigen Bild nicht wieder
 dekodieren kann — einmal sauber und einmal bei 3,2 Pixeln pro Modul mit Weichzeichner,
@@ -95,6 +99,6 @@ QR-Code lässt sich nicht nachbessern.
 ## Wenn sich etwas ändert
 
 Nummer, Adresse oder Leistungen ändern sich in `src/data/`, dann das Script neu laufen
-lassen. Das Layout steht in `scripts/build-business-card.mjs`; die vertikalen Maße der
-Rückseite sind auf die 42 mm Inhaltshöhe der engeren Variante gerechnet und dort
-kommentiert.
+lassen. Das Layout steht in `scripts/build-business-card.mjs` und ist auf die 42 mm
+Inhaltshöhe der engeren Variante gerechnet — die Kommentare dort nennen die Maße, weil
+genau diese Summe schon zweimal die Ursache eines Layoutfehlers war.

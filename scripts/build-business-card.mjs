@@ -168,34 +168,88 @@ const css = (L) => `
   }
   .panel--back { background: ${INK}; color: ${WHITE}; }
 
-  /* Front ---------------------------------------------------------------- */
-  /* Everything hangs off one left edge. The earlier version split the face into two
-     tidy columns with a hairline and a footer row underneath — which is the layout
-     every business-card generator produces, and it read like one. */
-  .panel--front { justify-content: space-between; }
+  /* Front — the ink face ------------------------------------------------- */
+  /* The light face led before and was the one that did not land. The dark one drew no
+     complaint, so it leads now: a navy card with the white signature reads as the more
+     considered object, and it moves the QR onto the light face where it needs no white
+     box of its own.
+     The composition is deliberately conventional — signature above, two bottom-aligned
+     groups below. A business card is not a poster, and a 16pt phone number was a flyer
+     gesture. What separates a professional card from a generated one is precision:
+     shared baselines, restrained steps, one accent used once. */
+  .panel--front { background: ${INK}; color: ${WHITE}; justify-content: space-between; }
 
-  /* 34 mm, not 40. The three blocks on this face summed to 38 of the 42 mm the tighter
-     layout leaves, so space-between had under 2 mm per gap to work with and the whole
-     column crowded against the top. The air has to be earned first. */
-  .lockup { width: 34mm; display: block; }
+  .lockup { width: 39mm; display: block; }
 
-  .front__call { display: block; }
-  /* The site's voice is scale contrast — 80px display against 11px kickers, about 8:1.
-     The first card ran 11.5pt against 5.6pt, barely 2:1, which is why every element
-     looked equally important and therefore inert. This is the number the card is kept
-     for, so it gets the display size and everything else gets out of its way. */
-  .tel {
+  .front__body { display: flex; align-items: flex-end; justify-content: space-between; gap: 5mm; }
+
+  .who { flex: 1 1 auto; min-width: 0; }
+  .who__name {
     font-family: Archivo, sans-serif;
     font-weight: 700;
-    font-size: 16pt;
-    line-height: 1;
-    letter-spacing: -0.035em;
-    color: ${INK};
+    font-size: 10.5pt;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: ${WHITE};
   }
-  /* Under the number, not above it. Above, it landed directly beneath the logo's own
-     "HAUSMEISTER & REINIGUNG" and the two letterspaced caps lines read as one block. */
+  .who__role {
+    margin-top: 1.2mm;
+    font-size: 5pt;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: ${CYAN};
+  }
+
+  .contact {
+    flex: none;
+    text-align: right;
+    font-size: 6.6pt;
+    line-height: 1.5;
+    color: ${ICE};
+  }
+  /* One step up for the number — the detail most often read off a card — and no more.
+     The old 16pt against 5pt was contrast for its own sake. */
+  .contact .tel {
+    font-size: 8.4pt;
+    font-weight: 600;
+    line-height: 1.25;
+    color: ${WHITE};
+  }
+  .contact .site { font-weight: 600; color: ${WHITE}; }
+  .contact .via {
+    margin-bottom: 1.6mm;
+    font-size: 5pt;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: ${CYAN};
+  }
+
+  /* Back — the light face ------------------------------------------------ */
+  .panel--back {
+    position: relative;
+    background: ${WHITE};
+    color: ${INK};
+    ${L.border ? `border: 0.2mm solid ${LINE};` : ''}
+  }
+
+  /* The site's move: an oversized mark cropped by the edge. Over the *top* right corner,
+     the way the step cards carry their ghost numerals — not the bottom, where it ran
+     under the QR and tinted the quiet zone. Masking it with a white tile instead just
+     punched a visible hole in the mark. */
+  .ghost {
+    position: absolute;
+    right: -9mm;
+    top: -8mm;
+    width: 34mm;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+
+  .back__inner { position: relative; display: flex; flex-direction: column; height: 100%; }
+
   .kicker-line {
-    margin-top: 1.6mm;
     font-size: 5pt;
     font-weight: 600;
     letter-spacing: 0.2em;
@@ -204,55 +258,20 @@ const css = (L) => `
   }
   .kicker-line b { color: ${CYAN}; font-weight: 600; }
 
-  .front__details {
-    font-size: 6.5pt;
-    line-height: 1.45;
-    color: ${MUTED};
-  }
-  .front__details .who {
-    font-weight: 600;
-    font-size: 7.4pt;
-    color: ${INK};
-  }
-  .front__details .site { font-weight: 600; color: ${INK}; }
-
-  /* Back ----------------------------------------------------------------- */
-  .panel--back { position: relative; }
-
-  /* The site puts an oversized mark behind its ink sections and lets it run off the
-     edge — 190px numerals at 0.14, a 130px wordmark at 0.11. Same move, same weight. */
-  .ghost {
-    position: absolute;
-    right: -13mm;
-    bottom: -9mm;
-    width: 50mm;
-    opacity: 0.13;
-    pointer-events: none;
-  }
-
-  .back__inner { position: relative; display: flex; flex-direction: column; height: 100%; }
-
-  .back__head { display: flex; align-items: baseline; justify-content: space-between; gap: 4mm; }
-  /* Cyan, so the accent still lands on this face now that the separators are gone. */
-  .back__head .kicker-line { margin: 0; color: ${CYAN}; }
-
-  /* A dense typographic block, not a bulleted list — two columns of dotted items was
-     the other thing that made the first card look generated.
-     Set as a wrapping row with real gaps rather than a run separated by middots: with
-     separators, three of the four lines ended on one, which reads as a mistake. Nothing
-     to strand this way, and each item stays unbreakable. */
+  /* A wrapping block of small caps rather than a bulleted list. Separators were tried
+     and dropped: three of four lines ended on a middot, which reads as a mistake. */
   .services {
-    margin-top: 3.4mm;
+    margin-top: 3.2mm;
     display: flex;
     flex-wrap: wrap;
-    column-gap: 4.2mm;
-    row-gap: 2.6mm;
-    font-size: 7pt;
+    column-gap: 3.8mm;
+    row-gap: 2.3mm;
+    font-size: 6.6pt;
     font-weight: 600;
     line-height: 1.15;
-    letter-spacing: 0.055em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: ${WHITE};
+    color: ${INK};
   }
   .services span { white-space: nowrap; }
 
@@ -263,17 +282,19 @@ const css = (L) => `
     justify-content: space-between;
     gap: 4mm;
   }
-  .back__where { font-size: 6.2pt; line-height: 1.5; color: ${ICE}; }
-  .back__where .site { display: block; font-weight: 600; font-size: 7.6pt; color: ${WHITE}; }
+  .back__where { font-size: 6.4pt; line-height: 1.5; color: ${MUTED}; }
+  .back__where .site { display: block; font-weight: 600; font-size: 7.4pt; color: ${INK}; }
 
-  /* The QR sits on white: inverted codes read unreliably. The panel is the code plus
-     four modules of quiet zone on each side — see QR_PANEL_MM. */
+  /* White on white, so it draws nothing — but it does mask the ghost mark, which would
+     otherwise tint the quiet zone the code needs left clear. The box stays QR_PANEL_MM
+     so those four clear modules are reserved whatever sits behind it. */
+  /* No tile: on the light face the ground is the quiet zone, and the ghost is kept out
+     of this corner so it stays clear. The box is still QR_PANEL_MM, so the four clear
+     modules the spec asks for are reserved. */
   .qr {
     flex: none;
     width: ${QR_PANEL_MM.toFixed(2)}mm;
     height: ${QR_PANEL_MM.toFixed(2)}mm;
-    background: ${WHITE};
-    border-radius: 1.4mm;
     display: grid;
     place-items: center;
   }
@@ -283,27 +304,28 @@ const css = (L) => `
 const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style>${css(L)}</style><body>
 
 <section class="card"><div class="panel panel--front">
-  <img class="lockup" src="${dataSvg('public/logo.svg')}" alt="">
+  <img class="lockup" src="${dataSvg('public/logo-invert.svg')}" alt="">
 
-  <div class="front__call">
-    <p class="tel">${phone}</p>
-    <p class="kicker-line">Telefon <b>&middot;</b> WhatsApp</p>
+  <div class="front__body">
+    <div class="who">
+      <p class="who__name">${owner.name}</p>
+      <p class="who__role">${owner.role}</p>
+    </div>
+
+    <div class="contact">
+      <p class="via">Telefon &middot; WhatsApp</p>
+      <p class="tel">${phone}</p>
+      <p>${email}</p>
+      <p>${address}</p>
+      <p class="site">${site}</p>
+    </div>
   </div>
-
-  <p class="front__details">
-    <span class="who">${owner.name}</span>, ${owner.role}<br>
-    ${email}<br>
-    ${address}<br>
-    <span class="site">${site}</span>
-  </p>
 </div></section>
 
 <section class="card"><div class="panel panel--back">
-  <img class="ghost" src="${dataSvg('public/mark-invert.svg')}" alt="" aria-hidden="true">
+  <img class="ghost" src="${dataSvg('public/mark.svg')}" alt="" aria-hidden="true">
   <div class="back__inner">
-    <div class="back__head">
-      <p class="kicker-line">Leistungen</p>
-    </div>
+    <p class="kicker-line">Leistungen</p>
 
     <p class="services">
       ${allServices.map((s) => `<span>${s.toUpperCase()}</span>`).join('\n      ')}
