@@ -37,6 +37,20 @@ if (form) {
     syncChips();
   });
 
+  /* Arriving from a service: /kontakt?leistung=gartenpflege#anfrage preselects that
+     chip. Every page is prerendered, so the query string can only be read here; without
+     JS the chips simply start empty, which is what they did before. Several are
+     accepted, because someone who wants two of them should be able to link to both. */
+  const wanted = new URLSearchParams(location.search).getAll('leistung').flatMap((v) => v.split(','));
+  if (wanted.length && chipWrap) {
+    for (const slug of wanted) {
+      chipWrap
+        .querySelector<HTMLButtonElement>(`[data-chip-slug="${CSS.escape(slug.trim())}"]`)
+        ?.setAttribute('aria-pressed', 'true');
+    }
+    syncChips();
+  }
+
   // --- validation ----------------------------------------------------------
   const showError = (field: string, message: string) => {
     const slot = form.querySelector<HTMLElement>(`[data-error-for="${field}"]`);

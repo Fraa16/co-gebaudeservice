@@ -9,7 +9,7 @@ const { fields, submitLabel, successMessage } = contact.form;
 /** content.json still lists the original five services here, so the form offered five
  *  chips on a site that advertises eight — someone wanting Kellerreinigung had nowhere
  *  to say so. The catalogue is the single source of truth for what can be asked for. */
-const serviceOptions = allServices.map((service) => service.title);
+const serviceOptions = allServices.map((s) => ({ value: s.title, slug: s.slug }));
 
 const field = (name: string) => fields.find((f) => f.name === name)!;
 const text = field('name');

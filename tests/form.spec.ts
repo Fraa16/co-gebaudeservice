@@ -89,3 +89,34 @@ test('no page makes a request to any third-party origin', async ({ page, baseURL
 
   expect(external, 'third-party requests break the privacy promise').toEqual([]);
 });
+
+test('an enquiry link from a service opens the form with that service chosen', async ({ page }) => {
+  /* Someone who reads about Gartenpflege and then presses "Angebot anfordern" should
+     not have to name it again. The CTA carries ?leistung=<slug>; every page is
+     prerendered, so only the client can read it. Without JS the chips just start
+     empty, which is what they did before. */
+  await page.goto('/leistungen');
+  const cta = page
+    .locator('#gartenpflege a[href*="/kontakt"]')
+    .first();
+  await expect(cta, 'the service row carries a service-specific enquiry link').toHaveAttribute(
+    'href',
+    /leistung=gartenpflege/,
+  );
+
+  await cta.click();
+  const chosen = page.locator('.co-chip[aria-pressed="true"]');
+  await expect(chosen).toHaveText(['Gartenpflege']);
+  // And it reaches the payload, not just the pressed state.
+  await expect(page.locator('[data-chip-mirror]')).toHaveValue('Gartenpflege');
+});
+
+test('an unknown or absent service leaves the chips alone', async ({ page }) => {
+  for (const query of ['', '?leistung=', '?leistung=gibtesnicht']) {
+    await page.goto(`/kontakt${query}#anfrage`);
+    await expect(
+      page.locator('.co-chip[aria-pressed="true"]'),
+      `"${query}" must not preselect anything`,
+    ).toHaveCount(0);
+  }
+});

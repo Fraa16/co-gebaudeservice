@@ -9,7 +9,10 @@ import { legalNav } from '../data/nav';
   <p class="site-footer__wordmark" aria-hidden="true">CO Gebäudeservice</p>
 
   <div class="site-footer__top">
-    <Logo href="/" tone="onDark" variant="lockup" height={78} />
+    <div class="site-footer__brand">
+      <Logo href="/" tone="onDark" variant="lockup" height={78} />
+      <p class="site-footer__blurb">{footer.blurb}</p>
+    </div>
 
     <address class="site-footer__address">
       {company.address.display}<br />
@@ -43,6 +46,11 @@ import { legalNav } from '../data/nav';
     position: relative;
     overflow: hidden;
     padding: clamp(28px, 3.4vw, 44px);
+    /* The WhatsApp button floats 56px tall in the bottom-right corner and was cutting
+       into the end of "Datenschutz" when the page is scrolled to the foot. The link
+       stayed clickable, but a legally required link should not sit under a button.
+       Room for the button plus its own gutter. */
+    padding-bottom: calc(clamp(28px, 3.4vw, 44px) + 56px + var(--co-page-padding));
   }
   /* Oversized wordmark as a ground, as both references close with. */
   .site-footer__wordmark {
@@ -66,6 +74,22 @@ import { legalNav } from '../data/nav';
     padding-bottom: 28px;
     border-bottom: 1px solid var(--co-on-dark-divider);
   }
+  /* The signature and the line under it read as one block, so they travel together
+     when the row wraps instead of the text drifting under the address column. */
+  .site-footer__brand {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    flex: 1 1 min(380px, 100%);
+    min-width: 0;
+  }
+  .site-footer__blurb {
+    max-width: 44ch;
+    font: 400 15px/1.6 var(--co-font-body);
+    color: var(--co-pale);
+    text-wrap: pretty;
+  }
+
   .site-footer__address {
     font: 400 16px/1.75 var(--co-font-body);
     font-style: normal;

@@ -1,15 +1,24 @@
 ---
 import { allServices } from '../../data/services';
 import { company } from '../../data/company';
-import { detail } from '../../data/content';
 
-/** The reference stat band: large figures separated by hairlines. Every value here
- *  is factual — drawn from content.json and the service list — rather than an
- *  invented metric. The CI tonality rule forbids claims we cannot stand behind. */
+/** The reference stat band: large figures separated by hairlines. Every value is
+ *  factual rather than an invented metric; the CI tonality rule forbids claims we
+ *  cannot stand behind.
+ *
+ *  Two of the four used to be read out of a list by position: `areaServed[1]` and
+ *  `detail.infoCard.facts[0]`. Both broke silently. Extending the Einsatzgebiet to ten
+ *  towns turned the "Einsatzgebiet" figure into "Ebhausen" — the second town in the
+ *  array — and the Turnus figure was "Wöchentlich oder 14-tägig", which is a sentence
+ *  where the band wants a headline. Positional access into copy is how a display value
+ *  changes without anyone editing the display. These are written out.
+ *
+ *  Values stay short because this row sets them at up to 34px. Detail belongs in the
+ *  label underneath, at 14px, which is why the Turnus reads the other way round now. */
 const stats = [
   { value: String(allServices.length), label: 'Leistungsbereiche' },
-  { value: detail.infoCard.facts[0]?.value ?? '', label: 'Turnus nach Plan' },
-  { value: company.areaServed[1] ?? '', label: 'Einsatzgebiet' },
+  { value: 'Fester Turnus', label: 'Wöchentlich oder 14-tägig' },
+  { value: company.district, label: 'Einsatzgebiet' },
   { value: 'Zwei Werktage', label: 'Rückmeldung auf Anfragen' },
 ];
 ---

@@ -2,7 +2,10 @@
 interface Props {
   name: string;
   label: string;
-  options: string[];
+  /** `value` is what the enquiry carries; `slug` is what a link can name. The two are
+   *  separate because the value is German prose with umlauts and spaces, which has no
+   *  business in a URL. */
+  options: readonly { value: string; slug: string }[];
 }
 const { name, label, options } = Astro.props;
 ---
@@ -12,8 +15,14 @@ const { name, label, options } = Astro.props;
   <div class="chip-group__chips" data-chip-group={name}>
     {
       options.map((option) => (
-        <button class="co-chip" type="button" aria-pressed="false" data-chip-value={option}>
-          {option}
+        <button
+          class="co-chip"
+          type="button"
+          aria-pressed="false"
+          data-chip-value={option.value}
+          data-chip-slug={option.slug}
+        >
+          {option.value}
         </button>
       ))
     }

@@ -43,11 +43,16 @@ const flipped = index % 2 === 1;
 
     {service.draft && <DraftNote what={`Beschreibung und Leistungsumfang „${service.title}"`} />}
 
+    <!-- The enquiry CTA carries the service it sits under, so the form opens with this
+         chip already chosen. Someone who reads about Gartenpflege and then asks for a
+         quote should not have to name it again two clicks later. -->
     <div class="service-row__actions">
       {service.href ? (
         <Button href={service.href} variant="primary" arrow>Mehr zur Leistung</Button>
       ) : (
-        <Button href="/kontakt#anfrage" variant="quiet" arrow>Angebot anfordern</Button>
+        <Button href={`/kontakt?leistung=${service.slug}#anfrage`} variant="quiet" arrow>
+          Angebot anfordern
+        </Button>
       )}
     </div>
   </div>

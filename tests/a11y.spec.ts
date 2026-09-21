@@ -57,3 +57,25 @@ test('the active nav link is marked aria-current', async ({ page }) => {
   await expect(current).toHaveCount(1);
   await expect(current).toHaveText('Leistungen');
 });
+
+test('the floating WhatsApp button never covers the legal links', async ({ page }) => {
+  /* Impressum and Datenschutz are legally required to be reachable. The button is
+     fixed in the bottom-right corner, so at the foot of the page it sat over the end
+     of "Datenschutz" — clickable at its centre, but not something to ship. */
+  for (const width of [1440, 1200, 768, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('/');
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const overlaps = await page.evaluate(() => {
+      const wa = document.querySelector('a[href*="wa.me"]');
+      const links = [...document.querySelectorAll('.site-footer__legal a')];
+      if (!wa || !links.length) return false;
+      const a = wa.getBoundingClientRect();
+      return links.some((el) => {
+        const c = el.getBoundingClientRect();
+        return !(a.right < c.left || a.left > c.right || a.bottom < c.top || a.top > c.bottom);
+      });
+    });
+    expect(overlaps, `${width}px: the button overlaps a legal link`).toBe(false);
+  }
+});

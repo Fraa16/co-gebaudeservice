@@ -72,9 +72,15 @@ const LABEL = 'CO Gebäudeservice';
 
 /** Ink bounding box in user units, by rendering 1:1 with the viewBox and scanning alpha.
  *  Anything under the threshold is antialiasing spill, not drawing. */
-async function inkBox(file) {
-  const source = readFileSync(file);
-  const box = viewBox(source.toString('utf8'));
+async function inkBox(file, transform) {
+  const raw = readFileSync(file, 'utf8');
+  const box = viewBox(raw);
+  const source = transform
+    ? Buffer.from(
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.x} ${box.y} ${box.w} ${box.h}">` +
+          `${transform(file, 'm-')}</svg>`,
+      )
+    : readFileSync(file);
   const { data, info } = await sharp(source)
     .resize(Math.round(box.w), Math.round(box.h), {
       fit: 'fill',
@@ -115,6 +121,23 @@ function body(file, prefix) {
   return inner
     .replace(/\bid="([^"]+)"/g, (_, id) => `id="${prefix}${id}"`)
     .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${prefix}${id})`);
+}
+
+/** The mark minus its letters: the two wave strokes on their own.
+ *
+ *  The exporter happens to put each element in its own clipped group, so this is a
+ *  removal rather than a redraw: clip `b` holds the CO, `c` the cyan stroke and `d` the
+ *  navy one. Dropping `b` leaves the wave, which the CI sheet calls the Wisch- und
+ *  Reinigungszug — the one element of the mark that means something on its own and can
+ *  therefore be used as an accent without reading as a chopped-up logo.
+ *
+ *  Both colourways come from their own source file, so the dark variant's second stroke
+ *  is white rather than a navy that vanishes on an ink card. */
+function waveOnly(file, prefix) {
+  return body(file, prefix).replace(
+    new RegExp(`<g clip-path="url\\(#${prefix}b\\)">[\\s\\S]*?</g>`),
+    '',
+  );
 }
 
 /** One artwork, one colourway, cropped to `box`. */
@@ -159,6 +182,18 @@ writeFileSync('public/logo.svg', shrink(conditioned(SOURCES.lockup.onLight, lock
 writeFileSync('public/logo-invert.svg', shrink(conditioned(SOURCES.lockup.onDark, lockupBox, 'li-')));
 writeFileSync('public/mark.svg', shrink(conditioned(SOURCES.mark.onLight, markBox, 'm-')));
 writeFileSync('public/mark-invert.svg', shrink(conditioned(SOURCES.mark.onDark, markBox, 'mi-')));
+
+/* The wave on its own, for use as an accent. Measured like everything else rather than
+   cropped to a guess; the box is the same for both colourways so they are swappable. */
+const waveBox = await inkBox(SOURCES.mark.onLight, (f, p) => waveOnly(f, p));
+const wave = (file, prefix) =>
+  shrink(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${round(waveBox.x)} ${round(waveBox.y)} ` +
+      `${round(waveBox.w)} ${round(waveBox.h)}" role="img" aria-label="${LABEL}">` +
+      `${waveOnly(file, prefix)}</svg>\n`,
+  );
+writeFileSync('public/wave.svg', wave(SOURCES.mark.onLight, 'w-'));
+writeFileSync('public/wave-invert.svg', wave(SOURCES.mark.onDark, 'wi-'));
 
 /* The favicon carries both colourways and switches on the tab bar's own theme. The mark
  * has no ground of its own, so a single navy version vanishes in a dark tab — and a

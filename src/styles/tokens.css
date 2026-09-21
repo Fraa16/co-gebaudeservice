@@ -205,7 +205,12 @@ a:hover { color: var(--co-ink); }
 }
 
 .co-btn {
-  display: inline-block;
+  /* inline-flex, not inline-block: in a row where a taller sibling stretches the box
+     (the arrow variant is 60px because of its 30px circle), an inline-block kept its
+     label at the top of the stretched pill. Measured 12px above and 27px below. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   border-radius: var(--co-radius-pill);
   padding: var(--co-button-padding);

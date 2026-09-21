@@ -89,6 +89,7 @@ export const contentSchema = z.object({
   }),
   footer: z.object({
     meta: z.string(),
+    blurb: z.string(),
     links: z.array(z.string()),
   }),
   tone: z.array(z.string()),

@@ -268,15 +268,19 @@ button, input, textarea, select { font: inherit; color: inherit; }
      or the page ground (4.13:1 — fails AA). Deep text clears all three at 8:1. */
   color: var(--co-deep-text);
 }
+/* The rule after a kicker is the brand's own Wisch- und Reinigungszug rather than a
+   generic hairline. An explicit height is required: a flex item sized only by
+   aspect-ratio has no definite basis and resolves to 0×0. `contain` then fits the
+   5.1:1 artwork inside whatever width is left over. */
 .co-kicker::after {
   content: '';
   flex: 1 1 auto;
-  height: 1px;
-  background: var(--co-line);
-  max-width: 120px;
+  max-width: 116px;
+  height: 20px;
+  background: url('/wave.svg') left center / contain no-repeat;
 }
 .co-card--ink .co-kicker { color: var(--co-ice); }
-.co-card--ink .co-kicker::after { background: var(--co-on-dark-divider); }
+.co-card--ink .co-kicker::after { background-image: url('/wave-invert.svg'); }
 
 .co-kicker__num {
   font-variant-numeric: tabular-nums;

@@ -39,6 +39,11 @@ export const company = {
     'Kreis Calw',
   ],
 
+  /** The district, by name. Anything that wants "Kreis Calw" reads this rather than
+   *  picking an entry out of areaServed, which is an ordered list of towns that has
+   *  already grown once. */
+  district: 'Kreis Calw',
+
   address: {
     verified: true,
     street: 'Schietinger Str. 28',
