@@ -6,7 +6,7 @@ import { legalNav } from '../data/nav';
 ---
 
 <footer class="co-card co-card--ink co-grain site-footer">
-  <p class="site-footer__wordmark" aria-hidden="true">CO Gebäudeservice</p>
+  <div class="site-footer__wordmark" aria-hidden="true"></div>
 
   <div class="site-footer__top">
     <div class="site-footer__brand">
@@ -53,15 +53,17 @@ import { legalNav } from '../data/nav';
     padding-bottom: calc(clamp(28px, 3.4vw, 44px) + 56px + var(--co-page-padding));
   }
   /* Oversized wordmark as a ground, as both references close with. */
+  /* The logo's own lettering, not a typeface that resembles it. This was "CO
+     Gebäudeservice" set in Archivo at 130px, so the largest piece of brand type on the
+     site showed a face the logo does not use. It is now the word cut out of the
+     lockup itself — see public/wordmark-invert.svg, generated from brand/. */
   .site-footer__wordmark {
-    font: 700 clamp(38px, 8.4vw, 130px) / 0.9 var(--co-font-heading);
-    letter-spacing: -0.05em;
-    color: var(--co-ice);
+    width: min(100%, 1040px);
+    aspect-ratio: 1090 / 103;
+    background: url('/wordmark-invert.svg') left center / contain no-repeat;
     opacity: 0.11;
     margin-bottom: clamp(20px, 3vw, 42px);
     pointer-events: none;
-    user-select: none;
-    text-wrap: nowrap;
   }
   .site-footer__top,
   .site-footer__bottom { position: relative; }

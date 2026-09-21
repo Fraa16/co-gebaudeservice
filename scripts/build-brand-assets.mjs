@@ -108,6 +108,52 @@ async function inkBox(file, transform) {
   return { x: box.x + minX, y: box.y + minY, w: maxX - minX + 1, h: maxY - minY + 1 };
 }
 
+/** The Nth horizontal band of ink in a file, counted from the top.
+ *
+ *  The lockup stacks three: the CO with the roofline, the word "Gebäudeservice", and
+ *  the descriptor. They are separated by clear rows, so a band is found rather than
+ *  guessed — and the groups inside the file are nested, so isolating one by dropping
+ *  its siblings does not work here the way it does for the mark.
+ *
+ *  Used for the footer's ghost, which was set in Archivo and therefore showed a
+ *  typeface the logo does not use. */
+async function inkBand(file, index) {
+  const raw = readFileSync(file, 'utf8');
+  const box = viewBox(raw);
+  const w = Math.round(box.w);
+  const h = Math.round(box.h);
+  const { data } = await sharp(readFileSync(file))
+    .resize(w, h, { fit: 'fill', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const inked = (x, y) => data[(y * w + x) * 4 + 3] > 8;
+
+  const bands = [];
+  let open = false;
+  for (let y = 0; y < h; y++) {
+    let has = false;
+    for (let x = 0; x < w && !has; x++) if (inked(x, y)) has = true;
+    if (has && !open) bands.push({ y0: y, y1: y });
+    else if (has) bands[bands.length - 1].y1 = y;
+    open = has;
+  }
+  const band = bands[index];
+  if (!band) throw new Error(`${file} has no ink band ${index}`);
+
+  let x0 = Infinity;
+  let x1 = -1;
+  for (let y = band.y0; y <= band.y1; y++) {
+    for (let x = 0; x < w; x++) {
+      if (inked(x, y)) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+      }
+    }
+  }
+  return { x: box.x + x0, y: box.y + band.y0, w: x1 - x0 + 1, h: band.y1 - band.y0 + 1 };
+}
+
 function viewBox(svg) {
   const m = /viewBox="([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)"/.exec(svg);
   if (!m) throw new Error('no viewBox');
@@ -220,6 +266,15 @@ const letters = (file, prefix) =>
   );
 writeFileSync('public/co.svg', letters(SOURCES.mark.onLight, 'c-'));
 writeFileSync('public/co-invert.svg', letters(SOURCES.mark.onDark, 'ci-'));
+
+/* The word "Gebäudeservice" in the logo's own lettering, for the footer's ghost. Band 1
+   of the lockup, counted from the top: 0 is the CO and roofline, 2 the descriptor. */
+const wordBox = await inkBand(SOURCES.lockup.onLight, 1);
+writeFileSync('public/wordmark.svg', shrink(conditioned(SOURCES.lockup.onLight, wordBox, 'g-')));
+writeFileSync(
+  'public/wordmark-invert.svg',
+  shrink(conditioned(SOURCES.lockup.onDark, wordBox, 'gi-')),
+);
 
 /* The favicon carries both colourways and switches on the tab bar's own theme. The mark
  * has no ground of its own, so a single navy version vanishes in a dark tab — and a
