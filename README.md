@@ -26,7 +26,7 @@ src/
 design/           the original handoff: prototypes, screenshots, tokens.json, the PDF
 scripts/          the two design-rule gates + the brand-asset generator
 brand/            the delivered logo vectors — source for everything in public/
-brand/visitenkarte/  the printable business card, in two layouts, from src/data/
+brand/visitenkarte/  the business card; druck/ holds the print-ready CMYK PDFs
 tests/            Playwright specs
 ```
 

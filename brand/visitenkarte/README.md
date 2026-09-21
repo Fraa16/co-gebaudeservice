@@ -3,7 +3,9 @@
 Erzeugt aus denselben Daten, aus denen die Website rendert:
 
 ```
-node scripts/build-business-card.mjs
+node scripts/build-business-card.mjs    # Layout und Vorschauen
+node scripts/build-print-pdf.mjs        # Druckdateien (braucht Ghostscript)
+node scripts/build-print-spec.mjs       # Datenblatt für die Druckerei
 ```
 
 Name, Telefonnummer, Anschrift und die acht Leistungen stehen nirgends in diesem
@@ -12,93 +14,91 @@ Eine Karte mit eigener Kopie der Telefonnummer ist genau der Fehler, gegen den a
 Website `contactRoutes` eingeführt wurde, nur auf Papier, wo er sich nicht mehr
 korrigieren lässt.
 
-## Zwei Layouts zur Auswahl
+## Was an die Druckerei geht
 
-Siehe `vergleich.png`.
+Alles in **`druck/`**, sonst nichts:
 
-**A — Karte auf Grund** (`visitenkarte-karten-druck.pdf`) — **die Empfehlung.**
-Eine gerundete Karte schwebt auf dem Website-Grund, der Grund bleibt als schmaler
-Rahmen sichtbar. Vorderseite in Navy mit der weißen Signatur, Rückseite hell mit den
-Leistungen. Das ist die Struktur der Website selbst: sie ist nicht eine runde
-Fläche, sondern Karten auf `--co-page`. Kostet bei der Druckerei nichts extra.
-
-Dazu ein praktischer Vorteil, der nichts mit Gestaltung zu tun hat: die dunkle Seite
-läuft nicht bis an den Rand. Bei randabfallendem Dunkel zeigt schon ein halber
-Millimeter Schnittversatz einen weißen Streifen an der Kante, und abgegriffene Ecken
-werden später hell. Beides kann hier nicht passieren.
-
-**B — flächig bis zum Rand** (`visitenkarte-flaechig-druck.pdf`).
-Farbe bis an die Schnittkante. Zur runden Formensprache der Website wird das erst mit
-**gestanzten Ecken** — siehe `ecken-gestanzt.png`, dort mit 3 mm Radius dargestellt.
-Die meisten deutschen Online-Druckereien bieten das an, gegen Aufpreis und mit
-längerer Produktionszeit.
-
-A und Stanzung zusammen wäre doppelt gemoppelt: dann rahmt eine runde Karte eine runde
-Karte. Eins von beidem.
-
-## Dateien
-
-| Datei | Wofür |
+| Datei | |
 |---|---|
-| `visitenkarte-karten-druck.pdf` | **Druckdatei Variante A.** 2 Seiten, 91 × 61 mm |
-| `visitenkarte-flaechig-druck.pdf` | Druckdatei Variante B |
-| `karten-vorne.png` / `karten-hinten.png` | 300 dpi, auf Endformat beschnitten |
-| `flaechig-vorne.png` / `flaechig-hinten.png` | dasselbe für B |
-| `karten-kontrolle.png` / `flaechig-kontrolle.png` | mit Schnittkante und Sicherheitsabstand |
-| `ecken-gestanzt.png` | B mit 3 mm gestanzten Ecken |
-| `vergleich.png` | alles nebeneinander |
+| `CO-Visitenkarte-CMYK.pdf` | 91 × 61 mm, ohne Schnittmarken |
+| `CO-Visitenkarte-CMYK-Schnittmarken.pdf` | 101 × 71 mm, mit Schnittmarken |
+| `DRUCKDATENBLATT.pdf` | Eine Seite, deutsch und englisch |
 
-## Was die Druckerei wissen muss
+Beide PDFs zeigen dasselbe Layout. Welches gebraucht wird, hängt von der Druckerei ab:
+wer selbst ausschießt, will die Datei ohne Marken; eine kleinere Druckerei will sie
+meist mit. Das Datenblatt erklärt beides, damit niemand nachfragen muss.
 
-- **Endformat 85 × 55 mm** (deutsches Standardformat).
-- **3 mm Beschnitt umlaufend**, deshalb 91 × 61 mm Seitengröße. Keine Schnittmarken —
-  so wollen es Flyeralarm, WIRmachenDRUCK und die meisten anderen Online-Druckereien.
-- **Sicherheitsabstand 4 mm** ab Schnittkante, wird eingehalten.
-- 2 Seiten: Seite 1 vorne, Seite 2 hinten.
-- Empfehlung: 350 g/m², matt. Auf Naturpapier wird das Navy deutlich flauer.
-- Für B zusätzlich: gestanzte Ecken, Radius 3 mm — falls gewünscht.
+Der Ordner enthält bewusst **nur eine Gestaltung**. Die flächige Variante bleibt als
+Alternative im übergeordneten Verzeichnis; ein Ordner, der an eine Druckerei geht,
+sollte keine Auswahl enthalten, die dort getroffen werden könnte.
 
-## Farbe — der eine Punkt, der Aufmerksamkeit braucht
+## Was die Dateien mitbringen
 
-**Die Datei ist RGB, nicht CMYK.** Die Druckerei konvertiert gegen das Profil des
-Papiers; anders geht es nicht sinnvoll, weil die Umrechnung vom Bedruckstoff abhängt.
+- **Endformat 85 × 55 mm**, 3 mm Beschnitt umlaufend.
+- **TrimBox und BleedBox auf beiden Seiten gesetzt.** Ohne sie muss eine Druckerei
+  raten, wo im 91-mm-Bogen die 85-mm-Karte liegt.
+- **CMYK**, kein RGB.
+- **Schriften in Kurven.** Keine eingebettete Schrift, also nichts, was ersetzt,
+  falsch geladen oder unterschiedlich interpretiert werden kann.
+- **Keine Transparenz.**
+- Maximaler Farbauftrag **295 %**.
 
-Wichtig dabei: `#010E40` ist ein sehr dunkles, gesättigtes Blau. Im Vierfarbdruck
-verliert es Tiefe, auf ungestrichenem Papier sichtbar. Wer das vermeiden will, lässt
-das Navy als **Sonderfarbe** drucken oder bittet um einen **Proof** vor der Auflage.
-Beides kostet extra und lohnt erst ab größeren Mengen.
+## Drei Dinge, die vorher nicht stimmten
 
-Das Navy ist bewusst `#010E40` (der Wert aus der Logodatei) und nicht `--co-ink`
-`#03045E` der Website. Auf der Karte liegt das Logo direkt auf dieser Fläche — das ist
-die eine Situation, in der die beiden Blautöne als Fehler gelesen würden. Begründung in
-`brand/README.md`.
+Der Weg vom Browser-PDF zur Druckdatei hat drei Fehler zutage gefördert, die alle am
+Bildschirm unsichtbar waren:
+
+**Type3-Schriften.** Chromium kann eine Variable Font nicht als normalen Subset
+unterbringen und legt die Glyphen stattdessen als Type3-Zeichenprozeduren ab. Die
+Zeichnung ist vollständig, aber Type3 ist der Klassiker unter den Vorstufenproblemen.
+`-dNoOutputFonts` wandelt jede Glyphe in einen Pfad, damit bleibt keine Schrift übrig.
+
+**Transparenz.** Die Geistermarke auf der Rückseite lag bei 10 % Deckkraft und war die
+einzige Stelle der Datei mit Transparenz. Wie ein fremdes RIP das flachrechnet, wollen
+wir nicht auf gedruckten Karten erfahren — die Farbe wird jetzt vorab ausgerechnet und
+deckend gezeichnet. Am Bildschirm identisch.
+
+**Defekte Querverweistabelle.** Die Seitenboxen werden direkt in die Seitenobjekte
+geschrieben, und damit stimmt jeder Byte-Versatz dahinter nicht mehr. Ghostscript
+repariert so etwas stillschweigend, weshalb es gefährlich ist: hier liest es sauber und
+wird anderswo abgelehnt. Ein zweiter pdfwrite-Lauf baut die Tabelle neu; das Script
+prüft anschließend, dass `startxref` wieder auf eine Tabelle zeigt.
+
+Jeder Schritt wird verifiziert: Seitenboxen auf beiden Seiten, keine Schriften, kein
+DeviceRGB, zwei Seiten, und ein Pixelvergleich beider Seiten gegen die Quelldatei. Eine
+Farbraumwandlung, die still ein Element verschluckt, fällt sonst erst auf Papier auf.
+
+## Was die Druckerei entscheidet
+
+Die CMYK-Umwandlung erfolgte mit einem **allgemeinen Profil**, nicht mit dem einer
+bestimmten Maschine — ein Profil der Druckerei liegt hier nicht vor. Die Werte sind
+Ausgangswerte; wer die Datei gegen sein eigenes Profil neu separiert, macht es richtig.
+Das steht auch auf dem Datenblatt.
+
+Zwei Punkte gehören dort geprüft:
+
+- **295 % Farbauftrag** ist für gestrichenes Papier üblich und für ungestrichenes
+  womöglich zu hoch.
+- **Das Dunkelblau** `#010E40` wird auf ungestrichenem Papier deutlich flauer. Bei
+  größerer Auflage lohnt ein Proof.
+
+Das Navy ist bewusst der Wert aus der Logodatei und nicht `--co-ink` `#03045E` der
+Website. Auf der Karte liegt das Logo direkt auf dieser Fläche — die eine Situation, in
+der die beiden Blautöne als Fehler gelesen würden. Begründung in `brand/README.md`.
 
 ## QR-Code
 
 Zeigt auf `https://co-gebaeudeservice.de`. 29 × 29 Module à 0,41 mm, also über der
-0,4-mm-Grenze, die Druckereien als Minimum angeben. Fehlerkorrektur M.
+0,4-mm-Grenze. Fehlerkorrektur M. Das weiße Feld dahinter ist keine Dekoration, sondern
+die **Ruhezone** — vier Module auf jeder Seite, aus der Modulanzahl berechnet statt
+geschätzt. Das Script bricht ab, wenn es seinen eigenen Code aus dem fertigen Bild
+nicht wiederfindet.
 
-Der Code steht auf der hellen Rückseite, der Grund ist damit selbst die **Ruhezone** —
-die Spezifikation verlangt dafür vier freie Module auf jeder Seite. Der reservierte
-Bereich wird aus der Modulanzahl des erzeugten Symbols berechnet; wächst die URL über
-die Kapazität dieser Version hinaus, wächst er mit. Von Hand gesetzt waren es einmal
-nur 2,7 Module: sauber dekodierbar aus der Renderdatei und nicht mehr dekodierbar,
-sobald das Bild abgewertet wurde — das wäre erst auf gedruckten Karten aufgefallen.
+**Vor dem Druck:** die Domain muss erreichbar sein. Ein gedruckter QR-Code lässt sich
+nicht nachbessern.
 
-Die angeschnittene Geistermarke liegt bewusst über der **oberen** rechten Ecke. Unten
-rechts lag sie unter dem Code und tönte dessen Ruhezone.
+## Vorschauen in diesem Ordner
 
-Das Script **bricht ab**, wenn es seinen eigenen QR aus dem fertigen Bild nicht wieder
-dekodieren kann — einmal sauber und einmal bei 3,2 Pixeln pro Modul mit Weichzeichner,
-also einer schlechten Aufnahme eines kleinen Codes.
-
-**Vor dem Druck prüfen:** die Domain muss erreichbar sein. Solange
-`co-gebaeudeservice.de` nicht live ist, führt der Code ins Leere — und ein gedruckter
-QR-Code lässt sich nicht nachbessern.
-
-## Wenn sich etwas ändert
-
-Nummer, Adresse oder Leistungen ändern sich in `src/data/`, dann das Script neu laufen
-lassen. Das Layout steht in `scripts/build-business-card.mjs` und ist auf die 42 mm
-Inhaltshöhe der engeren Variante gerechnet — die Kommentare dort nennen die Maße, weil
-genau diese Summe schon zweimal die Ursache eines Layoutfehlers war.
+`karten-*` ist die Empfehlung, `flaechig-*` die Alternative, `*-kontrolle.png` zeigt
+Schnittkante und Sicherheitsabstand, `ecken-gestanzt.png` die flächige Variante mit
+3 mm gestanzten Ecken, `vergleich.png` alles nebeneinander.

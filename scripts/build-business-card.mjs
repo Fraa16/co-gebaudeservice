@@ -119,6 +119,7 @@ const LAYOUTS = {
      gives 2 mm, which stops reading as rounded at all. */
   karten: { inset: 2.5, radius: 5, pad: 4, border: true },
   flaechig: { inset: 0, radius: 0, pad: SAFE, border: false },
+  'karten-schnittmarken': { inset: 2.5, radius: 5, pad: 4, border: true, marks: true },
 };
 
 /** The content box a layout leaves, in mm. Both must hold the back face. */
@@ -127,14 +128,44 @@ const contentBox = (L) => ({
   h: TRIM_H - 2 * (L.inset + L.pad),
 });
 
+/** Crop marks sit outside the bleed, so the sheet grows by this much on every side.
+ *  German online printers want a file without them; a local jobbing printer usually
+ *  wants them, and the card is being printed in Turkey by a shop we cannot ask. Both
+ *  files are produced and the spec sheet says which is which. */
+const MARK_ZONE = 5;
+const MARK_LEN = 3.5;
+
 const css = (L) => `
   @font-face { font-family: Archivo; src: url('${FONTS.archivo}') format('woff2'); font-weight: 100 900; }
   @font-face { font-family: Source; src: url('${FONTS.body}') format('woff2'); font-weight: 200 900; }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  @page { size: ${PAGE_W}mm ${PAGE_H}mm; margin: 0; }
-  html, body { width: ${PAGE_W}mm; }
+  @page {
+    size: ${L.marks ? PAGE_W + MARK_ZONE * 2 : PAGE_W}mm
+          ${L.marks ? PAGE_H + MARK_ZONE * 2 : PAGE_H}mm;
+    margin: 0;
+  }
+  html, body { width: ${L.marks ? PAGE_W + MARK_ZONE * 2 : PAGE_W}mm; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* The sheet that carries the card and its marks. */
+  .sheet {
+    position: relative;
+    width: ${L.marks ? PAGE_W + MARK_ZONE * 2 : PAGE_W}mm;
+    height: ${L.marks ? PAGE_H + MARK_ZONE * 2 : PAGE_H}mm;
+    padding: ${L.marks ? MARK_ZONE : 0}mm;
+    break-after: page;
+  }
+  .sheet:last-child { break-after: auto; }
+
+  /* Two hairlines per corner, starting at the bleed edge and running outwards, so the
+     cut line is where they would meet. 0.1 mm is about 0.28 pt. */
+  .mark {
+    position: absolute;
+    background: #000000;
+  }
+  .mark--h { width: ${MARK_LEN}mm; height: 0.1mm; }
+  .mark--v { width: 0.1mm; height: ${MARK_LEN}mm; }
 
   /* The sheet is the full bleed. In the karten layout it is the ground the panel floats
      on; in flaechig the panel covers it entirely and it is never seen. */
@@ -145,10 +176,7 @@ const css = (L) => `
     background: ${GROUND};
     font-family: Source, sans-serif;
     font-weight: 400;
-    /* Break exactly between the two faces, never inside one. */
-    break-after: page;
   }
-  .card:last-child { break-after: auto; }
 
   .panel {
     width: 100%;
@@ -243,7 +271,6 @@ const css = (L) => `
     right: -9mm;
     top: -8mm;
     width: 34mm;
-    opacity: 0.1;
     pointer-events: none;
   }
 
@@ -301,9 +328,51 @@ const css = (L) => `
   .qr img { width: ${QR_CODE_MM}mm; height: ${QR_CODE_MM}mm; display: block; }
 `;
 
+/** The ghost, with its colours pre-blended against the white panel it sits on.
+ *
+ *  It used to be the mark at `opacity: 0.1`, which made the back the only face in the
+ *  PDF carrying transparency. A RIP we will never see, in a shop we cannot ring up, is
+ *  not the place to discover how it flattens. The blend is arithmetic we can do here:
+ *  10 % of each ink over white, drawn opaque. Identical on screen, and the finished
+ *  file then has no transparency anywhere. */
+const GHOST_ALPHA = 0.1;
+const ghostData = (() => {
+  const over = (hex, alpha, ground = [255, 255, 255]) =>
+    '#' +
+    [1, 3, 5]
+      .map((i) => parseInt(hex.slice(i, i + 2), 16))
+      .map((v, i) => Math.round(alpha * v + (1 - alpha) * ground[i]))
+      .map((v) => v.toString(16).padStart(2, '0'))
+      .join('');
+
+  const svg = readFileSync('public/mark.svg', 'utf8').replace(
+    /fill="(#[0-9a-fA-F]{6})"/g,
+    (_, hex) => `fill="${over(hex, GHOST_ALPHA)}"`,
+  );
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+})();
+
+/** Eight hairlines: two at each corner of the trim, sitting in the margin outside the
+ *  bleed. Drawn only when the layout asks for them. */
+const marks = (L) => {
+  if (!L.marks) return '';
+  const edge = MARK_ZONE + BLEED; // distance from sheet edge to the cut line
+  const out = [];
+  for (const [vSide, vPos] of [['top', 0], ['bottom', 0]]) {
+    for (const [hSide, hPos] of [['left', 0], ['right', 0]]) {
+      // horizontal arm, pointing outwards from the corner
+      out.push(
+        `<span class="mark mark--h" style="${vSide}:${edge}mm;${hSide}:0"></span>`,
+        `<span class="mark mark--v" style="${hSide}:${edge}mm;${vSide}:0"></span>`,
+      );
+    }
+  }
+  return out.join('');
+};
+
 const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style>${css(L)}</style><body>
 
-<section class="card"><div class="panel panel--front">
+<section class="sheet">${marks(L)}<div class="card"><div class="panel panel--front">
   <img class="lockup" src="${dataSvg('public/logo-invert.svg')}" alt="">
 
   <div class="front__body">
@@ -320,10 +389,10 @@ const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style
       <p class="site">${site}</p>
     </div>
   </div>
-</div></section>
+</div></div></section>
 
-<section class="card"><div class="panel panel--back">
-  <img class="ghost" src="${dataSvg('public/mark.svg')}" alt="" aria-hidden="true">
+<section class="sheet">${marks(L)}<div class="card"><div class="panel panel--back">
+  <img class="ghost" src="${ghostData}" alt="" aria-hidden="true">
   <div class="back__inner">
     <p class="kicker-line">Leistungen</p>
 
@@ -339,7 +408,7 @@ const html = (L) => `<!doctype html><html lang="de"><meta charset="utf-8"><style
       <div class="qr"><img src="${qrData}" alt=""></div>
     </div>
   </div>
-</div></section>
+</div></div></section>
 
 </body></html>`;
 
