@@ -94,3 +94,16 @@ test('a link that promises an action lands on the form, not on a page top', asyn
 
   expect(bad).toEqual([]);
 });
+
+test('no draft banner reaches a built page', async ({ page }) => {
+  /* The "Entwurf" chips are an internal review aid, and the switch that hides them read
+     `!== 'false'` — so any deploy that simply did not set PUBLIC_SHOW_DRAFT_NOTES showed
+     them to whoever opened the link, the client included. It is opt-in now, and this
+     asserts the default the build actually ships. Set PUBLIC_SHOW_DRAFT_NOTES="true"
+     locally to see them; this suite runs without it, which is the point. */
+  for (const route of ROUTES) {
+    await page.goto(route);
+    await expect(page.locator('.draft-note'), `${route} ships a draft banner`).toHaveCount(0);
+    await expect(page.getByText('Entwurf', { exact: false })).toHaveCount(0);
+  }
+});
