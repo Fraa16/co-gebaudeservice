@@ -134,10 +134,25 @@ function body(file, prefix) {
  *  Both colourways come from their own source file, so the dark variant's second stroke
  *  is white rather than a navy that vanishes on an ink card. */
 function waveOnly(file, prefix) {
-  return body(file, prefix).replace(
-    new RegExp(`<g clip-path="url\\(#${prefix}b\\)">[\\s\\S]*?</g>`),
-    '',
-  );
+  return dropGroups(file, prefix, ['b']);
+}
+
+/** The letters without the wave: clips `c` and `d` are the two strokes. Used as an
+ *  oversized, cropped ghost on the ink sections, the way the step cards carry ghost
+ *  numerals. */
+function lettersOnly(file, prefix) {
+  return dropGroups(file, prefix, ['c', 'd']);
+}
+
+function dropGroups(file, prefix, ids) {
+  let out = body(file, prefix);
+  for (const id of ids) {
+    out = out.replace(
+      new RegExp(`<g clip-path="url\\(#${prefix}${id}\\)">[\\s\\S]*?</g>`),
+      '',
+    );
+  }
+  return out;
 }
 
 /** One artwork, one colourway, cropped to `box`. */
@@ -194,6 +209,17 @@ const wave = (file, prefix) =>
   );
 writeFileSync('public/wave.svg', wave(SOURCES.mark.onLight, 'w-'));
 writeFileSync('public/wave-invert.svg', wave(SOURCES.mark.onDark, 'wi-'));
+
+/* The letters on their own, for the ghost. */
+const lettersBox = await inkBox(SOURCES.mark.onLight, lettersOnly);
+const letters = (file, prefix) =>
+  shrink(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${round(lettersBox.x)} ${round(lettersBox.y)} ` +
+      `${round(lettersBox.w)} ${round(lettersBox.h)}" role="img" aria-label="${LABEL}">` +
+      `${lettersOnly(file, prefix)}</svg>\n`,
+  );
+writeFileSync('public/co.svg', letters(SOURCES.mark.onLight, 'c-'));
+writeFileSync('public/co-invert.svg', letters(SOURCES.mark.onDark, 'ci-'));
 
 /* The favicon carries both colourways and switches on the tab bar's own theme. The mark
  * has no ground of its own, so a single navy version vanishes in a dark tab — and a

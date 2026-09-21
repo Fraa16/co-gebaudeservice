@@ -240,8 +240,15 @@ button, input, textarea, select { font: inherit; color: inherit; }
   background: var(--co-pale-gradient);
 }
 
-/* Grain sits above the fill and below the content. Any card using it needs
-   position:relative and its own stacking for children. */
+/* Grain sits above the fill and below the content.
+   The class carries its own containing block. It used to be each card's job to add
+   position:relative, and .cta-band and .reach had both forgotten: their overlay was
+   anchored to the initial containing block, so a 6% grain meant for one card was
+   painting across the whole viewport. A rule that every user has to remember is a rule
+   that gets forgotten. Children still need their own stacking to sit above it. */
+.co-grain {
+  position: relative;
+}
 .co-grain::before {
   content: '';
   position: absolute;
