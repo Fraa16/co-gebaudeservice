@@ -137,9 +137,9 @@ Still open, in the order it costs something:
    names Resend; the Art. 28 contract and the third-country basis are still open.
 4. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap-index.xml`.
    Indexing does not start on its own just because `robots.txt` now allows it.
-5. **The nine outstanding photographs** — `PHOTOS.md`. The hero photo's stock licence
-   needs confirming too. Empty slots render a branded `BrandPanel`, so nothing looks
-   broken meanwhile.
+5. **The five outstanding photographs** — `PHOTOS.md`, landscape all of them. The hero
+   photo's stock licence needs confirming too. Empty slots render a branded
+   `BrandPanel`, so nothing looks broken meanwhile.
 6. **The remaining `TODO(client)` fields** in `src/data/company.ts`: opening hours,
    exact coordinates, `priceRange`, USt-IdNr. or Steuernummer, and confirmation of the
    ten towns in `areaServed`. Each is gated, so the graph stays silent rather than

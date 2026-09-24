@@ -5,6 +5,7 @@ import Statement from '../components/sections/Statement.astro';
 import StatStrip from '../components/sections/StatStrip.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
 import Photo from '../components/ui/Photo.astro';
+import BrandPanel from '../components/ui/BrandPanel.astro';
 import DraftNote from '../components/ui/DraftNote.astro';
 import { ueberUns } from '../data/ueber-uns';
 import { pages } from '../data/pages';
@@ -30,8 +31,15 @@ const jsonLd = buildGraph({
 
 const page = pages.ueberUns;
 
-/** Only the slots that actually hold a photograph. */
-const bandPhotos = ueberUns.photoBand.filter((slot) => getPhoto(slot).image);
+/** The band is all four photographs or none of them.
+ *
+ *  It used to render as soon as any one slot held a photo, showing only the filled
+ *  ones. That meant the natural first step — adding the Treppenhaus shot, which r-l1
+ *  also needs for the home page's feature tile — put a single tile in a row built for
+ *  four, and three photos left a hole on desktop and a stranded tile on tablet (rule 5,
+ *  the same failure .co-row-4 exists to prevent). Photos arrive one at a time, so the
+ *  page has to look finished at every count, not only at zero and four. */
+const bandComplete = ueberUns.photoBand.every((slot) => getPhoto(slot).image);
 ---
 
 <BaseLayout {...seo} path="/ueber-uns" jsonLd={jsonLd}>
@@ -47,13 +55,17 @@ const bandPhotos = ueberUns.photoBand.filter((slot) => getPhoto(slot).image);
   {
     /* Four photographs in a row is the design. Four *placeholders* in a row is four
        broken images, which is what it looked like while the shots are outstanding —
-       alternating the tone and the curve did not rescue it. So the band follows the
-       data: it appears once real photographs exist, and until then a single wide
-       panel stands in, which reads as a deliberate graphic rather than a gap.
-       Nothing here changes when the shots land in src/data/photos.ts. */
-    bandPhotos.length > 0 ? (
+       alternating the tone and the curve did not rescue it. So the band appears once
+       all four photographs exist, and until then a single wide panel stands in, which
+       reads as a deliberate graphic rather than a gap.
+
+       The stand-in is a BrandPanel, not Photo for the first slot: once r-l1 has its
+       photo for the home page, Photo would have put it here as a full-width strip at
+       about 4:1, a crop nobody chose. Nothing here changes when the shots land in
+       src/data/photos.ts. */
+    bandComplete ? (
       <section class="about__band co-row-4" aria-hidden="true">
-        {bandPhotos.map((slot, i) => (
+        {ueberUns.photoBand.map((slot, i) => (
           <div class="about__band-item co-reveal">
             <Photo
               slot={slot}
@@ -66,7 +78,7 @@ const bandPhotos = ueberUns.photoBand.filter((slot) => getPhoto(slot).image);
       </section>
     ) : (
       <section class="about__band-single co-reveal" aria-hidden="true">
-        <Photo slot={ueberUns.photoBand[0]!} sizes="100vw" tone="blue" />
+        <BrandPanel tone="blue" />
       </section>
     )
   }

@@ -122,12 +122,17 @@ kickers, roughly 8:1.
 
 ## Known placeholders
 
-- **Photography**: `PHOTOS.md` has the brief. One of seven is in place (recovered from
-  the design PDF); the rest render a branded `BrandPanel` until they land, so nothing
-  looks broken. `src/data/photos.ts` is the only file that changes when they arrive.
+- **Photography**: `PHOTOS.md` has the brief. Six slots are shown on the site and one is
+  filled (the hero, recovered from the design PDF, licence unconfirmed); the rest render
+  a branded `BrandPanel` until they land, so nothing looks broken. `src/data/photos.ts`
+  is the only file that changes when they arrive. **Every frame is landscape** — the
+  brief once asked for 3:4 portrait, which the measured frames (1.1:1 to 3.4:1) would
+  have cropped to a third. The /ueber-uns band appears only with all four photos.
 - **Contact details**: the address and the phone number are real — Oguz Cakir,
-  Schietinger Str. 28, 72202 Nagold, 0172 3001489. The e-mail is still a dummy value and
-  is gated (see rule 12). Values are read from `contactRoutes` in `src/data/company.ts`,
+  Schietinger Str. 28, 72202 Nagold, 0172 3001489. The e-mail `info@co-gebaeudeservice.de`
+  is set to `verified: true`, so it is linked and in the graph, but whether the mailbox
+  exists on the domain is unconfirmed — if it does not, set the flag back to `false`
+  (see rule 12). It is also printed on the business card. Values are read from `contactRoutes` in `src/data/company.ts`,
   never from `content.json`'s `contact.rows` — that second copy is how the Kontakt page
   once displayed the placeholder number while linking the real one.
 - **Logo**: done, and no longer a placeholder — the client delivered final vector

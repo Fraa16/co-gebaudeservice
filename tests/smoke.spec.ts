@@ -107,3 +107,19 @@ test('no draft banner reaches a built page', async ({ page }) => {
     await expect(page.getByText('Entwurf', { exact: false })).toHaveCount(0);
   }
 });
+
+test('the photo band on /ueber-uns is four photographs or none', async ({ page }) => {
+  /* The band used to render as soon as one of its four slots held a photo, showing
+     only the filled ones — so the first photo to arrive, r-l1, which the home page
+     also needs, would have stood alone in a row built for four. Photos land one at a
+     time; this holds the page to looking finished at every count in between. It
+     passes today with none and has to keep passing as they arrive. */
+  await page.goto('/ueber-uns');
+  const tiles = await page.locator('.about__band-item').count();
+  expect([0, 4], `the band shows ${tiles} tile(s)`).toContain(tiles);
+  if (tiles === 0) {
+    await expect(page.locator('.about__band-single'), 'the stand-in panel').toHaveCount(1);
+  } else {
+    await expect(page.locator('.about__band img'), 'every tile a real photograph').toHaveCount(4);
+  }
+});

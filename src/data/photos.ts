@@ -1,8 +1,11 @@
 import type { ImageMetadata } from 'astro';
 import heroFensterreinigung from '../assets/photos/hero-fensterreinigung.jpg';
 
-/** Slot → photograph. A null slot renders a branded BrandPanel instead, so the six
- *  outstanding shots drop in here with no component change. Briefs in PHOTOS.md. */
+/** Slot → photograph. A null slot renders a branded BrandPanel instead, so the
+ *  outstanding shots drop in here with no component change. Six slots are shown on
+ *  the site today (r-hero, r-l1, r-l2, r-l4, r-l5, r-detail); r-l3 and r-l6 to r-l8
+ *  exist but no page renders them. Briefs, measured frame sizes and the reason every
+ *  shot should be landscape are in PHOTOS.md. */
 export interface PhotoEntry {
   image: ImageMetadata | null;
   /** German alt text. Only meaningful when `image` is set — a BrandPanel is presentational. */
