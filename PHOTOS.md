@@ -1,6 +1,6 @@
 # Fotografie — Briefing
 
-**Sechs Bildplätze sind auf der Website sichtbar. Fünf sind belegt, einer fehlt.**
+**Zehn Bildplätze, alle auf der Website sichtbar. Neun sind belegt, einer kommt noch.**
 Solange ein Platz leer ist, zeigt die Website eine gestaltete Markenfläche
 (`BrandPanel`) statt eines kaputten Bildes — die Seite wirkt fertig, nicht unfertig.
 
@@ -9,26 +9,28 @@ Im September 2026 kam ein Satz von acht Fotos, eines je Leistung, alle 1672 × 9
 
 ## Stand
 
-| Slot | Wo es erscheint | Motiv | Status |
+| Slot | Leistung | Wo es erscheint | Datei |
 |---|---|---|---|
-| `r-hero` | Start, Kopfbereich | Glas- oder Fensterreinigung | vorhanden, **Lizenz klären** (siehe unten) |
-| `r-l1` | Start, große Leistungskachel · Über uns, Bildreihe | Treppenhaus | `treppenhausreinigung.png` |
-| `r-detail` | Start, Abschnitt Treppenhausreinigung | Treppenhaus nach der Reinigung | **fehlt** — siehe unten |
-| `r-l2` | Über uns, Bildreihe | Fensterfront | `fensterreinigung.png` |
-| `r-l4` | Über uns, Bildreihe | Außenanlage | `gartenpflege.png` |
-| `r-l5` | Über uns, Bildreihe | Winterdienst | `winterdienst.png` |
+| `r-hero` | — | Start, Kopfbereich | `hero-fensterreinigung.jpg`, Lizenz bestätigt |
+| `r-l1` | Treppenhausreinigung | Start, Kachel · Leistungen · Über uns, Bildreihe | `treppenhausreinigung.png` |
+| `r-l2` | Fensterreinigung | Start, Kachel · Leistungen · Über uns, Bildreihe | `fensterreinigung.png` |
+| `r-l3` | Hausmeisterdienst | Start, Kachel · Leistungen | `hausmeisterdienst.png` |
+| `r-l4` | Gartenpflege | Start, Kachel · Leistungen · Über uns, Bildreihe | `gartenpflege.png` |
+| `r-l5` | Winterdienst | Start, Kachel · Leistungen · Über uns, Bildreihe | `winterdienst.png` |
+| `r-l6` | Kellerreinigung | Leistungen | `kellerreinigung.png` |
+| `r-l7` | Außenreinigung | Leistungen | `aussenreinigung.png` |
+| `r-l8` | Mülltonnendienst | Leistungen | `muelltonnendienst.png` |
+| `r-detail` | — | Start, Abschnitt Treppenhausreinigung | **kommt noch**, siehe unten |
 
-Belegt, aber von keiner Seite angezeigt: `r-l3` `hausmeisterdienst.png`, `r-l6`
-`kellerreinigung.png`, `r-l7` `aussenreinigung.png`, `r-l8` `muelltonnendienst.png`.
+Die Startseite zeigt die fünf ersten Leistungen als Kacheln, jede mit ihrem Foto;
+`/leistungen` zeigt alle acht, jede Zeile mit ihrem Foto über dem Leistungsumfang.
 
-**`r-detail` braucht ein zweites, anderes Treppenhausfoto.** Der Abschnitt steht auf
-der Startseite direkt unter dem Leistungsraster, dessen große Kachel schon
-`treppenhausreinigung.png` zeigt. Dasselbe Foto in zwei benachbarten Abschnitten liest
-sich als Versehen. Gesucht: ein Podest oder Flur der Länge nach, frisch gewischt, ohne
-Person oder mit Person nur am Rand — quer, und es wird am Laptop bis 3,4 : 1 flach.
-
-`r-l1` arbeitet doppelt: es ist die große Kachel im Leistungsraster der Startseite
-*und* das erste Bild der Reihe auf „Über uns". Das wichtigste der fünf.
+**`r-detail` braucht ein zweites, anderes Treppenhausfoto** — der Kunde liefert es
+nach. Der Abschnitt steht auf der Startseite direkt unter dem Leistungsraster, dessen
+große Kachel schon `treppenhausreinigung.png` zeigt. Dasselbe Foto in zwei
+benachbarten Abschnitten liest sich als Versehen. Gesucht: ein Podest oder Flur der
+Länge nach, frisch gewischt, ohne Person oder mit Person nur am Rand — quer, und es
+wird am Laptop bis 3,4 : 1 flach.
 
 **Die Bildreihe auf „Über uns" erscheint erst mit allen vier Fotos** — `r-l1`,
 `r-l2`, `r-l4` und `r-l5`. Bis dahin steht dort eine einzelne breite Markenfläche, die
@@ -39,33 +41,37 @@ zeigte die Reihe jedes belegte Bild einzeln, und das erste wäre allein in einer
 für vier gestanden. `tests/smoke.spec.ts` hält das jetzt fest.) Seit dem Fotosatz vom
 September 2026 sind alle vier da, und die Reihe steht.
 
-**Warum vier Fotos nicht zu sehen sind:** `r-l3`, `r-l6`, `r-l7` und `r-l8` sind
-belegt, aber keine Seite rendert sie — die Startseite zeigt nur die erste Leistung
-mit Foto, `/leistungen` kommt ohne Fotos aus, und die Treppenhaus-Unterseite, an der
-früher Bilder hingen, gibt es nicht mehr. Die Fotos liegen bereit; sichtbar werden
-sie erst, wenn eine Seite einen Platz für sie bekommt.
+**Schrift auf Fotos.** Auf den Kacheln der Startseite steht weiße Schrift auf dem
+Foto. Ein dunkler Verlauf von unten (`--co-card-scrim`) hält Titel und Text lesbar,
+Nummer und Chip stehen in einer deckend weißen Pille. `tests/photo-contrast.spec.ts`
+misst bei jedem Durchlauf den Kontrast gegen die hellsten Pixel hinter jedem
+Textblock und verlangt 4,5 : 1. Ein neues, helleres Foto, das das bricht, fällt dort
+auf, nicht erst beim Besucher.
 
 ## Format: quer, nicht hoch
 
 Dieses Briefing verlangte früher Hochformat 3:4 für fast alle Plätze. Das stimmt für
 die heutigen Seiten nicht — gemessen im Browser, Breite × Höhe des Bildrahmens:
 
-| Bildschirm | `r-hero` | `r-l1` Kachel | `r-detail` | Bildreihe „Über uns" |
-|---|---|---|---|---|
-| Handy, 390 px | 370 × 697 · **0,53 : 1** | 370 × 340 · 1,09 : 1 | 326 × 240 · 1,36 : 1 | 370 × 170 · 2,18 : 1 |
-| Tablet, 768 px | 747 × 594 · 1,26 : 1 | 747 × 340 · 2,20 : 1 | 685 × 240 · 2,85 : 1 | 368 × 170 · 2,16 : 1 |
-| Laptop, 1024 px | 995 × 640 · 1,55 : 1 | 654 × 348 · 1,88 : 1 | 913 × 266 · **3,43 : 1** | 491 × 205 · 2,40 : 1 |
-| Desktop, 1440 px | 1400 × 770 · 1,82 : 1 | 682 × 461 · 1,48 : 1 | 606 × 360 · 1,68 : 1 | 338 × 260 · 1,30 : 1 |
+| Bildschirm | `r-hero` | große Kachel Start | kleine Kachel Start | `r-detail` | Bildreihe „Über uns" | Zeile `/leistungen` |
+|---|---|---|---|---|---|---|
+| Handy, 390 px | 370 × 697 · **0,53 : 1** | 370 × 340 · 1,09 : 1 | 370 × 260 · 1,42 : 1 | 326 × 240 · 1,36 : 1 | 370 × 170 · 2,18 : 1 | 326 × 204 · 1,60 : 1 |
+| Tablet, 768 px | 747 × 594 · 1,26 : 1 | 747 × 340 · 2,20 : 1 | 368 × 260 · 1,41 : 1 | 685 × 240 · 2,85 : 1 | 368 × 170 · 2,16 : 1 | 685 × 428 · 1,60 : 1 |
+| Laptop, 1024 px | 995 × 640 · 1,55 : 1 | 654 × 348 · 1,88 : 1 | 327 × 348 · 0,94 : 1 | 913 × 266 · **3,43 : 1** | 491 × 205 · 2,40 : 1 | 386 × 241 · 1,60 : 1 |
+| Desktop, 1440 px | 1400 × 770 · 1,82 : 1 | 682 × 461 · 1,48 : 1 | 341 × 461 · **0,74 : 1** | 606 × 360 · 1,68 : 1 | 338 × 260 · 1,30 : 1 | 565 × 353 · 1,60 : 1 |
 
-Jeder Rahmen ist querformatig, und keiner hat ein festes Seitenverhältnis: die Bilder
-werden mittig zugeschnitten, je nach Bildschirm zwischen 1,1 : 1 und 3,4 : 1. Ein
-Hochformat 3:4 in einem 2,4 : 1-Rahmen behält nur ein knappes Drittel seiner Höhe.
+Die Rahmen haben kein festes Seitenverhältnis, außer auf `/leistungen` (16 : 10): die
+Bilder werden mittig zugeschnitten, je nach Platz und Bildschirm zwischen 0,74 : 1 und
+3,4 : 1. Ein Hochformat 3:4 in einem 2,4 : 1-Rahmen behält nur ein knappes Drittel
+seiner Höhe; ein 16:9-Foto in der schmalen Kachel am Desktop behält 42 % seiner
+Breite, und zwar die Mitte.
 
 Daraus folgt für jedes Foto:
 
-- **Querformat 3:2.** So liefern fast alle Kameras und Stockportale ohnehin.
-- **Motiv in die Mitte, Luft drumherum.** Oben und unten fällt am meisten weg — nichts
-  Wichtiges ins obere und untere Fünftel legen.
+- **Querformat 3:2 oder 16:9.** So liefern fast alle Kameras und Stockportale ohnehin.
+- **Motiv in die Mitte, Luft drumherum.** Oben und unten fällt in den breiten Rahmen
+  am meisten weg, links und rechts in den schmalen Kacheln — nichts Wichtiges ins
+  obere und untere Fünftel oder an die Seitenränder legen.
 - **`r-hero` ist der Sonderfall.** Auf dem Handy ist der Rahmen hochkant (0,53 : 1),
   am Desktop breit (1,82 : 1). Das Motiv muss als schmaler senkrechter Streifen aus
   der Bildmitte genauso funktionieren wie als ganzes Querformat. Eine Person mittig im
@@ -102,12 +108,12 @@ Mehr ist nicht nötig: `Photo.astro` erzeugt automatisch AVIF/WebP in mehreren G
 setzt `loading="lazy"` (außer im Hero) und `object-fit: cover`. Der Alt-Text
 beschreibt, was auf *diesem* Foto zu sehen ist, nicht die Leistung.
 
-## Offen: das Hero-Foto
+## Das Hero-Foto
 
-Das vorhandene Hero-Foto stammt aus `design/website-rounded.pdf`, liegt nur in
-1200 × 900 vor und sieht nach einem Stockbild aus. **Ob die Lizenz die Nutzung im Web
-abdeckt, ist ungeklärt — und die Seite ist inzwischen öffentlich.** Falls nicht, wird
-es ersetzt; der Platz fällt dann auf die Markenfläche zurück, bis ein Ersatz da ist.
+Das Hero-Foto stammt aus `design/website-rounded.pdf` und liegt nur in 1200 × 900 vor.
+**Die Lizenz für die Nutzung im Web hat der Kunde im September 2026 bestätigt.** Wenn
+es einmal ersetzt wird, dann wegen der Auflösung: am Desktop ist der Rahmen 1400 px
+breit, auf hochauflösenden Bildschirmen also doppelt so viele Pixel, wie das Foto hat.
 
 ---
 

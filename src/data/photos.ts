@@ -10,10 +10,11 @@ import aussenreinigung from '../assets/photos/aussenreinigung.png';
 import muelltonnendienst from '../assets/photos/muelltonnendienst.png';
 
 /** Slot → photograph. A null slot renders a branded BrandPanel instead, so an
- *  outstanding shot drops in here with no component change. Six slots are shown on
- *  the site today (r-hero, r-l1, r-l2, r-l4, r-l5, r-detail); r-l3 and r-l6 to r-l8
- *  hold their service's photo but no page renders them yet. Briefs, measured frame
- *  sizes and the reason every shot should be landscape are in PHOTOS.md.
+ *  outstanding shot drops in here with no component change. Every slot is shown:
+ *  r-hero on the home page, the eight service photos in the home tiles (the first
+ *  five), in each row on /leistungen and in the /ueber-uns band, and r-detail in the
+ *  home page's Treppenhaus chapter. Briefs, measured frame sizes and the reason every
+ *  shot should be landscape with its subject centred are in PHOTOS.md.
  *
  *  The eight service photos arrived as one set in September 2026, 1672 × 941 each,
  *  one per service. The alt text describes what is in the frame, not the service and
@@ -27,8 +28,8 @@ export interface PhotoEntry {
 }
 
 export const photos: Record<string, PhotoEntry> = {
-  // Recovered at 1200×900 from design/website-rounded.pdf.
-  // TODO(client): confirm the stock licence covers web use.
+  // Recovered at 1200×900 from design/website-rounded.pdf. Licence for web use
+  // confirmed by the client, September 2026.
   'r-hero': {
     image: heroFensterreinigung,
     alt: 'Glasfassade wird mit Sprühflasche und Mikrofasertuch gereinigt',
@@ -74,10 +75,11 @@ export const photos: Record<string, PhotoEntry> = {
     alt: 'Mülltonne wird über eine gepflasterte Einfahrt gezogen',
     tone: 'blue',
   },
-  /* Still open. This is the Treppenhausreinigung chapter on the home page, directly
-     below the service grid whose feature tile is r-l1 — the Treppenhaus photo again
-     here would stand twice in two adjacent sections. It needs a second, different
-     stairwell shot; until then the BrandPanel stands in, which reads as intended. */
+  /* Still open; the client is supplying a separate shot. This is the
+     Treppenhausreinigung chapter on the home page, directly below the service grid
+     whose feature tile is r-l1 — the Treppenhaus photo again here would stand twice in
+     two adjacent sections. Until the second stairwell shot arrives the BrandPanel
+     stands in, which reads as intended. */
   'r-detail': { image: null, alt: 'Treppenhaus nach der Reinigung', tone: 'pale' },
 };
 

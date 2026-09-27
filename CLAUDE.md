@@ -122,15 +122,18 @@ kickers, roughly 8:1.
 
 ## Known placeholders
 
-- **Photography**: `PHOTOS.md` has the brief. Six slots are shown on the site and five
-  are filled: the hero (recovered from the design PDF, licence unconfirmed) and four
-  from the client's set of eight service photos, which arrived in September 2026 and
-  live in `src/assets/photos/` under the service's name. Only `r-detail` is open — it
-  needs a second stairwell shot, because r-l1's sits in the section directly above —
-  and renders a branded `BrandPanel` meanwhile. Four of the eight service photos
-  (r-l3, r-l6 to r-l8) are wired but no page renders their slots. Alt text describes
-  the frame, never implies staff. `src/data/photos.ts` is the only file that changes
-  when a photo arrives. **Every frame is landscape** — the
+- **Photography**: `PHOTOS.md` has the brief. All ten slots are shown and nine are
+  filled: the hero (recovered from the design PDF, licence confirmed by the client)
+  and the client's eight service photos, which arrived in September 2026 and live in
+  `src/assets/photos/` under the service's name. Each service shows its photo on its
+  home tile (the first five), in its `/leistungen` row and, for four, in the
+  `/ueber-uns` band. Only `r-detail` is open — the client is supplying a second
+  stairwell shot, because r-l1's sits in the section directly above — and it renders
+  a branded `BrandPanel` meanwhile. Alt text describes the frame, never implies staff.
+  `src/data/photos.ts` is the only file that changes when a photo arrives. **Text over
+  a photo** is guarded by `tests/photo-contrast.spec.ts` (4.5:1 against the pixels
+  behind it); `--co-card-scrim` is deliberately darker than the design token for that
+  reason, and photo tiles put their number and chip in an opaque white pill. **Every frame is landscape** — the
   brief once asked for 3:4 portrait, which the measured frames (1.1:1 to 3.4:1) would
   have cropped to a third. The /ueber-uns band appears only with all four photos.
 - **Contact details**: the address and the phone number are real — Oguz Cakir,

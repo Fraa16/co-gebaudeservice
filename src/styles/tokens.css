@@ -62,7 +62,16 @@
 
   /* Overlays */
   --co-hero-photo-fade: linear-gradient(90deg, #CAF0F8 0%, rgba(202,240,248,.55) 34%, rgba(202,240,248,0) 66%);
-  --co-card-scrim: linear-gradient(180deg, rgba(3,4,94,.45) 0%, rgba(3,4,94,0) 34%, rgba(3,4,94,0) 52%, rgba(3,4,94,.78) 100%);
+  /* Deliberately darker than design/tokens.json's serviceCardScrim, which ramps from
+     52 % to .78. That was drawn for one feature tile over a placeholder; with real
+     photographs in all five home tiles, measured white-on-photo contrast under the
+     titles fell to 2.2:1 on phones (bright sky, snow, a lobby), below the 3:1 large
+     text needs. White over a pure-white pixel reaches 3:1 at about .47 ink and 4.5:1
+     at about .58, so the ramp now starts at 34 % and passes .66 by 58 %, where the
+     title of the shortest tile begins. The top stays as designed: the label there is
+     an opaque pill on photo tiles and does not depend on it. Same reason as rule 9's
+     focus ring departing from the token cyan. */
+  --co-card-scrim: linear-gradient(180deg, rgba(3,4,94,.45) 0%, rgba(3,4,94,0) 34%, rgba(3,4,94,.66) 58%, rgba(3,4,94,.92) 100%);
 
   /* Type */
   --co-font-heading: 'Archivo Variable', Archivo, system-ui, sans-serif;

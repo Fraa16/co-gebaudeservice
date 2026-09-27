@@ -1,12 +1,19 @@
 ---
-/** A bento mosaic, not an even grid: the first service is a feature tile carrying
- *  the photograph and spanning two columns, the rest vary in tone and height. This
- *  is the single biggest difference between the reference sites and a template. */
+/** A bento mosaic, not an even grid: tiles vary in width and height, the first is a
+ *  feature spanning two columns. This is the single biggest difference between the
+ *  reference sites and a template.
+ *
+ *  Every service with a photograph carries it. Until September 2026 only the feature
+ *  tile did and the rest were flat brand grounds — a stand-in variety for a site with
+ *  one photo. With a photo per service the variety comes from the photographs and the
+ *  tile sizes; the recipe's tones stay as the fallback for a service without one, and
+ *  the closing CTA card keeps the one solid ink ground. */
 import ServiceCard from './ServiceCard.astro';
 import ServicesCtaCard from './ServicesCtaCard.astro';
 import Button from '../ui/Button.astro';
 import type { Service } from '../../data/services';
 import { pages } from '../../data/pages';
+import { getPhoto } from '../../data/photos';
 
 type LinkResolver = (service: Service) => string | undefined;
 
@@ -22,7 +29,8 @@ interface Props {
  *  type-check the caller, which is the one thing lost. */
 const { services, linkTo } = Astro.props as Props;
 
-/** Tile recipe by position. Varied deliberately — never a repeating pattern. */
+/** Tile recipe by position. Varied deliberately — never a repeating pattern. `tone`
+ *  applies only when the service has no photograph. */
 const RECIPE = [
   { size: 'feature', tone: 'photo', span: 'wide' },
   { size: 'standard', tone: 'ink', span: 'narrow' },
@@ -45,13 +53,19 @@ const RECIPE = [
     {
       services.map((service, i) => {
         const recipe = RECIPE[i % RECIPE.length]!;
+        const hasPhoto = Boolean(getPhoto(service.photoSlot).image);
         return (
           <div class:list={['leistungen__cell', `is-${recipe.span}`, 'co-reveal']}>
             <ServiceCard
               service={service}
               href={linkTo?.(service)}
               size={recipe.size}
-              tone={recipe.tone}
+              tone={hasPhoto ? 'photo' : recipe.tone}
+              photoSizes={
+                recipe.span === 'wide'
+                  ? '(max-width: 760px) 100vw, 55vw'
+                  : '(max-width: 760px) 100vw, 30vw'
+              }
               index={i}
             />
           </div>

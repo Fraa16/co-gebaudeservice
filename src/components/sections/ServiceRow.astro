@@ -2,17 +2,24 @@
 import Button from '../ui/Button.astro';
 import DraftNote from '../ui/DraftNote.astro';
 import ServiceIcon from '../ui/ServiceIcon.astro';
+import Photo from '../ui/Photo.astro';
 import type { Service } from '../../data/services';
+import { getPhoto } from '../../data/photos';
 
 /** One anchored service, as an editorial row rather than a card. Rows alternate which
- *  side carries the scope list, so a page of eight reads as a document with a rhythm
- *  instead of a grid that repeats. */
+ *  side carries the photograph and the scope list, so a page of eight reads as a
+ *  document with a rhythm instead of a grid that repeats. */
 interface Props {
   service: Service;
   index: number;
 }
 const { service, index } = Astro.props;
 const flipped = index % 2 === 1;
+
+/** Only a real photograph gets a frame here. A BrandPanel between seven photos would
+ *  read as the one image that failed to load, so a service without a photo simply
+ *  keeps the scope card on its own, as every row did before the photos arrived. */
+const hasPhoto = Boolean(getPhoto(service.photoSlot).image);
 ---
 
 <article class:list={['service-row', flipped && 'is-flipped']} id={service.slug}>
@@ -57,18 +64,28 @@ const flipped = index % 2 === 1;
     </div>
   </div>
 
-  <div class="service-row__scope">
-    <p class="service-row__scope-label">Leistungsumfang</p>
-    <ul class="service-row__list">
-      {
-        service.scope.map((item) => (
-          <li class="service-row__item">
-            <span class="service-row__dot" aria-hidden="true" />
-            <span>{item}</span>
-          </li>
-        ))
-      }
-    </ul>
+  <div class="service-row__aside">
+    {
+      hasPhoto && (
+        <div class="service-row__photo">
+          <Photo slot={service.photoSlot} sizes="(max-width: 760px) 100vw, 45vw" />
+        </div>
+      )
+    }
+
+    <div class="service-row__scope">
+      <p class="service-row__scope-label">Leistungsumfang</p>
+      <ul class="service-row__list">
+        {
+          service.scope.map((item) => (
+            <li class="service-row__item">
+              <span class="service-row__dot" aria-hidden="true" />
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </article>
 
@@ -139,8 +156,28 @@ const flipped = index % 2 === 1;
     margin-top: 6px;
   }
 
-  .service-row__scope {
+  /* Photograph and scope card stacked as two cards with the site's card gutter
+     between them — the same relation the page's own sections have to each other. */
+  .service-row__aside {
     flex: 1 1 min(320px, 100%);
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--co-card-gap);
+  }
+  /* 16:10 against a 16:9 source: a little off the sides, nothing off the top, where
+     the heads are. The radius matches the scope card directly beneath it rather than
+     --co-radius-photo, because two stacked cards 2px apart in their corners read as a
+     mistake, not as two tiers. */
+  .service-row__photo {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--co-radius-l);
+    background: var(--co-mist);
+  }
+
+  .service-row__scope {
     min-width: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);

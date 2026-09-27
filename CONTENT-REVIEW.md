@@ -460,3 +460,26 @@ Ablaufdatum und braucht nur so lange eine Freigabe, wie der Versand offen ist.
 **Zur Abstimmung:** ob „wird derzeit eingerichtet" so stehen bleiben soll oder ob der
 Kunde eine neutralere Formulierung bevorzugt. Die Alternative wäre, das Formular bis zur
 Freischaltung ganz auszublenden und nur Telefon, WhatsApp und Anschrift zu zeigen.
+
+## 14. Bildbeschreibungen (Alt-Texte), 27. September 2026
+
+Mit den acht Fotos der Leistungen kamen neue Alt-Texte, in `src/data/photos.ts`.
+Screenreader lesen sie vor, und Suchmaschinen verstehen damit, was auf dem Bild ist.
+Sie beschreiben, was im Bild zu sehen ist, nicht die Leistung und nicht, wer die Person
+ist: die Website behauptet nirgends, dass der Betrieb Personal hat, und die
+Bildbeschreibung soll das nicht nebenbei tun.
+
+| Bild | Alt-Text |
+|---|---|
+| Kopfbereich Startseite | Glasfassade wird mit Sprühflasche und Mikrofasertuch gereinigt |
+| Treppenhausreinigung | Mann in dunkelblauer Arbeitskleidung wischt die Stufen eines hellen Treppenhauses |
+| Fensterreinigung | Fensterscheibe wird mit dem Abzieher gereinigt, im Vordergrund ein Rücken mit dem CO-Logo |
+| Hausmeisterdienst | Hausmeister mit Reinigungswagen im Eingangsbereich eines Gebäudes |
+| Gartenpflege | Hecke vor einem Wohngebäude wird mit der Heckenschere geschnitten |
+| Winterdienst | Mann mit Schneeschaufel in einer verschneiten Wohnstraße |
+| Kellerreinigung | Kellerboden wird mit dem Wasserschieber abgezogen |
+| Außenreinigung | Sockel einer Hauswand wird mit dem Hochdruckreiniger gereinigt |
+| Mülltonnendienst | Mülltonne wird über eine gepflasterte Einfahrt gezogen |
+
+Der Text zum Kopfbild hieß vorher „Mitarbeiter reinigt eine Glasfassade …" und ist aus
+demselben Grund umformuliert.

@@ -1,7 +1,7 @@
 ---
-/** One tile of the bento mosaic. `size` drives both the grid span and the internal
- *  treatment: feature tiles carry a photograph, standard tiles are flat brand
- *  grounds with a watermark, so the grid reads as varied rather than repeated. */
+/** One tile of the bento mosaic. `size` sets the tile's height; `tone` its ground —
+ *  a photograph under a scrim, or a flat brand ground with a watermark for a service
+ *  that has no photo yet. ServiceGrid decides which. */
 import Photo from '../ui/Photo.astro';
 import type { Service } from '../../data/services';
 
@@ -10,9 +10,19 @@ interface Props {
   href?: string;
   size?: 'feature' | 'tall' | 'standard';
   tone?: 'photo' | 'ink' | 'pale' | 'blue';
+  /** The `sizes` attribute for the photograph. A narrow tile is about a third of the
+   *  row, and telling the browser 55vw there made it fetch the next width up. */
+  photoSizes?: string;
   index?: number;
 }
-const { service, href, size = 'standard', tone = 'blue', index = 0 } = Astro.props;
+const {
+  service,
+  href,
+  size = 'standard',
+  tone = 'blue',
+  photoSizes = '(max-width: 760px) 100vw, 55vw',
+  index = 0,
+} = Astro.props;
 const num = String(index + 1).padStart(2, '0');
 ---
 
@@ -25,7 +35,7 @@ const num = String(index + 1).padStart(2, '0');
   ]}
   id={service.slug}
 >
-  {tone === 'photo' && <Photo slot={service.photoSlot} sizes="(max-width: 760px) 100vw, 55vw" variant={index} />}
+  {tone === 'photo' && <Photo slot={service.photoSlot} sizes={photoSizes} variant={index} />}
   {tone === 'photo' && <div class="co-scrim" aria-hidden="true"></div>}
 
   {tone !== 'photo' && (
@@ -105,11 +115,33 @@ const num = String(index + 1).padStart(2, '0');
     align-items: center;
     gap: 12px;
   }
+  /* Quieter than the chip beside it, but by colour, not by alpha: this was white at
+     opacity .72, which is exactly what rule 3 forbids — and over a photograph the
+     fade took it to 1.8:1. */
   .tile__num {
     font: 600 11px/1 var(--co-font-body);
     letter-spacing: var(--co-label-tracking);
     font-variant-numeric: tabular-nums;
-    opacity: 0.72;
+    color: var(--co-pale);
+  }
+  .tile--pale .tile__num { color: var(--co-deep-text); }
+
+  /* On a photograph no scrim keeps 11px type legible over every pixel — snow, sky and
+     a lit lobby all sit at the top of these shots, and the translucent chip measured
+     1.9 to 3.4:1 against the 4.5 small text needs. So on photo tiles number and chip
+     share one opaque white pill, the same white as the arrow button opposite it. */
+  .tile--photo .tile__top {
+    align-self: flex-start;
+    gap: 10px;
+    padding: var(--co-label-pill-padding);
+    border-radius: var(--co-radius-pill);
+    background: var(--co-white);
+  }
+  .tile--photo .tile__num { color: var(--co-deep-text); }
+  .tile--photo .tile__chip {
+    padding: 0;
+    background: none;
+    color: var(--co-ink);
   }
   .tile__chip {
     border-radius: var(--co-radius-pill);
