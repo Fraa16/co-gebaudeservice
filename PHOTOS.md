@@ -1,19 +1,31 @@
 # Fotografie — Briefing
 
-**Sechs Bildplätze sind auf der Website sichtbar. Einer ist belegt, fünf fehlen.**
+**Sechs Bildplätze sind auf der Website sichtbar. Fünf sind belegt, einer fehlt.**
 Solange ein Platz leer ist, zeigt die Website eine gestaltete Markenfläche
 (`BrandPanel`) statt eines kaputten Bildes — die Seite wirkt fertig, nicht unfertig.
 
-## Was gebraucht wird
+Im September 2026 kam ein Satz von acht Fotos, eines je Leistung, alle 1672 × 941
+(16:9 quer). Sie liegen in `src/assets/photos/` unter dem Namen der Leistung.
+
+## Stand
 
 | Slot | Wo es erscheint | Motiv | Status |
 |---|---|---|---|
-| `r-hero` | Start, Kopfbereich | Glas- oder Fensterreinigung | **vorhanden**, Lizenz klären (siehe unten) |
-| `r-l1` | Start, große Leistungskachel · Über uns, Bildreihe | Treppenhaus | fehlt |
-| `r-detail` | Start, Abschnitt Treppenhausreinigung | Treppenhaus nach der Reinigung | fehlt |
-| `r-l2` | Über uns, Bildreihe | Fensterfront | fehlt |
-| `r-l4` | Über uns, Bildreihe | Außenanlage | fehlt |
-| `r-l5` | Über uns, Bildreihe | Winterdienst | fehlt |
+| `r-hero` | Start, Kopfbereich | Glas- oder Fensterreinigung | vorhanden, **Lizenz klären** (siehe unten) |
+| `r-l1` | Start, große Leistungskachel · Über uns, Bildreihe | Treppenhaus | `treppenhausreinigung.png` |
+| `r-detail` | Start, Abschnitt Treppenhausreinigung | Treppenhaus nach der Reinigung | **fehlt** — siehe unten |
+| `r-l2` | Über uns, Bildreihe | Fensterfront | `fensterreinigung.png` |
+| `r-l4` | Über uns, Bildreihe | Außenanlage | `gartenpflege.png` |
+| `r-l5` | Über uns, Bildreihe | Winterdienst | `winterdienst.png` |
+
+Belegt, aber von keiner Seite angezeigt: `r-l3` `hausmeisterdienst.png`, `r-l6`
+`kellerreinigung.png`, `r-l7` `aussenreinigung.png`, `r-l8` `muelltonnendienst.png`.
+
+**`r-detail` braucht ein zweites, anderes Treppenhausfoto.** Der Abschnitt steht auf
+der Startseite direkt unter dem Leistungsraster, dessen große Kachel schon
+`treppenhausreinigung.png` zeigt. Dasselbe Foto in zwei benachbarten Abschnitten liest
+sich als Versehen. Gesucht: ein Podest oder Flur der Länge nach, frisch gewischt, ohne
+Person oder mit Person nur am Rand — quer, und es wird am Laptop bis 3,4 : 1 flach.
 
 `r-l1` arbeitet doppelt: es ist die große Kachel im Leistungsraster der Startseite
 *und* das erste Bild der Reihe auf „Über uns". Das wichtigste der fünf.
@@ -24,13 +36,14 @@ gewollt aussieht. Die Fotos lassen sich also einzeln einbauen, ohne dass eine Se
 zwischendurch halb fertig wirkt: `r-l1` und `r-detail` erscheinen sofort auf der
 Startseite, die Reihe auf „Über uns" kommt mit dem vierten Bild. (Bis September 2026
 zeigte die Reihe jedes belegte Bild einzeln, und das erste wäre allein in einer Zeile
-für vier gestanden. `tests/smoke.spec.ts` hält das jetzt fest.)
+für vier gestanden. `tests/smoke.spec.ts` hält das jetzt fest.) Seit dem Fotosatz vom
+September 2026 sind alle vier da, und die Reihe steht.
 
-**Derzeit nirgends angezeigt:** `r-l3` (Hausmeister), `r-l6` (Kellergang), `r-l7`
-(Gehweg), `r-l8` (Müllstandsplatz). Die Plätze sind angelegt, aber keine Seite
-rendert sie — die Startseite zeigt nur die erste Leistung mit Foto, `/leistungen`
-kommt ohne Fotos aus, und die Treppenhaus-Unterseite, an der früher Bilder hingen,
-gibt es nicht mehr. Nicht beschaffen, bis eine Seite sie braucht.
+**Warum vier Fotos nicht zu sehen sind:** `r-l3`, `r-l6`, `r-l7` und `r-l8` sind
+belegt, aber keine Seite rendert sie — die Startseite zeigt nur die erste Leistung
+mit Foto, `/leistungen` kommt ohne Fotos aus, und die Treppenhaus-Unterseite, an der
+früher Bilder hingen, gibt es nicht mehr. Die Fotos liegen bereit; sichtbar werden
+sie erst, wenn eine Seite einen Platz für sie bekommt.
 
 ## Format: quer, nicht hoch
 
