@@ -97,9 +97,11 @@ With any of them missing the endpoint answers 503 and the form tells the visitor
 could not send. That is deliberate: the one thing it must never do is confirm
 *"wir melden uns innerhalb von zwei Werktagen"* while dropping the enquiry.
 
-Before switching it on, the Datenschutzerklärung names Resend as an Auftragsverarbeiter
-and carries a `TODO(client)` for the Art. 28 contract and the third-country transfer
-basis. Both need to be settled first.
+Before switching it on, settle the two things the Datenschutzerklärung's Resend
+paragraph relies on: the Art. 28 DSGVO contract with Resend, and the basis for the
+transfer to the USA (Art. 44 ff. DSGVO). The paragraph itself is already on the page;
+the note that said so used to be on the page too, which is how the next section's
+first item came about.
 
 Nothing else changes; every other page stays static.
 
@@ -127,24 +129,28 @@ Still open, in the order it costs something:
    Werktagen"* for an enquiry nothing received. Set the endpoint plus the three
    server-side variables, verify the Resend domain, and the notice disappears on its
    own — no other change needed.
-2. **`info@co-gebaeudeservice.de` has to exist.** `company.email.verified` is `true`,
-   so the address is linked as `mailto:` and sits in the structured-data graph. If the
-   mailbox is not live on the domain, set the flag back to `false`: a bouncing address
-   in the graph is worse than none, because the entity gets cross-referenced against
-   every other citation of the business.
-3. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
-   Steuerberater, and every `TODO(client)` filled in. The Datenschutzerklärung already
-   names Resend; the Art. 28 contract and the third-country basis are still open.
-4. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap-index.xml`.
+2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
+   Steuerberater. The Impressum's facts are settled — no USt-IdNr., no
+   Handwerkskammer entry, both confirmed and recorded in `company.ts`. What the review
+   still has to answer: the Resend contract and transfer basis (above), whether the
+   business use of WhatsApp is described sufficiently, and whether the AI-generated
+   photographs need labelling under Art. 50 KI-VO. None of these is written on the
+   pages any more: **working notes belong here, not in page copy**. The Impressum went
+   live reading "USt-IdNr.: TODO(client)"; `tests/smoke.spec.ts` now fails on any
+   TODO, FIXME or lorem ipsum a visitor could read.
+3. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap-index.xml`.
    Indexing does not start on its own just because `robots.txt` now allows it.
-5. **One photograph** — `PHOTOS.md`. The eight service photos are in and shown on the
-   home page, `/leistungen` and `/ueber-uns`; the hero licence is confirmed. `r-detail`
-   still needs a second, different stairwell shot, which the client is supplying. The
-   empty slot renders a branded `BrandPanel`, so nothing looks broken meanwhile.
-6. **The remaining `TODO(client)` fields** in `src/data/company.ts`: opening hours,
-   exact coordinates, `priceRange`, USt-IdNr. or Steuernummer, and confirmation of the
-   ten towns in `areaServed`. Each is gated, so the graph stays silent rather than
-   guessing.
+4. **One photograph** — `PHOTOS.md`. The eight service photos are in and shown on the
+   home page, `/leistungen` and `/ueber-uns`, and the hero shows the Hausmeisterdienst
+   photo. `r-detail` still needs a second, different stairwell shot, which the client
+   is supplying. The empty slot renders a branded `BrandPanel`, so nothing looks
+   broken meanwhile.
+5. **The remaining `TODO(client)` fields** in `src/data/company.ts`: opening hours,
+   exact coordinates, `priceRange`, and confirmation of the ten towns in
+   `areaServed`. Each is gated, so the graph stays silent rather than guessing.
+
+Settled: `info@co-gebaeudeservice.de` exists (confirmed 28 Sep 2026), so
+`company.email.verified` stays `true` and the address on the business card is live.
 
 `www` must redirect to the apex in Vercel, not the other way round: the canonical URLs,
 the sitemap, the OG tags and the printed QR code on the business card all name

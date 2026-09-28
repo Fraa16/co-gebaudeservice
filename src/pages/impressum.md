@@ -25,19 +25,6 @@ Schietinger Str. 28<br />
 
 **E-Mail:** info@co-gebaeudeservice.de
 
-## Umsatzsteuer
-
-**Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:** `TODO(client)`
-
-Alternativ, falls keine USt-IdNr. vorliegt, die Steuernummer: `TODO(client)`
-
-## Berufsrechtliche Angaben
-
-Eine Eintragung bei der Handwerkskammer besteht nicht.
-
-`TODO(client)` — Diese Angabe bitte von der Kanzlei oder dem Steuerberater bestätigen
-lassen, bevor die Seite online geht.
-
 ## Verantwortlich für den Inhalt
 
 Oguz Cakir, Anschrift wie oben.

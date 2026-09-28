@@ -139,11 +139,13 @@ kickers, roughly 8:1.
   reason, and photo tiles put their number and chip in an opaque white pill. **Every frame is landscape** — the
   brief once asked for 3:4 portrait, which the measured frames (1.1:1 to 3.4:1) would
   have cropped to a third. The /ueber-uns band appears only with all four photos.
-- **Contact details**: the address and the phone number are real — Oguz Cakir,
-  Schietinger Str. 28, 72202 Nagold, 0172 3001489. The e-mail `info@co-gebaeudeservice.de`
-  is set to `verified: true`, so it is linked and in the graph, but whether the mailbox
-  exists on the domain is unconfirmed — if it does not, set the flag back to `false`
-  (see rule 12). It is also printed on the business card. Values are read from `contactRoutes` in `src/data/company.ts`,
+- **Contact details**: all real and confirmed — Oguz Cakir, Schietinger Str. 28,
+  72202 Nagold, 0172 3001489, `info@co-gebaeudeservice.de` (mailbox confirmed on the
+  domain, 28 Sep 2026; also printed on the business card). No USt-IdNr. and no
+  Handwerkskammer entry, so the Impressum names neither — § 5 DDG asks only for what
+  exists. **Working notes never go into page copy**: the Impressum went live reading
+  "USt-IdNr.: TODO(client)", and `tests/smoke.spec.ts` now fails on any TODO a visitor
+  could read. Open questions live in `README.md`. Values are read from `contactRoutes` in `src/data/company.ts`,
   never from `content.json`'s `contact.rows` — that second copy is how the Kontakt page
   once displayed the placeholder number while linking the real one.
 - **Logo**: done, and no longer a placeholder — the client delivered final vector

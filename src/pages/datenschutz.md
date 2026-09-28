@@ -79,9 +79,7 @@ kommt insbesondere kein reCAPTCHA zum Einsatz.
 
 **Versand der Anfrage:** Für die Zustellung der Formularanfragen an unser Postfach setzen
 wir den Dienst Resend (Resend, Inc., USA) als Auftragsverarbeiter ein. Dabei werden die
-von Ihnen angegebenen Daten an diesen Dienst übermittelt. `TODO(client)` — Abschluss
-eines Auftragsverarbeitungsvertrags nach Art. 28 DSGVO sowie Prüfung der Grundlage für
-die Übermittlung in ein Drittland (Art. 44 ff. DSGVO) vor Freischaltung des Formulars.
+von Ihnen angegebenen Daten an diesen Dienst übermittelt.
 
 ## Kontaktaufnahme über WhatsApp
 
@@ -98,10 +96,6 @@ Bearbeitung Ihrer Anfrage.
 **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO, soweit die Anfrage auf den Abschluss
 eines Vertrages gerichtet ist, im Übrigen Art. 6 Abs. 1 lit. f DSGVO — unser berechtigtes
 Interesse an einer einfachen Erreichbarkeit.
-
-`TODO(client)` — Von der Kanzlei prüfen zu lassen, ob die geschäftliche Nutzung von
-WhatsApp im vorliegenden Umfang mitgeteilt werden muss und ob ein Hinweis auf
-alternative Kontaktwege genügt.
 
 ## Ihre Rechte
 

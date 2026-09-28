@@ -72,9 +72,10 @@ export const company = {
   },
 
   email: {
-    /* Confirmed by the client, 14 Sep 2026. The mailbox has to exist on the domain
-       before launch — this flag puts the address into mailto: links and the structured
-       data graph, and an address that bounces is worse there than none. */
+    /* Address confirmed by the client on 14 Sep 2026, and the mailbox confirmed to
+       exist on the domain on 28 Sep 2026. This flag puts the address into mailto:
+       links and the structured data graph, where one that bounced would be worse than
+       none — it is also printed on the business card. */
     verified: true,
     display: content.company.email,
   },
@@ -107,12 +108,16 @@ export const company = {
     value: '',
   },
 
+  /** What src/pages/impressum.md states, and why two sections are absent from it.
+   *  Both confirmed by the client on 28 Sep 2026: there is no USt-IdNr. and no
+   *  Handwerkskammer entry. § 5 DDG asks for either only where it exists, so the
+   *  Impressum names neither — it used to carry a "## Umsatzsteuer" section reading
+   *  "TODO(client)", live, and a line suggesting the Steuernummer as a fallback, which
+   *  does not belong in an Impressum at all. If a USt-IdNr. is issued, it goes into
+   *  the Impressum under that heading and here. */
   legal: {
     rechtsform: 'Einzelunternehmen',
-    /** TODO(client): USt-IdNr. oder, falls keine vorliegt, die Steuernummer. */
-    ustId: '',
-    steuernummer: '',
-    /** No Handwerkskammer entry, per the client. */
+    ustId: null,
     kammer: null,
   },
 } as const;

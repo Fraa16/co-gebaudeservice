@@ -108,6 +108,25 @@ test('no draft banner reaches a built page', async ({ page }) => {
   }
 });
 
+test('no working note reaches a visitor', async ({ request }) => {
+  /* The test above looked for "Entwurf" and nothing else, so when the site went live
+     the Impressum still read "Umsatzsteuer-Identifikationsnummer: TODO(client)" and
+     "bitte von der Kanzlei bestätigen lassen, bevor die Seite online geht", and the
+     Datenschutzerklärung carried two more notes of the same kind. Read from the served
+     HTML rather than innerText so text inside a closed <details> counts too; scripts,
+     styles and HTML comments are not something a visitor reads, so they are dropped. */
+  for (const route of ROUTES) {
+    const html = await (await request.get(route)).text();
+    const text = html
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ');
+    const notes = text.match(/\bTODO\b[^.\n]{0,60}|\bFIXME\b|\bXXX\b|lorem ipsum/gi) ?? [];
+    expect(notes, `${route} shows a working note`).toEqual([]);
+  }
+});
+
 test('the photo band on /ueber-uns is four photographs or none', async ({ page }) => {
   /* The band used to render as soon as one of its four slots held a photo, showing
      only the filled ones — so the first photo to arrive, r-l1, which the home page
