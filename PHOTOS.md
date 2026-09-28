@@ -11,7 +11,7 @@ Im September 2026 kam ein Satz von acht Fotos, eines je Leistung, alle 1672 × 9
 
 | Slot | Leistung | Wo es erscheint | Datei |
 |---|---|---|---|
-| `r-hero` | — | Start, Kopfbereich | `hero-fensterreinigung.jpg`, Lizenz bestätigt |
+| `r-hero` | — | Start, Kopfbereich | `hausmeisterdienst.png` (dasselbe wie `r-l3`), siehe unten |
 | `r-l1` | Treppenhausreinigung | Start, Kachel · Leistungen · Über uns, Bildreihe | `treppenhausreinigung.png` |
 | `r-l2` | Fensterreinigung | Start, Kachel · Leistungen · Über uns, Bildreihe | `fensterreinigung.png` |
 | `r-l3` | Hausmeisterdienst | Start, Kachel · Leistungen | `hausmeisterdienst.png` |
@@ -73,9 +73,8 @@ Daraus folgt für jedes Foto:
   am meisten weg, links und rechts in den schmalen Kacheln — nichts Wichtiges ins
   obere und untere Fünftel oder an die Seitenränder legen.
 - **`r-hero` ist der Sonderfall.** Auf dem Handy ist der Rahmen hochkant (0,53 : 1),
-  am Desktop breit (1,82 : 1). Das Motiv muss als schmaler senkrechter Streifen aus
-  der Bildmitte genauso funktionieren wie als ganzes Querformat. Eine Person mittig im
-  Bild geht, eine Fensterfront, die über die ganze Breite läuft, nicht.
+  am Desktop breit (1,82 : 1), und links steht die Überschrift. Ideal ist ein Motiv im
+  **rechten Drittel** mit ruhiger Fläche links. Siehe „Das Hero-Foto" unten.
 - **`r-detail` wird am Laptop sehr flach** (3,43 : 1). Gesucht ist ein Podest oder Flur
   *der Länge nach*, nicht der Blick ein Treppenhaus hinauf.
 
@@ -110,10 +109,27 @@ beschreibt, was auf *diesem* Foto zu sehen ist, nicht die Leistung.
 
 ## Das Hero-Foto
 
-Das Hero-Foto stammt aus `design/website-rounded.pdf` und liegt nur in 1200 × 900 vor.
-**Die Lizenz für die Nutzung im Web hat der Kunde im September 2026 bestätigt.** Wenn
-es einmal ersetzt wird, dann wegen der Auflösung: am Desktop ist der Rahmen 1400 px
-breit, auf hochauflösenden Bildschirmen also doppelt so viele Pixel, wie das Foto hat.
+Seit September 2026 zeigt der Hero auf Wunsch des Kunden das Hausmeisterdienst-Foto.
+Das frühere Stockfoto (Glasreinigung, aus `design/website-rounded.pdf`, Lizenz vom
+Kunden bestätigt) liegt weiter unter `src/assets/photos/hero-fensterreinigung.jpg`.
+
+**Der Hero ist für ein Motiv rechts gebaut**, weil links die Überschrift steht. Im
+Hausmeister-Foto steht die Person mittig bis links; in voller Größe lief die
+Überschrift quer über das Gesicht. Deshalb wird das Foto ab 720 px Breite vom linken
+Rand aus vergrößert (1,8 × bis 960 px, 1,55 × bis 1200 px, darüber 1,4 ×), bis die
+Person neben der Überschrift steht. Unter 720 px, wo die Schrift die ganze Breite
+einnimmt, liegt stattdessen ein gleichmäßig heller Schleier über dem Foto
+(`--co-hero-scrim-narrow`); ohne ihn stand „und im Kreis Calw" als dunkle Schrift auf
+dem dunkelblauen Shirt, 1,3 : 1.
+
+Beides ist **auf dieses Foto abgestimmt**. Ein neues Hero-Foto muss gegengeprüft
+werden; `tests/photo-contrast.spec.ts` misst den Kontrast von Überschrift und
+Unterzeile bei acht Breiten von 360 bis 1440 px und schlägt an, wenn eine Zeile unter
+4,5 : 1 fällt. Ein Foto mit dem Motiv im rechten Drittel bräuchte die Vergrößerung
+nicht und wäre schärfer.
+
+Dasselbe Foto steht als `r-l3` auch in der Hausmeisterdienst-Kachel der Startseite,
+drei Abschnitte tiefer.
 
 ---
 

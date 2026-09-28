@@ -33,6 +33,87 @@ const PARTS = [
 const HIDE_GLYPHS =
   '.tile__num,.tile__chip,.tile__title,.tile__title a,.tile__text{color:transparent!important}';
 
+/** Luminance values of the screenshot pixels inside one rectangle, sorted. */
+function pixelsIn(
+  data: Buffer,
+  width: number,
+  height: number,
+  r: { x: number; y: number; w: number; h: number },
+) {
+  const values: number[] = [];
+  for (let y = Math.max(0, Math.floor(r.y)); y < Math.min(height, Math.ceil(r.y + r.h)); y++) {
+    for (let x = Math.max(0, Math.floor(r.x)); x < Math.min(width, Math.ceil(r.x + r.w)); x++) {
+      const o = (y * width + x) * 3;
+      values.push(lum(data[o]!, data[o + 1]!, data[o + 2]!));
+    }
+  }
+  return values.sort((a, b) => a - b);
+}
+
+test('the hero headline and lead keep their contrast over the photograph at every width', async ({
+  page,
+}, testInfo) => {
+  /* The hero is text over a photograph too, and it moves with the width: from 720px
+     the photo is enlarged to put the subject beside the headline, below that it
+     sits centred behind the text under a veil. Both have failed once — the headline
+     across his face on desktop, and "und im Kreis Calw" in dark type on his navy
+     shirt on phones, 1.3:1. Measured per line box rather than per element, so the
+     background beside a short line does not count against it. */
+  test.skip(testInfo.project.name !== 'ref-924', 'drives the viewport itself');
+  for (const width of [360, 390, 600, 768, 900, 1024, 1180, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.evaluate(() =>
+      Promise.all([...document.images].map((i) => i.decode().catch(() => undefined))),
+    );
+    const hero = page.locator('.hero');
+    const origin = (await hero.boundingBox())!;
+    const parts = await page.evaluate(() =>
+      ['.hero__title', '.hero__sub'].map((selector) => {
+        const el = document.querySelector(selector)!;
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const rgb = getComputedStyle(el).color.match(/\d+(\.\d+)?/g)!.slice(0, 3).map(Number);
+        const lines = [...range.getClientRects()].map((q) => ({
+          x: q.x,
+          y: q.y + scrollY,
+          w: q.width,
+          h: q.height,
+        }));
+        return { selector, rgb, lines };
+      }),
+    );
+
+    const hide = await page.addStyleTag({
+      content: '.hero__title,.hero__sub{color:transparent!important}',
+    });
+    const shot = await hero.screenshot();
+    await hide.evaluate((el) => (el as Element).remove());
+    const { data, info } = await sharp(shot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+
+    for (const { selector, rgb, lines } of parts) {
+      const fg = lum(rgb[0]!, rgb[1]!, rgb[2]!);
+      for (const line of lines) {
+        const values = pixelsIn(data, info.width, info.height, {
+          x: line.x - origin.x,
+          y: line.y - origin.y,
+          w: line.w,
+          h: line.h,
+        });
+        if (!values.length) continue;
+        const worst = Math.min(
+          ratio(fg, values[Math.floor(values.length * 0.9)]!),
+          ratio(fg, values[Math.floor(values.length * 0.1)]!),
+        );
+        expect
+          .soft(worst, `${width}px ${selector}: a line measures ${worst.toFixed(2)}:1`)
+          .toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  }
+});
+
 test('text over a photograph on the home page keeps 4.5:1 against every pixel behind it', async ({
   page,
 }) => {

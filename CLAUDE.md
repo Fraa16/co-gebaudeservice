@@ -123,9 +123,12 @@ kickers, roughly 8:1.
 ## Known placeholders
 
 - **Photography**: `PHOTOS.md` has the brief. All ten slots are shown and nine are
-  filled: the hero (recovered from the design PDF, licence confirmed by the client)
-  and the client's eight service photos, which arrived in September 2026 and live in
-  `src/assets/photos/` under the service's name. Each service shows its photo on its
+  filled with the client's eight service photos, which arrived in September 2026 and
+  live in `src/assets/photos/` under the service's name. The hero shows the
+  Hausmeisterdienst photo at the client's request; its subject stands left of centre
+  where the headline is, so `Hero.astro` enlarges it from the left edge from 720px up
+  and puts a uniform veil over it below — both tuned to that photo, and a new hero
+  photo must be re-checked (the contrast test sweeps eight widths). Each service shows its photo on its
   home tile (the first five), in its `/leistungen` row and, for four, in the
   `/ueber-uns` band. Only `r-detail` is open — the client is supplying a second
   stairwell shot, because r-l1's sits in the section directly above — and it renders

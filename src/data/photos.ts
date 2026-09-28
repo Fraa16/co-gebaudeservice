@@ -1,5 +1,4 @@
 import type { ImageMetadata } from 'astro';
-import heroFensterreinigung from '../assets/photos/hero-fensterreinigung.jpg';
 import treppenhausreinigung from '../assets/photos/treppenhausreinigung.png';
 import fensterreinigung from '../assets/photos/fensterreinigung.png';
 import hausmeisterdienst from '../assets/photos/hausmeisterdienst.png';
@@ -28,11 +27,13 @@ export interface PhotoEntry {
 }
 
 export const photos: Record<string, PhotoEntry> = {
-  // Recovered at 1200×900 from design/website-rounded.pdf. Licence for web use
-  // confirmed by the client, September 2026.
+  /* The Hausmeisterdienst photo, at the client's request (September 2026). It
+     replaced the stock Glasreinigung shot recovered from the design PDF, which stays
+     in src/assets/photos/hero-fensterreinigung.jpg, licensed, should it come back. The
+     same file is r-l3 below; see PHOTOS.md for what that means on the home page. */
   'r-hero': {
-    image: heroFensterreinigung,
-    alt: 'Glasfassade wird mit Sprühflasche und Mikrofasertuch gereinigt',
+    image: hausmeisterdienst,
+    alt: 'Hausmeister mit Reinigungswagen im Eingangsbereich eines Gebäudes',
     tone: 'ice',
   },
   'r-l1': {

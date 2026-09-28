@@ -54,6 +54,13 @@
      left while the photograph runs clean to the right edge. */
   --co-hero-scrim: linear-gradient(96deg, rgba(202,240,248,0.97) 0%, rgba(202,240,248,0.92) 26%, rgba(202,240,248,0.55) 48%, rgba(202,240,248,0.08) 72%, rgba(202,240,248,0) 100%);
   --co-hero-scrim-v: linear-gradient(180deg, rgba(3,4,94,0) 40%, rgba(3,4,94,0.10) 100%);
+  /* The same job on a narrow hero, where the text runs the full width and the
+     sideways scrim above leaves its right half over bare photograph. With the
+     Hausmeisterdienst photo that put "und im Kreis Calw" in dark type on his navy
+     shirt, measured 1.3:1. Deep-text over that shirt needs about .75 of the pale
+     ground for 4.5:1, so the veil holds .84 down past the buttons and eases off only
+     behind the fact panels, which carry their own glass ground. */
+  --co-hero-scrim-narrow: linear-gradient(180deg, rgba(202,240,248,0.92) 0%, rgba(202,240,248,0.84) 58%, rgba(202,240,248,0.5) 100%);
 
   /* Glass panels floating over photography, as on the reference heroes. */
   --co-glass-bg: rgba(255, 255, 255, 0.82);

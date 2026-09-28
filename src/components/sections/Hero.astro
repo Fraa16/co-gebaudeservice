@@ -16,7 +16,15 @@ const facts = [
 
 <section class="co-card--xl co-grain hero" id="hero">
   <div class="hero__media">
-    <Photo slot="r-hero" priority sizes="100vw" />
+    <!-- Up to the source's own 1672px, and `sizes` says how large it really renders:
+         from 720px on the photo is enlarged 1.4 to 1.8 times (see the styles below),
+         so "100vw" had the browser fetch a width it then upscaled. -->
+    <Photo
+      slot="r-hero"
+      priority
+      sizes="(min-width: 760px) 160vw, 100vw"
+      widths={[480, 800, 1200, 1672]}
+    />
   </div>
   <div class="hero__scrim" aria-hidden="true"></div>
   <div class="hero__scrim-v" aria-hidden="true"></div>
@@ -84,7 +92,9 @@ const facts = [
     inset: 0;
     pointer-events: none;
   }
-  .hero__scrim { background: var(--co-hero-scrim); }
+  /* Narrow first: the text spans the hero, so the whole of it needs the veil. The
+     sideways scrim takes over below, once the text is a column on the left. */
+  .hero__scrim { background: var(--co-hero-scrim-narrow); }
   .hero__scrim-v { background: var(--co-hero-scrim-v); }
 
   .hero__body {
@@ -213,5 +223,26 @@ const facts = [
     }
     .hero__float--left { left: clamp(16px, 2vw, 28px); }
     .hero__float--right { right: clamp(16px, 2vw, 28px); }
+    .hero__scrim { background: var(--co-hero-scrim); }
+
+    /* The hero holds its type on the left, so it wants a photo whose subject stands
+       right of centre. The Hausmeisterdienst shot has him left of centre, and at
+       full frame the headline ran straight across his face. The frame (about 1.8:1)
+       is as wide as the photo (1.78:1), so object-position has no slack to move him;
+       enlarging from the left edge does, and puts him beside the headline. Tuned for
+       this photograph: a new hero photo should be checked against it. */
+    .hero__media :global(.photo) {
+      transform: scale(1.8);
+      transform-origin: 0 10%;
+    }
+  }
+  /* The headline takes a smaller share of a wider hero, so less enlargement is
+     needed as it grows — and less means sharper. Each step is the least that keeps
+     "in" off his cap and "festem" off his face at the narrow end of its range. */
+  @container page (min-width: 960px) {
+    .hero__media :global(.photo) { transform: scale(1.55); }
+  }
+  @container page (min-width: 1200px) {
+    .hero__media :global(.photo) { transform: scale(1.4); }
   }
 </style>
