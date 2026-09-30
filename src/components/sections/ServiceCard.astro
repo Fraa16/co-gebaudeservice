@@ -70,6 +70,10 @@ const num = String(index + 1).padStart(2, '0');
 <style>
   .tile {
     position: relative;
+    /* A stacking context of its own, so the photograph, scrim and grain can sit at
+       z-index -1 — under the text but above the tile's ground — without positioning
+       the text. See .tile__title a::after for why the text must stay unpositioned. */
+    isolation: isolate;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -157,8 +161,14 @@ const num = String(index + 1).padStart(2, '0');
     color: var(--co-blue);
   }
 
+  .tile > :global(.photo),
+  .tile > .co-scrim,
+  .tile > .tile__watermark,
+  .tile.co-grain::before {
+    z-index: -1;
+  }
+
   .tile__body {
-    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 8px;
@@ -182,6 +192,13 @@ const num = String(index + 1).padStart(2, '0');
   }
   .tile--feature .tile__title { font-size: clamp(26px, 3vw, 40px); }
   .tile__title a { color: inherit; }
+  /* The whole tile is the link. This overlay is meant to cover the tile, and it did
+     not: .tile__body was position:relative (to lift the text over the scrim), which
+     made the body its containing block, so only the title and teaser were clickable.
+     The photograph, the chip and the ↗ button that plainly invites a tap all did
+     nothing — on a phone, most of the tile. The text now clears the scrim through
+     z-index -1 on the layers beneath it instead, and nothing between the tile and this
+     overlay is positioned. */
   .tile__title a::after {
     content: '';
     position: absolute;
@@ -207,6 +224,8 @@ const num = String(index + 1).padStart(2, '0');
     background: var(--co-white);
     color: var(--co-ink);
     transition: background-color 220ms ease, transform 260ms ease;
+    /* Drawn over the link overlay, so a tap on it has to fall through to the link. */
+    pointer-events: none;
   }
   .tile.is-linked:hover .tile__arrow {
     background: var(--co-cyan);

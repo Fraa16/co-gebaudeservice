@@ -72,7 +72,7 @@ test('a link that promises an action lands on the form, not on a page top', asyn
   const ACTIONS = ['Angebot anfordern', 'Termin vereinbaren', 'Anfrage starten'];
   const bad: string[] = [];
 
-  for (const route of ['/', '/leistungen', '/ueber-uns', '/leistungen/treppenhausreinigung']) {
+  for (const route of ['/', '/leistungen', '/ueber-uns', '/datenschutz']) {
     await page.goto(route);
     const links = await page.locator('a').evaluateAll((els, actions) =>
       els

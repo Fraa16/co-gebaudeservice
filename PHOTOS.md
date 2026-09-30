@@ -118,9 +118,11 @@ Hausmeister-Foto steht die Person mittig bis links; in voller Größe lief die
 Überschrift quer über das Gesicht. Deshalb wird das Foto ab 720 px Breite vom linken
 Rand aus vergrößert (1,8 × bis 960 px, 1,55 × bis 1200 px, darüber 1,4 ×), bis die
 Person neben der Überschrift steht. Unter 720 px, wo die Schrift die ganze Breite
-einnimmt, liegt stattdessen ein gleichmäßig heller Schleier über dem Foto
-(`--co-hero-scrim-narrow`); ohne ihn stand „und im Kreis Calw" als dunkle Schrift auf
-dem dunkelblauen Shirt, 1,3 : 1.
+einnimmt, liegt das Foto nicht mehr hinter dem Text, sondern steht darunter als eigenes,
+gerundetes Bild im Format 4 : 3 (Ausschnitt `object-position: 45% 30%`, Person und
+Wagen ganz im Bild). Vorher lag es hinter der Schrift unter einem Schleier von 84 %
+Deckkraft, den dunkle Schrift auf dem dunkelblauen Shirt brauchte; auf dem Handy war
+vom Foto dadurch fast nichts zu sehen.
 
 Beides ist **auf dieses Foto abgestimmt**. Ein neues Hero-Foto muss gegengeprüft
 werden; `tests/photo-contrast.spec.ts` misst den Kontrast von Überschrift und

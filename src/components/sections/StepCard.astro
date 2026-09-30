@@ -22,18 +22,29 @@ const { num, title, text, offset = false } = Astro.props;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
-    min-height: clamp(220px, 20vw, 290px);
+    /* Interpolated from 160px at a 360px viewport to 290px at 1440px. This was
+       clamp(220px, 20vw, 290px), which sat on its 220px floor across every phone:
+       stacked one per row, each step was a 220px card holding about 100px of text,
+       four times over. */
+    min-height: clamp(160px, 116.67px + 12.037vw, 290px);
     background: var(--co-on-dark-card-bg);
     border: 1px solid var(--co-on-dark-card-border);
     border-radius: var(--co-radius-step);
     padding: clamp(18px, 2.4vw, 30px);
   }
-  /* Stagger: every other step drops, so the row is not a flat band. */
-  .step.is-offset { transform: translateY(clamp(14px, 2.4vw, 34px)); }
+  /* Stagger: every other step drops, so the row is not a flat band. Only once the
+     steps stand side by side — stacked, the same drop just moved every second card
+     down, leaving 36px above it and 8px below. */
+  @container main (min-width: 580px) {
+    .step.is-offset { transform: translateY(clamp(14px, 2.4vw, 34px)); }
+  }
 
   .step__ghost {
     position: absolute;
-    top: clamp(-12px, -1vw, -4px);
+    /* The numeral bleeds off the top edge on a wide card, by design. At phone size
+       the same -4px cut the top off the digits instead, which reads as a mistake
+       rather than a bleed, so the overhang now scales in from zero. */
+    top: clamp(-12px, 3.33px - 1.065vw, 0px);
     right: clamp(4px, 1vw, 14px);
     color: var(--co-ice);
     opacity: 0.14;

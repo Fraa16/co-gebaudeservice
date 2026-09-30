@@ -15,19 +15,19 @@ import { legalNav } from '../data/nav';
     </div>
 
     <address class="site-footer__address">
-      {company.address.display}<br />
+      <span>{company.address.display}</span>
       {
         company.phone.verified ? (
           <a href={`tel:${company.phone.e164}`}>{company.phone.display}</a>
         ) : (
-          company.phone.display
+          <span>{company.phone.display}</span>
         )
-      }<br />
+      }
       {
         company.email.verified ? (
           <a href={`mailto:${company.email.display}`}>{company.email.display}</a>
         ) : (
-          company.email.display
+          <span>{company.email.display}</span>
         )
       }
     </address>
@@ -92,12 +92,22 @@ import { legalNav } from '../data/nav';
     text-wrap: pretty;
   }
 
+  /* Lines rather than <br>s, so the two links can be real touch targets. As lines of
+     running text they were 22px tall and 6px apart — the number is the one thing on
+     this card people tap on a phone, and it was the hardest thing to hit. */
   .site-footer__address {
-    font: 400 16px/1.75 var(--co-font-body);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    align-items: center;
+    font: 400 16px/1.5 var(--co-font-body);
     font-style: normal;
     color: var(--co-pale);
   }
   .site-footer__address a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
     color: var(--co-cyan);
   }
   .site-footer__address a:hover {
@@ -106,18 +116,25 @@ import { legalNav } from '../data/nav';
   .site-footer__bottom {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding-top: 22px;
+    /* The legal links carry 11px of their own air above and below now. */
+    padding-top: 11px;
     font: 400 13px/1.5 var(--co-font-body);
     color: var(--co-ice);
   }
+  /* Impressum and Datenschutz are links a visitor is legally owed an easy route to;
+     at 13px they were 20px tall. The type stays small, the target does not. */
   .site-footer__legal {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 0 20px;
   }
   .site-footer__legal a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
     color: var(--co-ice);
   }
   .site-footer__legal a:hover {

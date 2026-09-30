@@ -54,7 +54,9 @@ cards, 999px for every interactive element (nav links, buttons, chips, labels). 
 flat fills with 1px `#DCE6EF` borders. Deep navy `#03045E` and blue `#0077B6` carry the
 weight, cyan `#00B4D8` is the accent, pale `#CAF0F8` is the light ground. Archivo for
 headings with tight negative tracking, Source Sans 3 for everything else. Fully fluid: no
-media queries, no max-width container — `auto-fit` grids and `clamp()` do the work.
+media queries — `auto-fit` grids and `clamp()` do the work. The one width limit is the
+page frame's, `--co-page-max` (1920px): below it nothing is capped; above it a 2560
+monitor gets the 1920 composition centred on the ground rather than 2520px cards.
 
 Sections are **not** one repeated card. The page alternates archetypes: a full-bleed
 photographic hero with panels floating over its corners, a stat band divided by
@@ -119,6 +121,13 @@ kickers, roughly 8:1.
 12. **No `LocalBusiness` markup and no linked `tel:`/`mailto:` while contact details are
    placeholders.** `src/data/company.ts` gates each field; a fake NAP in structured data
    is worse than none.
+13. **Every control answers across 44px.** Grow the hit area, not the design: pills
+   and chips carry an invisible `::after` sized to 44px, and a card or row that looks
+   like one link *is* one link, through a stretched `::after`. That overlay only covers
+   the card if nothing between the card and the link is positioned — the home tiles
+   shipped with the overlay covering the text block alone, so their photos and ↗
+   buttons were dead on a phone. `tests/responsive.spec.ts` hit-tests every control
+   with `elementFromPoint` at 360, 390 and 768px; links inside a sentence are exempt.
 
 ## Known placeholders
 
@@ -126,9 +135,11 @@ kickers, roughly 8:1.
   filled with the client's eight service photos, which arrived in September 2026 and
   live in `src/assets/photos/` under the service's name. The hero shows the
   Hausmeisterdienst photo at the client's request; its subject stands left of centre
-  where the headline is, so `Hero.astro` enlarges it from the left edge from 720px up
-  and puts a uniform veil over it below — both tuned to that photo, and a new hero
-  photo must be re-checked (the contrast test sweeps eight widths). Each service shows its photo on its
+  where the headline is, so `Hero.astro` enlarges it from the left edge from 720px up.
+  Below 720px it is not behind the text at all but a framed image under it (4:3, 16:10
+  from 480px) — a veil strong enough for text over his shirt left the photo invisible
+  on phones. Both are tuned to that photo, and a new hero photo must be re-checked
+  (the contrast test sweeps eight widths). Each service shows its photo on its
   home tile (the first five), in its `/leistungen` row and, for four, in the
   `/ueber-uns` band. Only `r-detail` is open — the client is supplying a second
   stairwell shot, because r-l1's sits in the section directly above — and it renders

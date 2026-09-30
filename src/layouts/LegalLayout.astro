@@ -115,7 +115,9 @@ const meta = [
     display: flex;
     gap: 12px;
     align-items: baseline;
-    padding: 11px 10px 11px 0;
+    /* 12px, not 11: one line of 15px/1.35 plus 22px came to 42px, 2px short of a
+       thumb-sized target, on the list a visitor taps to jump through the page. */
+    padding: 12px 10px 12px 0;
     font: 500 15px/1.35 var(--co-font-body);
     color: var(--co-ink);
     border-radius: var(--co-radius-input);

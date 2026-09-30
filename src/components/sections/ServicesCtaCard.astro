@@ -23,7 +23,10 @@ import { resolveHref } from '../../data/routes';
     align-items: flex-start;
     justify-content: space-between;
     gap: 22px;
-    min-height: clamp(300px, 26vw, 370px);
+    /* No min-height of its own. Beside a tile, the mosaic's row stretches it to the
+       tile's height and space-between sends the button to the foot; alone on a row
+       — every phone, and a tablet in portrait — it is as tall as what it says. The
+       fixed 300px floor left a 100px hole between its text and its button there. */
     padding: var(--co-small-card-padding);
   }
   .services-cta__text {

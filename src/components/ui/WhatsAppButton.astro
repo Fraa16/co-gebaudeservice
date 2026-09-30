@@ -49,8 +49,15 @@ const href = `https://wa.me/${waMe}?text=${text}`;
 <style>
   .wa {
     position: fixed;
-    /* env() keeps it clear of the iPhone home indicator and any browser chrome. */
-    right: max(var(--co-page-padding), env(safe-area-inset-right));
+    /* env() keeps it clear of the iPhone home indicator and any browser chrome. The
+       third term holds it to the page frame's edge once the frame stops growing
+       (--co-page-max), instead of stranding it on the bare ground at the far corner of
+       a wide monitor. 100% is the viewport for a fixed box, without the scrollbar. */
+    right: max(
+      var(--co-page-padding),
+      env(safe-area-inset-right),
+      calc((100% - var(--co-page-max)) / 2 + var(--co-page-padding))
+    );
     bottom: max(var(--co-page-padding), env(safe-area-inset-bottom));
     z-index: 30;
 

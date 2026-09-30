@@ -44,11 +44,19 @@ const { services } = Astro.props;
   .index__row + .index__row {
     border-top: var(--co-rule);
   }
+  /* A grid with named places rather than a wrapping flex row. Wrapped, the turnus and
+     the arrow fell onto a second line as a pair, so on a phone the arrow sat wherever
+     that row's turnus happened to end: 60px in on one row, 290px on the next, on a
+     line of its own on a third. Now the arrow has its own column at the right edge of
+     every row, centred against the two lines beside it. */
   .index__link {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 3.4ch minmax(0, 1fr) auto;
+    grid-template-areas:
+      'num title  arrow'
+      '.   turnus arrow';
     align-items: baseline;
-    gap: clamp(12px, 2vw, 28px);
+    gap: 6px clamp(12px, 2vw, 28px);
     padding: clamp(16px, 1.8vw, 26px) clamp(8px, 1vw, 16px);
     color: var(--co-ink);
     border-radius: var(--co-radius-m);
@@ -60,10 +68,9 @@ const { services } = Astro.props;
     color: var(--co-ink);
   }
   .index__num {
-    flex: none;
+    grid-area: num;
     /* Wide enough for "01" plus its tracking — 2.6ch wrapped the digits onto two
-       lines once letter-spacing was applied. */
-    min-width: 3.4ch;
+       lines once letter-spacing was applied. The column is 3.4ch for that reason. */
     white-space: nowrap;
     font: 600 12px/1 var(--co-font-body);
     font-variant-numeric: tabular-nums;
@@ -71,19 +78,18 @@ const { services } = Astro.props;
     color: var(--co-deep-text);
   }
   .index__title {
-    flex: 1 1 min(360px, 100%);
+    grid-area: title;
     min-width: 0;
     font: 600 clamp(21px, 2.4vw, 32px) / 1.1 var(--co-font-heading);
     letter-spacing: var(--co-h3-tracking);
   }
   .index__turnus {
-    flex: 0 1 auto;
+    grid-area: turnus;
     font: 400 14px/1.4 var(--co-font-body);
     color: var(--co-muted);
-    text-align: right;
   }
   .index__arrow {
-    flex: none;
+    grid-area: arrow;
     display: grid;
     place-items: center;
     width: 38px;
@@ -97,5 +103,14 @@ const { services } = Astro.props;
     background: var(--co-ink);
     color: var(--co-white);
     transform: translateX(3px);
+  }
+
+  /* Once there is room, one line per service: number, name, turnus, arrow. */
+  @container main (min-width: 720px) {
+    .index__link {
+      grid-template-columns: 3.4ch minmax(0, 1fr) auto auto;
+      grid-template-areas: 'num title turnus arrow';
+    }
+    .index__turnus { text-align: right; }
   }
 </style>

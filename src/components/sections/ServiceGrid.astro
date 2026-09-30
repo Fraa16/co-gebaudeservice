@@ -72,7 +72,7 @@ const RECIPE = [
         );
       })
     }
-    <div class="leistungen__cell is-narrow co-reveal">
+    <div class="leistungen__cell is-cta co-reveal">
       <ServicesCtaCard />
     </div>
   </div>
@@ -125,4 +125,7 @@ const RECIPE = [
   .leistungen__cell > :global(*) { flex: 1 1 auto; }
   .is-wide { flex: 2 1 min(620px, 100%); }
   .is-narrow { flex: 1 1 min(310px, 100%); }
+  /* Sized like a narrow tile, but without a tile's minimum height: it has no photo to
+     show, so alone on a row it should be as tall as its text and no taller. */
+  .is-cta { flex: 1 1 min(310px, 100%); }
 </style>

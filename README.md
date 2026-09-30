@@ -37,14 +37,14 @@ tests/            Playwright specs
 | Route | |
 |---|---|
 | `/` | Hero, Schriftband, five service cards, Treppenhaus chapter, Ablauf, Kontakt |
-| `/leistungen` | All eight services with scope lists |
-| `/leistungen/treppenhausreinigung` | The one service with established long-form copy |
+| `/leistungen` | All eight services, each with its long-form text, scope list and photo, then the FAQ |
 | `/ueber-uns` · `/kontakt` | |
-| `/impressum` · `/datenschutz` | Drafts — see *Launched, and what is still open* |
+| `/impressum` · `/datenschutz` | See *Launched, and what is still open* |
 
-Adding a second deep service page: give the service real copy, then create
-`src/content.config.ts` with a `glob()` loader over `src/content/leistungen/*.md` and
-swap the static route for `[...slug].astro`. Component props do not change.
+There used to be a `/leistungen/treppenhausreinigung` page; its text moved into the
+Treppenhausreinigung section of `/leistungen` when every service got long-form copy
+(see `CONTENT-REVIEW.md`). A deep page per service would start from a `glob()` loader
+over `src/content/leistungen/*.md` and a `[...slug].astro` route.
 
 ## Editing copy
 
@@ -73,8 +73,9 @@ review:
   empty marketing phrases, no superlatives, no unverifiable claims.
 
 The test suite covers the rest: no breakpoints in the built CSS, no third-party
-requests, no placeholder contact details in structured data, zero axe violations, and a
-visible focus ring on every interactive element.
+requests, no placeholder contact details in structured data, zero axe violations, a
+visible focus ring on every interactive element, and a 44px touch target on every
+control at phone and tablet widths, measured by hit-testing rather than by box size.
 
 ## Contact form
 

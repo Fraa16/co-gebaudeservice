@@ -33,6 +33,7 @@ const rows = contactRoutes;
     gap: 10px;
   }
   .contact-row {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -54,6 +55,14 @@ const rows = contactRoutes;
   }
   a.contact-row__value:hover {
     color: var(--co-blue);
+  }
+  /* The row is the target, not the 22px of text in it: it is drawn as one pill, so a
+     tap anywhere on "Telefon … 0172 3001489" should dial. */
+  a.contact-row__value::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
   }
   /* Value and its note stack at the row's right edge, so the hours sit directly under
      the number they belong to. */

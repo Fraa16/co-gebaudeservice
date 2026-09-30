@@ -30,7 +30,7 @@ test('no row of four strands a single item on its own line', async ({ page }) =>
   const stranded: string[] = [];
   for (const w of WIDTHS) {
     await page.setViewportSize({ width: w, height: 900 });
-    for (const route of ['/', '/ueber-uns', '/kontakt', '/leistungen/treppenhausreinigung']) {
+    for (const route of ['/', '/leistungen', '/ueber-uns', '/kontakt']) {
       await page.goto(route);
       const bad = await page.evaluate(() => {
         const out: string[] = [];
@@ -183,6 +183,199 @@ test('interactive targets meet the WCAG 2.5.8 minimum of 24px', async ({ page })
     for (const b of bad) small.push(`${route}: ${b}`);
   }
   expect(small).toEqual([]);
+});
+
+test('every control a thumb can reach answers across 44px on touch widths', async ({ page }) => {
+  /* The 24px test above measures boxes, and only of buttons and inputs. It passed a
+     home tile whose photograph and ↗ button did nothing when tapped (the link's overlay
+     covered the text block only), a 20px phone number, 36px nav pills on a tablet and
+     20px Impressum links. This hit-tests instead: from each control's centre it walks
+     outward with elementFromPoint and measures how far the control still answers. That
+     counts an invisible hit area — a pill's ::after, a stretched link — the way a
+     finger does, and it fails a target something else is lying on.
+
+     44px is Apple's minimum and roughly a fingertip; WCAG 2.5.8 asks only 24. Two
+     exemptions, both from WCAG: a link inside a sentence, and a checkbox, which is 24px
+     here with its whole label as the target. */
+  const bad: string[] = [];
+  for (const width of [360, 390, 768]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const route of ROUTES) {
+      await page.goto(route);
+      const hits = await page.evaluate(() => {
+        const out: string[] = [];
+        const controls = document.querySelectorAll<HTMLElement>(
+          'a[href], button, summary, select, textarea, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])',
+        );
+        for (const el of controls) {
+          if (el.closest('[aria-hidden="true"], .contact-form__trap, .co-skip-link')) continue;
+          if (!el.checkVisibility({ visibilityProperty: true, opacityProperty: true })) continue;
+
+          // A link that is part of a sentence: its nearest block holds more text than it.
+          if (el.tagName === 'A' && getComputedStyle(el).display === 'inline') {
+            let block = el.parentElement;
+            while (block && getComputedStyle(block).display === 'inline') block = block.parentElement;
+            const own = (el.textContent ?? '').trim().length;
+            if (block && (block.textContent ?? '').trim().length > own + 3) continue;
+          }
+
+          el.scrollIntoView({ block: 'center', inline: 'nearest' });
+          const r = el.getBoundingClientRect();
+          if (!r.width || !r.height) continue;
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const answers = (x: number, y: number) => {
+            const hit = document.elementFromPoint(x, y);
+            return !!hit && (hit === el || el.contains(hit));
+          };
+          const reach = (dx: number, dy: number) => {
+            let n = 0;
+            for (let d = 0.5; d < 80; d += 0.5) {
+              if (!answers(cx + dx * d, cy + dy * d)) break;
+              n = d;
+            }
+            return n;
+          };
+          const name = `${el.tagName.toLowerCase()}.${[...el.classList][0] ?? ''} "${(el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 24)}"`;
+          if (!answers(cx, cy)) {
+            out.push(`${name} is covered at its centre`);
+            continue;
+          }
+          const w = reach(-1, 0) + reach(1, 0);
+          const h = reach(0, -1) + reach(0, 1);
+          // Half-pixel sampling: 43 is 44 within the step.
+          if (w < 43 || h < 43) out.push(`${name} answers across ${w}×${h}px`);
+        }
+        return [...new Set(out)];
+      });
+      for (const h of hits) bad.push(`${width}px ${route}: ${h}`);
+    }
+  }
+  expect(bad).toEqual([]);
+});
+
+test('a home service tile answers a tap anywhere on it', async ({ page }) => {
+  /* The tiles look like one big link — a photograph, a chip, a ↗ button in the
+     corner — and for months only the title and teaser were. The overlay meant to cover
+     the tile had the text block as its containing block. On a phone the photo is
+     most of the tile, so most taps did nothing. */
+  const dead: string[] = [];
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    // The floating button and the sticky header lie over whatever scrolls under them,
+    // by design; a tile corner under either is not a dead spot on the tile.
+    await page.addStyleTag({
+      content: 'a[href*="wa.me"], .site-header { visibility: hidden !important; }',
+    });
+    const tiles = page.locator('.tile.is-linked');
+    const count = await tiles.count();
+    expect(count, 'linked tiles on the home page').toBeGreaterThan(0);
+    for (let i = 0; i < count; i++) {
+      await tiles.nth(i).scrollIntoViewIfNeeded();
+      const misses = await tiles.nth(i).evaluate((tile) => {
+        const link = tile.querySelector('.tile__title a');
+        const b = tile.getBoundingClientRect();
+        const arrow = tile.querySelector('.tile__arrow')!.getBoundingClientRect();
+        const chip = tile.querySelector('.tile__chip')!.getBoundingClientRect();
+        const points: [string, number, number][] = [
+          ['photo', b.left + b.width / 2, b.top + b.height * 0.35],
+          ['↗ button', arrow.left + arrow.width / 2, arrow.top + arrow.height / 2],
+          ['chip', chip.left + chip.width / 2, chip.top + chip.height / 2],
+          ['corner', b.right - 12, b.bottom - 12],
+        ];
+        return points
+          .filter(([, x, y]) => document.elementFromPoint(x, y)?.closest('a') !== link)
+          .map(([where]) => `${tile.id}: the ${where}`);
+      });
+      for (const m of misses) dead.push(`${width}px ${m}`);
+    }
+  }
+  expect(dead, 'places on a tile where a tap does nothing').toEqual([]);
+});
+
+test('the page frame stops growing at 1920px and stays centred', async ({ page }) => {
+  /* Fully fluid below 1920; above it the cards kept stretching — 2520px on a 2560
+     monitor, where the bento's closing card became an empty ink band across the whole
+     row. --co-page-max holds the 1920 composition and centres it. The WhatsApp button
+     follows the frame, so it does not float alone on the bare ground in the corner. */
+  for (const width of [1440, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const frame = (await page.locator('.co-page').boundingBox())!;
+    expect(Math.round(frame.width), `${width}px: the frame should still be fluid`).toBe(width);
+  }
+
+  for (const width of [2560, 3000]) {
+    await page.setViewportSize({ width, height: 1200 });
+    await page.goto('/');
+    const m = await page.evaluate(() => {
+      const frame = document.querySelector('.co-page')!.getBoundingClientRect();
+      const hero = document.querySelector('.hero')!.getBoundingClientRect();
+      const wa = document.querySelector('a[href*="wa.me"]')?.getBoundingClientRect();
+      return {
+        frame: { left: frame.left, right: frame.right, width: frame.width },
+        hero: hero.width,
+        viewport: document.documentElement.clientWidth,
+        waRight: wa?.right ?? null,
+      };
+    });
+    expect(Math.round(m.frame.width), `${width}px: frame width`).toBe(1920);
+    expect(Math.abs(m.frame.left - (m.viewport - m.frame.right)), `${width}px: frame centred`).toBeLessThan(1);
+    expect(m.hero, `${width}px: hero width`).toBeLessThanOrEqual(1920);
+    if (m.waRight !== null) {
+      expect(m.waRight, `${width}px: WhatsApp button inside the frame`).toBeLessThanOrEqual(m.frame.right + 1);
+    }
+  }
+});
+
+test('on a phone the hero photograph is shown, not veiled behind the text', async ({ page }) => {
+  /* Below 720px the headline runs the full width, so a photo behind it needed a veil
+     of .84 for dark type over his navy shirt, and the client's chosen hero photo was
+     a pale smear on every phone. It now stands under the text as a framed image of its
+     own. From 720px it is behind the text again, full bleed, beside the headline. */
+  for (const width of [360, 390, 600]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const m = await page.evaluate(() => {
+      const box = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const media = box('.hero__media');
+      const text = [box('.hero__title'), box('.hero__sub'), box('.hero__actions')];
+      const overlaps = text.some((t) => t.bottom > media.top && t.top < media.bottom);
+      const veil = getComputedStyle(document.querySelector('.hero__scrim')!).display;
+      return { height: media.height, overlaps, veil };
+    });
+    expect(m.overlaps, `${width}px: text over the hero photo`).toBe(false);
+    expect(m.height, `${width}px: hero photo height`).toBeGreaterThan(200);
+    expect(m.veil, `${width}px: hero veil`).toBe('none');
+  }
+
+  await page.setViewportSize({ width: 924, height: 900 });
+  await page.goto('/');
+  const wide = await page.evaluate(() => {
+    const media = document.querySelector('.hero__media')!.getBoundingClientRect();
+    const title = document.querySelector('.hero__title')!.getBoundingClientRect();
+    return title.top >= media.top && title.bottom <= media.bottom;
+  });
+  expect(wide, '924px: the photo is full bleed behind the headline').toBe(true);
+});
+
+test('stacked cards keep an even rhythm', async ({ page }) => {
+  /* The Ablauf steps stagger — every second card drops — which is the point side by
+     side and a fault stacked: one column with the same drop put 36px above every second
+     card and 8px below it. */
+  const bad: string[] = [];
+  for (const width of [320, 390, 480]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const gaps = await page.evaluate(() => {
+      const steps = [...document.querySelectorAll('.process__step > *')].map((s) => s.getBoundingClientRect());
+      return steps.slice(1).map((s, i) => Math.round(s.top - steps[i]!.bottom));
+    });
+    if (new Set(gaps).size > 1) bad.push(`${width}px: gaps between steps ${gaps.join(', ')}`);
+  }
+  expect(bad).toEqual([]);
 });
 
 test('hairline dividers do not survive a wrap into a stacked column', async ({ page }) => {

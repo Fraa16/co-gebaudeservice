@@ -54,11 +54,13 @@ test('the hero headline and lead keep their contrast over the photograph at ever
   page,
 }, testInfo) => {
   /* The hero is text over a photograph too, and it moves with the width: from 720px
-     the photo is enlarged to put the subject beside the headline, below that it
-     sits centred behind the text under a veil. Both have failed once — the headline
-     across his face on desktop, and "und im Kreis Calw" in dark type on his navy
-     shirt on phones, 1.3:1. Measured per line box rather than per element, so the
-     background beside a short line does not count against it. */
+     the photo is enlarged to put the subject beside the headline. Below 720px it no
+     longer sits behind the text at all (it follows it as a framed image), so there
+     this measures the pale ground — and would catch the photo sliding back under the
+     type. Both layouts have failed once: the headline across his face on desktop, and
+     "und im Kreis Calw" in dark type on his navy shirt on phones, 1.3:1. Measured per
+     line box rather than per element, so the background beside a short line does not
+     count against it. */
   test.skip(testInfo.project.name !== 'ref-924', 'drives the viewport itself');
   for (const width of [360, 390, 600, 768, 900, 1024, 1180, 1440]) {
     await page.setViewportSize({ width, height: 900 });

@@ -82,19 +82,33 @@ const facts = [
     grid-template-columns: minmax(0, 1fr);
     background: var(--co-pale);
   }
+  /* Narrow first. On a phone the text runs the full width of the hero, so a photo
+     behind it needs a veil strong enough for dark type over his navy shirt — .84 of
+     the pale ground — and under that veil the photograph was a pale smear: the one
+     picture the client chose for the top of the site, and phones never saw it. So
+     below 720px it is not behind the text at all. It follows the text as a framed
+     photograph of its own, with the facts panel floating over its lower edge the way
+     both panels float over the photo's corners on a wide screen. No text crosses it,
+     so it needs no scrim. */
   .hero__media {
-    position: absolute;
-    inset: 0;
+    position: relative;
+    order: 1;
+    margin: 0 clamp(12px, 2vw, 28px);
+    aspect-ratio: 4 / 3;
+    border-radius: var(--co-radius-l);
+    overflow: hidden;
   }
+  /* 4:3 shows three quarters of the 1.78:1 frame's width and all of its height: he
+     stands just left of centre, so the crop keeps him and his cart whole. */
+  .hero__media :global(.photo) { object-position: 45% 30%; }
   .hero__scrim,
   .hero__scrim-v {
+    display: none;
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
-  /* Narrow first: the text spans the hero, so the whole of it needs the veil. The
-     sideways scrim takes over below, once the text is a column on the left. */
-  .hero__scrim { background: var(--co-hero-scrim-narrow); }
+  .hero__scrim { background: var(--co-hero-scrim); }
   .hero__scrim-v { background: var(--co-hero-scrim-v); }
 
   .hero__body {
@@ -154,11 +168,13 @@ const facts = [
     box-shadow: var(--co-shadow-card);
   }
   .hero__float--left {
+    order: 2;
     display: flex;
     flex-wrap: wrap;
     padding: clamp(14px, 1.6vw, 22px) clamp(16px, 2vw, 26px);
     gap: clamp(14px, 2vw, 30px);
-    margin-bottom: 10px;
+    /* Pulled up over the photograph's lower edge and held inside its frame. */
+    margin: -52px clamp(24px, 4vw, 44px) clamp(12px, 2vw, 28px);
   }
   .hero__fact {
     display: grid;
@@ -166,7 +182,7 @@ const facts = [
     gap: 5px;
   }
   .hero__fact-label {
-    font: 600 10px/1 var(--co-font-body);
+    font: 600 11px/1 var(--co-font-body);
     letter-spacing: var(--co-label-tracking);
     text-transform: uppercase;
     color: var(--co-blue);
@@ -176,8 +192,11 @@ const facts = [
     color: var(--co-ink);
   }
 
+  /* On a phone this sat directly under "Leistungen ansehen", a second link to the
+     same page one thumb's width below the first. It returns with the wide layout,
+     where it is a panel on the photograph rather than a repeat of a button. */
   .hero__float--right {
-    display: flex;
+    display: none;
     margin-bottom: clamp(14px, 2vw, 28px);
     align-items: center;
     gap: 14px;
@@ -209,6 +228,14 @@ const facts = [
     color: var(--co-muted);
   }
 
+  /* A large phone or a small tablet in portrait: 4:3 across 700px of width is a
+     photograph taller than the headline, buttons and lead together. 16:10 still keeps
+     him and the cart whole — the frame is only a little narrower than the photo's own
+     1.78:1. */
+  @container page (min-width: 480px) {
+    .hero__media { aspect-ratio: 16 / 10; }
+  }
+
   /* Wide enough to float the panels over the corners without hitting the CTAs. */
   @container page (min-width: 720px) {
     .hero {
@@ -216,14 +243,27 @@ const facts = [
       min-height: clamp(500px, 66vh, 720px);
     }
     .hero__body { padding-bottom: clamp(120px, 14vw, 180px); }
+    /* The photograph goes back behind everything, full bleed. */
+    .hero__media {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      aspect-ratio: auto;
+      border-radius: 0;
+    }
+    .hero__media :global(.photo) { object-position: 50% 50%; }
+    .hero__scrim,
+    .hero__scrim-v { display: block; }
     .hero__float {
       position: absolute;
       bottom: clamp(16px, 2vw, 28px);
       margin: 0;
     }
     .hero__float--left { left: clamp(16px, 2vw, 28px); }
-    .hero__float--right { right: clamp(16px, 2vw, 28px); }
-    .hero__scrim { background: var(--co-hero-scrim); }
+    .hero__float--right {
+      display: flex;
+      right: clamp(16px, 2vw, 28px);
+    }
 
     /* The hero holds its type on the left, so it wants a photo whose subject stands
        right of centre. The Hausmeisterdienst shot has him left of centre, and at

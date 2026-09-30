@@ -44,5 +44,9 @@ const { name, label, options } = Astro.props;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    /* A rendered <legend> is not a grid item, so the fieldset's gap never reached it
+       and the label sat flush on the first chip, where every other label in the form
+       sits 7px above its field. */
+    padding-top: 7px;
   }
 </style>

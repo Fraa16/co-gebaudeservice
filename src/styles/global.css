@@ -121,6 +121,31 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 .co-btn { text-align: center; }
 
+/* Touch targets. A nav pill is 36px tall and a chip 38px — the design's sizes, and
+   right for a mouse — but under the 44px a thumb needs, and the header pills are what
+   a tablet in portrait shows. The hit area grows instead of the pill: an invisible
+   overlay reaching exactly 44px tall. It is sized from the pill's own height rather
+   than a fixed 4px, because it hangs off the padding box, inside the border: a flat
+   -4px made a 36px pill's area 42px. It only grows vertically, and a chip's 38px
+   grows by 3px each way, inside the 8px between rows of chips, so no two targets'
+   areas overlap. tests/responsive.spec.ts measures the result with real hit tests. */
+.co-nav-pill,
+.co-chip { position: relative; }
+.co-nav-pill::after,
+.co-chip::after {
+  content: '';
+  position: absolute;
+  inset: min(0px, (100% - 44px) / 2) 0;
+}
+
+/* Every button reaches 44px. The ink-ground variant's 14px padding made it 43. */
+.co-btn { min-block-size: 44px; }
+
+/* The header logo. Here rather than in SiteHeader for the reason given under "Header
+   wordmark" below: a class passed to a child component is never scoped. The short
+   logo on a phone is 32px tall; the header row is 44px, so the link can be too. */
+.site-header__logo { flex: none; min-block-size: 44px; }
+
 /* Form ---------------------------------------------------------------- */
 
 .co-field { width: 100%; }
@@ -366,12 +391,16 @@ button, input, textarea, select { font: inherit; color: inherit; }
     border-top: 0;
     border-left: var(--co-rule);
   }
-  .co-facts__item:first-child { padding-left: 0; border-left: 0; }
+  /* The stacked rules above zero the first item's top and the last item's bottom, and
+     as :first-child / :last-child they outrank the plain padding-block here — so side
+     by side the first fact sat 4px higher than its neighbours. Restated explicitly. */
+  .co-facts__item:first-child { padding-left: 0; padding-top: 4px; border-left: 0; }
+  .co-facts__item:last-child { padding-bottom: 4px; }
 }
 .co-card--ink .co-facts__item { border-color: var(--co-on-dark-divider); }
 
 .co-facts__label {
-  font: 600 10px/1 var(--co-font-body);
+  font: 600 11px/1 var(--co-font-body);
   letter-spacing: var(--co-label-tracking);
   text-transform: uppercase;
   color: var(--co-deep-text);

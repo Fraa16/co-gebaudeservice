@@ -89,11 +89,17 @@ const cta = primaryNav.find((i) => i.primary)!;
   /* Inline links: hidden until the header has room for them. */
   .site-header__inline { display: none; }
 
-  .site-header__logo { flex: none; }
-
+  /* 44px, the size a thumb can hit without aiming — Apple's minimum, and the menu
+     button's own size. On a phone the short logo is 32px tall and the CTA was 38px,
+     so the three controls in the one row a visitor touches first were three sizes.
+     The logo's rule is in global.css: it is a child component, so a scoped rule here
+     never reaches it. */
   .site-header__cta {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
     white-space: nowrap;
-    padding: 11px 16px;
+    padding: 0 16px;
   }
 
   /* Disclosure -------------------------------------------------------- */
@@ -171,6 +177,11 @@ const cta = primaryNav.find((i) => i.primary)!;
       gap: 8px;
     }
     .site-header__menu { display: none; }
-    .site-header__cta { padding: var(--co-nav-pill-padding); }
+    /* Back to the nav pills' own size, so the CTA lines up with them; global.css
+       gives every pill its 44px hit area. */
+    .site-header__cta {
+      min-block-size: 0;
+      padding: var(--co-nav-pill-padding);
+    }
   }
 </style>

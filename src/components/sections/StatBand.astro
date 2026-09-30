@@ -47,13 +47,17 @@ const stats = [
     align-content: start;
   }
   .stat-band__value {
-    /* Two rows' worth, so a value that wraps does not drop its label below the
-       others' baseline. */
-    min-height: calc(2 * 1.05em);
     font: 700 clamp(22px, 2.2vw, 34px) / 1.05 var(--co-font-heading);
     letter-spacing: var(--co-h2-tracking);
     color: var(--co-ink);
     text-wrap: balance;
+  }
+  /* Two rows' worth, so a value that wraps does not drop its label below its
+     neighbours' — which only means something when there are neighbours. Stacked on a
+     phone it put an empty line between every figure and its label, and the band ran
+     to 460px for four short facts. Same 580px as .co-row-4's first step. */
+  @container main (min-width: 580px) {
+    .stat-band__value { min-height: calc(2 * 1.05em); }
   }
   .stat-band__label {
     font: 400 14px/1.4 var(--co-font-body);

@@ -2,8 +2,9 @@ import { test, expect } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-/** CLAUDE.md: "Fully fluid: no media queries, no max-width container."
- *  User-preference queries are not breakpoints and stay allowed. */
+/** CLAUDE.md: "Fully fluid: no media queries." Layout responds through container
+ *  queries and clamp(); the page frame's --co-page-max is a max-inline-size, not a
+ *  breakpoint. User-preference queries are not breakpoints and stay allowed. */
 const ALLOWED = /prefers-reduced-motion|prefers-color-scheme|forced-colors|print/;
 
 function cssFiles(dir: string): string[] {
