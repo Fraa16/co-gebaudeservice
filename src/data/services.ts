@@ -113,7 +113,8 @@ if (verbatim.length !== 5) {
   throw new Error('content.json services drifted from 5 — update src/data/services.ts.');
 }
 
-/** The three the client named that the design never covered. All copy is draft. */
+/** The three the client named that the design never covered. Written for this build,
+ *  approved by the client on 30 Sep 2026 with the rest of CONTENT-REVIEW.md. */
 const drafted: Service[] = [
   {
     slug: 'kellerreinigung',
@@ -131,7 +132,7 @@ const drafted: Service[] = [
     turnus: 'Nach Bedarf oder im festen Intervall',
     icon: 'keller',
     photoSlot: 'r-l6',
-    draft: true,
+    draft: false,
     source: 'draft',
   },
   {
@@ -150,7 +151,7 @@ const drafted: Service[] = [
     turnus: 'Wöchentlich oder 14-tägig',
     icon: 'aussen',
     photoSlot: 'r-l7',
-    draft: true,
+    draft: false,
     source: 'draft',
   },
   {
@@ -169,12 +170,15 @@ const drafted: Service[] = [
     turnus: 'Zum Abfuhrkalender der Gemeinde',
     icon: 'tonne',
     photoSlot: 'r-l8',
-    draft: true,
+    draft: false,
     source: 'draft',
   },
 ];
 
 export const allServices: Service[] = [...verbatim, ...drafted];
 
-/** The home page shows only approved services. */
+/** The home page shows the design's five. The mosaic is laid out for five tiles and
+ *  a closing CTA card; the three added later are on /leistungen, one click away via
+ *  the grid's "Alle acht Leistungen". (This used to read "only approved services" —
+ *  since the sign-off of 30 Sep 2026 all eight are, so the reason is the layout.) */
 export const homeServices: Service[] = verbatim;

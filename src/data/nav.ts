@@ -11,7 +11,7 @@ export interface NavItem {
 
 export const primaryNav: NavItem[] = [
   { label: 'Leistungen', href: '/leistungen' }, // verbatim, content.json nav[0]
-  { label: 'Über uns', href: '/ueber-uns' }, // draft — client review
+  { label: 'Über uns', href: '/ueber-uns' }, // written for this build, approved 30 Sep 2026
   { label: 'Kontakt', href: '/kontakt' }, // verbatim, content.json contact.pill
   /* The page for "Kontakt", the form for "Angebot anfordern". Both pointed at
      /kontakt, so the nav offered one destination under two names and the CTA promised

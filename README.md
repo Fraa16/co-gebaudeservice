@@ -145,13 +145,18 @@ Still open, in the order it costs something:
    photo. `r-detail` still needs a second, different stairwell shot, which the client
    is supplying. The empty slot renders a branded `BrandPanel`, so nothing looks
    broken meanwhile.
-5. **The remaining `TODO(client)` fields** in `src/data/company.ts`: opening hours,
-   exact coordinates, `priceRange`, and confirmation of the ten towns in
-   `areaServed`. Each is gated, so the graph stays silent rather than guessing.
+5. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
+   and, if wanted, `priceRange`. Each is gated, so the graph stays silent rather than
+   guessing.
 
-Settled: `info@co-gebaeudeservice.de` exists (confirmed 28 Sep 2026), so
-`company.email.verified` stays `true` and the address on the business card is live.
+Settled:
 
-`www` must redirect to the apex in Vercel, not the other way round: the canonical URLs,
-the sitemap, the OG tags and the printed QR code on the business card all name
-`co-gebaeudeservice.de` without `www`.
+- `info@co-gebaeudeservice.de` exists (confirmed 28 Sep 2026), so
+  `company.email.verified` stays `true` and the address on the business card is live.
+- Hours: Mo–Fr 8–12 (confirmed 30 Sep 2026). In the graph as
+  `openingHoursSpecification`, and shown as "erreichbar Mo–Fr, 8–12 Uhr" under the
+  phone number wherever it appears — `tests/seo.spec.ts` holds the two together.
+- All copy in `CONTENT-REVIEW.md` approved (30 Sep 2026), including the ten towns.
+- `www` redirects to the apex (confirmed 30 Sep 2026). It must stay that way round:
+  the canonical URLs, the sitemap, the OG tags and the printed QR code on the business
+  card all name `co-gebaeudeservice.de` without `www`.

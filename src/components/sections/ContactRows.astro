@@ -12,13 +12,16 @@ const rows = contactRoutes;
     rows.map((row) => (
       <div class="contact-row">
         <span class="contact-row__label">{row.label}</span>
-        {row.href ? (
-          <a class="contact-row__value" href={row.href}>
-            {row.value}
-          </a>
-        ) : (
-          <span class="contact-row__value">{row.value}</span>
-        )}
+        <span class="contact-row__detail">
+          {row.href ? (
+            <a class="contact-row__value" href={row.href}>
+              {row.value}
+            </a>
+          ) : (
+            <span class="contact-row__value">{row.value}</span>
+          )}
+          {row.note && <span class="contact-row__note">{row.note}</span>}
+        </span>
       </div>
     ))
   }
@@ -51,5 +54,20 @@ const rows = contactRoutes;
   }
   a.contact-row__value:hover {
     color: var(--co-blue);
+  }
+  /* Value and its note stack at the row's right edge, so the hours sit directly under
+     the number they belong to. */
+  .contact-row__detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: end;
+    gap: 3px;
+    min-width: 0;
+    text-align: right;
+  }
+  .contact-row__note {
+    font: 400 14px/1.35 var(--co-font-body);
+    color: var(--co-muted);
+    text-wrap: pretty;
   }
 </style>

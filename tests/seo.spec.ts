@@ -253,3 +253,25 @@ test('an unconfirmed local signal never reaches the graph', async ({ page }) => 
   }
   if (org.priceRange) expect(String(org.priceRange).length).toBeGreaterThan(0);
 });
+
+test('opening hours in the graph are also shown on the page', async ({ page }) => {
+  /* Google expects structured data to describe what the page itself shows, and hours
+     that exist only in the graph are a claim no visitor can see. They are rendered
+     under the phone number, wherever it appears; this derives the visible span from
+     the graph's own opens/closes, so the two cannot drift apart. */
+  for (const route of ['/', '/kontakt']) {
+    await page.goto(route);
+    const graph = JSON.parse(
+      (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+    )['@graph'] as Record<string, unknown>[];
+    const org = graph.find((n) => String(n['@type']).includes('Organization'))!;
+    const specs = org.openingHoursSpecification as { opens: string; closes: string }[] | undefined;
+    if (!specs) continue;
+
+    const text = await page.locator('main').innerText();
+    for (const spec of specs) {
+      const span = `${parseInt(spec.opens, 10)}–${parseInt(spec.closes, 10)} Uhr`;
+      expect(text, `${route} shows the hours the graph claims (${span})`).toContain(span);
+    }
+  }
+});

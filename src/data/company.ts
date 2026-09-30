@@ -20,7 +20,8 @@ export const company = {
    *  answer, and areaServed in the structured-data graph — the towns used to exist
    *  only as a hard-coded array inside ueber-uns.astro, so the graph claimed two
    *  places while the page named six.
-   *  TODO(client): confirm the towns — draft, see CONTENT-REVIEW.md §3. */
+   *  The ten towns were approved by the client on 30 Sep 2026 with the rest of
+   *  CONTENT-REVIEW.md (§3, §12). */
   areaServed: [
     // Kernring um Nagold, Landkreis Calw
     'Nagold',
@@ -80,15 +81,28 @@ export const company = {
     display: content.company.email,
   },
 
-  /** Opening hours. "Wann hat ... offen" is one of the most common voice queries and
-   *  the graph cannot answer it today. Gated like every other contact detail, for the
-   *  same reason: a wrong opening time sends somebody to a locked door, which is worse
-   *  than no answer at all.
-   *  TODO(client): Erreichbarkeit angeben — z. B. Mo–Fr 07:00–17:00. Bereitschaft für
-   *  den Winterdienst ggf. gesondert. */
+  /** When the business can be reached: Mo–Fr 8–12, confirmed by the client on
+   *  30 Sep 2026. "Wann hat ... offen" is one of the most common voice queries, and
+   *  this is what answers it in the graph.
+   *
+   *  The client called them Öffnungszeiten; the site says "erreichbar", under the phone
+   *  number. There is no shop to walk into, and a line reading "Öffnungszeiten" beside
+   *  a street address invites exactly that. It is still openingHoursSpecification in
+   *  the graph, because that is the property the question is asked of.
+   *
+   *  `display` is shown wherever the phone number is, because Google expects structured
+   *  data to describe what the page shows — hours only in the graph would be a claim
+   *  the page does not make. tests/seo.spec.ts holds the two together. */
   hours: {
-    verified: false,
-    spec: [] as readonly { days: readonly string[]; opens: string; closes: string }[],
+    verified: true,
+    display: 'erreichbar Mo–Fr, 8–12 Uhr',
+    spec: [
+      {
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '08:00',
+        closes: '12:00',
+      },
+    ] as readonly { days: readonly string[]; opens: string; closes: string }[],
   },
 
   /** Coordinates of the business address, for local and map surfaces. Gated because a
@@ -135,6 +149,10 @@ export const contactRoutes: readonly {
   label: string;
   value: string;
   href?: string;
+  /** A second, quieter line under the value. The phone carries the hours: they are
+   *  when that number is answered, and a fourth route of their own would have made the
+   *  Kontakt page's facts row four columns wide, too narrow for the e-mail address. */
+  note?: string;
 }[] = content.contact.rows.map((row) => {
   switch (row.label) {
     case 'Telefon':
@@ -142,6 +160,7 @@ export const contactRoutes: readonly {
         label: row.label,
         value: company.phone.display,
         href: company.phone.verified ? `tel:${company.phone.e164}` : undefined,
+        note: company.hours.verified ? company.hours.display : undefined,
       };
     case 'E-Mail':
       return {

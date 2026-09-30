@@ -53,6 +53,7 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
             ) : (
               <span class="co-facts__value">{route.value}</span>
             )}
+            {route.note && <span class="reach__route-note">{route.note}</span>}
           </div>
         ))
       }
@@ -94,6 +95,7 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
             ) : (
               <span class="enquiry__direct-value">{phone.value}</span>
             )}
+            {phone.note && <span class="enquiry__direct-note">{phone.note}</span>}
           </div>
         )
       }
@@ -148,6 +150,12 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
     padding-top: clamp(20px, 2.4vw, 32px);
   }
   a.reach__route-link:hover { color: var(--co-cyan); }
+  /* The hours, under the phone number. Pale on ink, the rule 3 colour for secondary
+     copy on dark — full opacity, quieter by size alone. */
+  .reach__route-note {
+    font: 400 14px/1.35 var(--co-font-body);
+    color: var(--co-pale);
+  }
 
   /* The form takes the card; the aside is deliberately slim. */
   .enquiry {
@@ -182,6 +190,10 @@ const phone = contactRoutes.find((route) => route.label === 'Telefon');
     color: var(--co-ink);
   }
   a.enquiry__direct-value:hover { color: var(--co-blue); }
+  .enquiry__direct-note {
+    font: 400 14px/1.35 var(--co-font-body);
+    color: var(--co-muted);
+  }
   .enquiry__title {
     font: 700 clamp(22px, 2.2vw, 32px) / 1.1 var(--co-font-heading);
     letter-spacing: var(--co-h2-tracking);

@@ -11,7 +11,7 @@ import { company } from './company';
  *
  * This is a .ts module rather than a content.json key because content.json is the
  * *design's* copy; none of this was in the design. Same reasoning as ueber-uns.ts and
- * services.ts. Everything here is draft — see CONTENT-REVIEW.md.
+ * services.ts. Everything here was approved by the client on 30 Sep 2026 (CONTENT-REVIEW.md).
  *
  * Heading constraint worth knowing before editing: tests/responsive.spec.ts requires
  * every heading to be wider than its longest word at 380px. At the display clamp's

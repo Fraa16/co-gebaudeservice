@@ -1,7 +1,15 @@
 # Copy-Freigabe
 
-Jede Zeile hier ist **neu geschrieben** und noch nicht vom Kunden freigegeben. Alles
-andere auf der Website stammt wörtlich aus `src/data/content.json`.
+**Freigegeben vom Kunden am 30. September 2026**, alle Abschnitte 1 bis 14 in der
+jeweils letzten Fassung, einschließlich der zehn Orte im Einsatzgebiet (§ 3, § 12),
+des Formularhinweises (§ 13) und der Bildbeschreibungen (§ 14). Die Datei bleibt als
+Nachweis, was wann für diese Website geschrieben und freigegeben wurde.
+
+**Neue Texte** kommen als neuer, datierter Abschnitt ans Ende und gelten bis zur
+nächsten Freigabe als Entwurf.
+
+Jede Zeile hier wurde **für diese Website neu geschrieben**. Alles andere auf der
+Website stammt wörtlich aus `src/data/content.json`.
 
 Tonalität laut CI-Blatt: *„Kurz, konkret, ohne Werbesprache. Sie-Anrede. Leistungen
 benennen statt bewerben. Angaben zu Turnus, Erreichbarkeit und Einsatzgebiet immer

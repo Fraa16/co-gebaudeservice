@@ -1,6 +1,6 @@
 /** Every title and meta description on the site, in one place.
- *  All of it is new copy — content.json has no <title> field — so all of it is draft
- *  pending client review. See CONTENT-REVIEW.md.
+ *  All of it is new copy — content.json has no <title> field — and all of it was
+ *  approved by the client on 30 Sep 2026 (CONTENT-REVIEW.md).
  *
  *  Written for local search. The business sells to Hausverwaltungen and
  *  Eigentümergemeinschaften inside one Landkreis, so the place name earns its space in

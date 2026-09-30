@@ -11,7 +11,7 @@ import { company } from './company';
  * be traced to copy that already exists, it does not belong here until the client
  * confirms it.
  *
- * All draft — see CONTENT-REVIEW.md. The rendered text and the structured data are
+ * Written for this build, approved by the client on 30 Sep 2026 (CONTENT-REVIEW.md). The rendered text and the structured data are
  * generated from this one list, so Google can never be shown an answer the page does
  * not display.
  */

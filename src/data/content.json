@@ -1,5 +1,5 @@
 {
-  "$comment": "All site copy. German, formal Sie. Was verbatim from the design; the editorial pass of 21 Sep 2026 rewrote the running text, so every string here is draft again and listed in CONTENT-REVIEW.md. Tonality is enforced by npm run lint:copy.",
+  "$comment": "All site copy. German, formal Sie. Was verbatim from the design; the editorial pass of 21 Sep 2026 rewrote the running text, listed in CONTENT-REVIEW.md and approved by the client on 30 Sep 2026. Tonality is enforced by npm run lint:copy.",
   "company": {
     "name": "CO Gebäudeservice",
     "logoLabel": "CO Gebäudeservice",

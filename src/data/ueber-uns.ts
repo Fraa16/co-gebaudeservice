@@ -1,4 +1,5 @@
-/** The Über-uns page has no design and no copy in content.json. All of it is draft.
+/** The Über-uns page has no design and no copy in content.json. All of it was written
+ *  for this build and approved by the client on 30 Sep 2026 (CONTENT-REVIEW.md).
  *  See CONTENT-REVIEW.md.
  *
  *  Rewritten on 21 Sep 2026, in two passes, and the second pass is the instructive one.
@@ -31,19 +32,19 @@ export const ueberUns = {
   paragraphs: [
     {
       text: 'Jedes Objekt wird fest betreut, und die Betreuung wechselt nicht. Wer den Auftrag vergibt, hat denselben Ansprechpartner bei der Besichtigung, beim Turnusplan und bei einer Rückfrage zum Treppenhaus. Im Objekt arbeitet dieselbe Person, Woche für Woche.',
-      draft: true,
+      draft: false,
     },
     {
       text: 'Jedes Objekt bekommt einen festen Wochentag und einen Turnus, der vorab schriftlich steht. Wir nehmen nur so viele Objekte an, wie sich in diesem Rhythmus zuverlässig bedienen lassen. Für die Verwaltung ist damit planbar, wann gearbeitet wird, und für die Mieter nachvollziehbar, was geleistet wurde.',
-      draft: true,
+      draft: false,
     },
     {
       text: 'Vor jedem Vertrag steht eine Objektbesichtigung. Dabei werden Flächen, Zugänge, Müllstandsplatz und Besonderheiten aufgenommen. Daraus entsteht das Leistungsverzeichnis mit Umfang, Turnus und Festpreis pro Monat, und daraus der Reinigungsplan, der anschließend im Objekt aushängt. Beim Winterdienst wird jeder Einsatz mit Datum und Uhrzeit dokumentiert.',
-      draft: true,
+      draft: false,
     },
     {
       text: 'Wir arbeiten im Umkreis von Nagold, unter anderem in Altensteig, Wildberg, Haiterbach, Rohrdorf und Ebhausen, dazu im Gäu rund um Mötzingen, Jettingen und Herrenberg. Kurze Wege heißen: beim Winterdienst und bei kurzfristigen Einsätzen sind wir schnell vor Ort.',
-      draft: true,
+      draft: false,
     },
   ],
 
