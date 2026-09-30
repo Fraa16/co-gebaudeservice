@@ -4,29 +4,38 @@ import { marquee } from '../../data/content';
 /** Decorative: it repeats the service names that are already in the cards below,
  *  so it is hidden from assistive tech rather than read twice.
  *
- *  The ribbon has to be full end to end. The path begins at x=-60, outside the
- *  viewBox, so whatever sits at its start is clipped by the left edge — which reads
- *  as a band passing through only if the right edge is clipped too. With the list
- *  written once it was not: 823 units of text on a 1348-unit path left the last
- *  third empty, so one end looked cropped and the other looked unfinished.
+ *  Geometry, and why it changed. This used a 1200×160 viewBox with
+ *  `xMidYMid slice`, so the drawing was scaled to cover the strip and cropped to fit.
+ *  On a wide screen the strip is far wider than 7.5:1, the drawing was scaled to the
+ *  width, and only about 90 of its 160 units of height stayed visible: the crest of
+ *  the wave, which also had a control point at y=-24, was cut flat along the top. On
+ *  a narrow screen it was cropped at the sides instead, and since the text started at
+ *  the path's start at x=-60, it began mid-word ("…nhausreinigung").
  *
- *  Repeating the list overruns the path instead, and a textPath simply stops
- *  rendering where the path ends. Two passes already exceed it; three leaves room for
- *  the copy to be shortened at sign-off without the gap coming back. */
-const band = Array.from({ length: 3 }, () => marquee).join(' · ');
+ *  Now the drawing is 3600 units wide and anchored left (`xMinYMid slice`). A strip
+ *  is narrower than 22.5:1 at every realistic width — 390×96 is 4:1, 2560×150 is
+ *  17:1 — so the drawing is always scaled to the strip's height, all 160 units stay
+ *  visible, and whatever is too long simply runs off the right edge, where a ribbon
+ *  passing through is expected to disappear. The wave stays between y=50 and y=110,
+ *  so with its 54-unit stroke the band keeps about 23 units of air above and below.
+ *
+ *  The text starts 64 units into the path, which begins off-canvas at x=-40: the
+ *  first word is whole and clear of the edge. The list is repeated until it outruns
+ *  the path; a textPath stops rendering where the path ends. */
+const band = Array.from({ length: 6 }, () => marquee).join(' · ');
 ---
 
 <div class="schriftband" aria-hidden="true">
-  <svg viewBox="0 0 1200 160" preserveAspectRatio="xMidYMid slice" class="schriftband__svg">
+  <svg viewBox="0 0 3600 160" preserveAspectRatio="xMinYMid slice" class="schriftband__svg">
     <path
       id="co-ribbon"
-      d="M-60 122 C 200 18, 420 152, 660 58 C 880 -24, 1020 112, 1270 26"
+      d="M-40 106 C 180 106, 390 54, 620 58 S 1030 110, 1280 102 S 1700 50, 1950 56 S 2400 110, 2660 104 S 3080 52, 3320 58 S 3600 94, 3720 96"
       fill="none"
       stroke="var(--co-cyan)"
-      stroke-width="48"
+      stroke-width="54"
       stroke-linecap="butt"></path>
     <text dominant-baseline="middle" class="schriftband__text">
-      <textPath href="#co-ribbon" startOffset="0%">{band}</textPath>
+      <textPath href="#co-ribbon" startOffset="64">{band}</textPath>
     </text>
   </svg>
 </div>
@@ -46,7 +55,9 @@ const band = Array.from({ length: 3 }, () => marquee).join(' · ');
   .schriftband__text {
     fill: var(--co-ink);
     font-family: var(--co-font-body);
-    font-size: 19px;
+    /* In drawing units: the drawing is scaled to the strip's height (0.6 on a phone,
+       0.94 on a desktop), so this is about 13px on a phone and 21px on a desktop. */
+    font-size: 22px;
     font-weight: 600;
     letter-spacing: 0.05em;
   }
