@@ -83,8 +83,12 @@ the site: it re-parses the body with the same `src/lib/contact-schema.ts` the br
 uses, re-checks the spam traps, refuses cross-origin posts, rate-limits per address, and
 sends through Resend. `tests/contact-endpoint.spec.ts` covers it without a server.
 
-It stays dormant until four environment variables are set — three of them server-side
-only, so set them in the Vercel project settings, not in a committed file:
+It needs four environment variables — three of them server-side only, so they live in
+the Vercel project settings, never in a committed file. **All four are set for
+Production since 30 Sep 2026**, and the sending domain `co-gebaeudeservice.de` is
+verified in Resend (region eu-west-1, Ireland; DNS at IONOS). Local and preview builds
+have none of them, which is why they — and the test suite — still take the refusal path
+below.
 
 | Variable | Value |
 | --- | --- |
@@ -93,15 +97,25 @@ only, so set them in the Vercel project settings, not in a committed file:
 | `CONTACT_TO` | the inbox enquiries should reach |
 | `CONTACT_FROM` | e.g. `Website <noreply@co-gebaeudeservice.de>` — the domain must be verified in Resend first |
 
-With any of them missing the endpoint answers 503 and the form tells the visitor it
-could not send. That is deliberate: the one thing it must never do is confirm
-*"wir melden uns innerhalb von zwei Werktagen"* while dropping the enquiry.
+`PUBLIC_FORM_ENDPOINT` is read at build time, so changing it takes a redeploy, and it
+cannot be marked *Sensitive* in Vercel: it is public by design, the browser posts to
+it. The other three should be. The key in use is a *Sending access* key limited to the
+domain.
 
-Before switching it on, settle the two things the Datenschutzerklärung's Resend
-paragraph relies on: the Art. 28 DSGVO contract with Resend, and the basis for the
-transfer to the USA (Art. 44 ff. DSGVO). The paragraph itself is already on the page;
-the note that said so used to be on the page too, which is how the next section's
-first item came about.
+The mail arrives as "Neue Anfrage über die Website — Name", with the visitor's address
+as Reply-To, so answering it is one click.
+
+With any server-side variable missing the endpoint answers 503 and the form tells the
+visitor it could not send. With `PUBLIC_FORM_ENDPOINT` missing the form refuses before
+sending and points at Telefon and WhatsApp. Both are deliberate: the one thing it must
+never do is confirm *"wir melden uns innerhalb von zwei Werktagen"* while dropping the
+enquiry.
+
+The Datenschutzerklärung's Resend paragraph relies on two things still to settle: the
+Art. 28 DSGVO contract with Resend, and the basis for the transfer to the USA
+(Art. 44 ff. DSGVO) — sending runs through the EU region, but Resend, Inc. is a US
+company. The paragraph itself is on the page; the note that said so used to be on the
+page too, which is how the next section's first item came about.
 
 Nothing else changes; every other page stays static.
 
@@ -122,13 +136,11 @@ is invisible in a way nobody notices for weeks.
 
 Still open, in the order it costs something:
 
-1. **The contact form does not send yet.** `PUBLIC_FORM_ENDPOINT` is unset, so a valid
-   submit is *refused* with `contact.form.offlineNotice` and the form points at Telefon
-   and WhatsApp. That refusal is deliberate: until the four variables above are set,
-   the one thing the form must never do is answer *"wir melden uns innerhalb von zwei
-   Werktagen"* for an enquiry nothing received. Set the endpoint plus the three
-   server-side variables, verify the Resend domain, and the notice disappears on its
-   own — no other change needed.
+1. **Confirm a live enquiry arrives.** The form is configured (see *Contact form*
+   above) but has not been seen to deliver from here: this repo's sandbox cannot
+   reach the live domain. One test through `/kontakt`, landing in `info@` and not in
+   spam. If it lands in spam, add a DMARC record (`_dmarc`, `v=DMARC1; p=none;`) at
+   IONOS. And the API key first posted during setup should be deleted in Resend.
 2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
    Steuerberater. The Impressum's facts are settled — no USt-IdNr., no
    Handwerkskammer entry, both confirmed and recorded in `company.ts`. What the review

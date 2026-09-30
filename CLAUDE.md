@@ -161,13 +161,15 @@ Live on `co-gebaeudeservice.de` since September 2026, and indexable: `PUBLIC_SIT
 now defaults to `true`. The apex is canonical — canonical URLs, sitemap, OG tags and the
 printed QR code on the business card all name it without `www`.
 
-What is still open is the checklist at the end of `README.md`. One item shapes component
-behaviour rather than just data, so it belongs here: **`PUBLIC_FORM_ENDPOINT` is unset,
-so the contact form refuses a valid submit** and shows `contact.form.offlineNotice`
-pointing at Telefon and WhatsApp. It used to fall through to the success panel and
-confirm an enquiry that was sent nowhere. Do not restore that path — a form may fail
-loudly, but it may never answer *"wir melden uns"* for something nothing received.
-Setting the endpoint removes the notice with no other change.
+What is still open is the checklist at the end of `README.md`. One thing shapes
+component behaviour rather than just data, so it belongs here: **the contact form
+sends in Production** (Resend, all four variables set in Vercel on 30 Sep 2026), but
+every build without `PUBLIC_FORM_ENDPOINT` — local, preview, the test suite — takes the
+refusal path: a valid submit is refused with `contact.form.offlineNotice`, pointing at
+Telefon and WhatsApp. It used to fall through to the success panel and confirm an
+enquiry that was sent nowhere. Do not restore that path — a form may fail loudly, but it
+may never answer *"wir melden uns"* for something nothing received. The API key lives
+only in Vercel; never commit it, and never paste one into a file in this repo.
 
 Done already: self-hosted fonts (Google's CDN is a German privacy-law problem), SVG
 logo and favicons, per-page titles and meta descriptions, OG image, sitemap, and the
