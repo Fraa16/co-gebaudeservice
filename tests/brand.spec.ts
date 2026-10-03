@@ -10,6 +10,17 @@ test('every brand asset the page asks for actually loads', async ({ page }) => {
   /* A missing SVG is invisible in a screenshot test — the reserved box is still there,
      just empty. Assert the decoded bitmap has pixels. */
   await page.goto('/');
+  // Lazy images out of reach of the viewport never start loading, and "not complete"
+  // would read as broken: on a phone the Treppenhaus chapter's photo is that far down.
+  // Load everything now, so only a file that fails is reported.
+  await page.locator('img').evaluateAll((imgs) =>
+    Promise.all(
+      imgs.map((img) => {
+        (img as HTMLImageElement).loading = 'eager';
+        return (img as HTMLImageElement).decode().catch(() => undefined);
+      }),
+    ),
+  );
   const broken = await page.locator('img').evaluateAll((imgs) =>
     imgs
       .filter((img) => !(img as HTMLImageElement).complete || (img as HTMLImageElement).naturalWidth === 0)

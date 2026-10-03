@@ -40,6 +40,7 @@ const photo = getPhoto(slot);
       loading={priority ? 'eager' : 'lazy'}
       fetchpriority={priority ? 'high' : 'auto'}
       decoding={priority ? 'sync' : 'async'}
+      style={photo.focus ? `--photo-focus:${photo.focus}` : undefined}
     />
   ) : (
     <BrandPanel tone={tone ?? photo.tone} variant={variant} class={cls} />
@@ -53,5 +54,9 @@ const photo = getPhoto(slot);
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* The photo's own focal point from photos.ts, as a variable rather than an inline
+       object-position, so a component that frames the shot itself (the hero) can
+       still set object-position in CSS and win. */
+    object-position: var(--photo-focus, 50% 50%);
   }
 </style>

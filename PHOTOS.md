@@ -1,11 +1,12 @@
 # Fotografie — Briefing
 
-**Zehn Bildplätze, alle auf der Website sichtbar. Neun sind belegt, einer kommt noch.**
-Solange ein Platz leer ist, zeigt die Website eine gestaltete Markenfläche
+**Zehn Bildplätze, alle auf der Website sichtbar, alle belegt** (seit 3. Oktober 2026).
+Wird ein Platz einmal leer, zeigt die Website eine gestaltete Markenfläche
 (`BrandPanel`) statt eines kaputten Bildes — die Seite wirkt fertig, nicht unfertig.
 
 Im September 2026 kam ein Satz von acht Fotos, eines je Leistung, alle 1672 × 941
-(16:9 quer). Sie liegen in `src/assets/photos/` unter dem Namen der Leistung.
+(16:9 quer). Sie liegen in `src/assets/photos/` unter dem Namen der Leistung. Im
+Oktober kam ein zweites Treppenhausfoto im selben Format für `r-detail` dazu.
 
 ## Stand
 
@@ -20,23 +21,27 @@ Im September 2026 kam ein Satz von acht Fotos, eines je Leistung, alle 1672 × 9
 | `r-l6` | Kellerreinigung | Leistungen | `kellerreinigung.png` |
 | `r-l7` | Außenreinigung | Leistungen | `aussenreinigung.png` |
 | `r-l8` | Mülltonnendienst | Leistungen | `muelltonnendienst.png` |
-| `r-detail` | — | Start, Abschnitt Treppenhausreinigung | **kommt noch**, siehe unten |
+| `r-detail` | Treppenhausreinigung | Start, Abschnitt Treppenhausreinigung | `treppenhausreinigung-detail.png`, siehe unten |
 
 Die Startseite zeigt die fünf ersten Leistungen als Kacheln, jede mit ihrem Foto;
 `/leistungen` zeigt alle acht, jede Zeile mit ihrem Foto über dem Leistungsumfang.
 
-**`r-detail` braucht ein zweites, anderes Treppenhausfoto** — der Kunde liefert es
-nach. Der Abschnitt steht auf der Startseite direkt unter dem Leistungsraster, dessen
-große Kachel schon `treppenhausreinigung.png` zeigt. Dasselbe Foto in zwei
-benachbarten Abschnitten liest sich als Versehen. Gesucht: ein Podest oder Flur der
-Länge nach, frisch gewischt, ohne Person oder mit Person nur am Rand — quer, und es
-wird am Laptop bis 3,4 : 1 flach.
+**`r-detail` ist ein zweites, anderes Treppenhausfoto** (geliefert am 3. Oktober 2026,
+hochgeladen als „Mitarbeiter-im-Treppenhaus"). Der Abschnitt steht auf der Startseite
+direkt unter dem Leistungsraster, dessen große Kachel schon `treppenhausreinigung.png`
+zeigt; dasselbe Foto in zwei benachbarten Abschnitten hätte sich als Versehen gelesen.
+Dieses zeigt die Treppe hinauf mit Korb statt das Wischen. Weil die Person hoch im Bild
+steht (Kappe bei 13 % der Höhe, Korb bis 80 %), wurde der Rahmen dafür angepasst: statt
+einer festen Höhe, die ihn am Laptop auf 3,43 : 1 drückte und entweder Kopf oder Korb
+abschnitt, hat er jetzt 16 : 10 zwischen 240 und 420 px Höhe. Der Ausschnitt sitzt
+etwas oberhalb der Mitte (`focus: '50% 30%'` in `src/data/photos.ts`), damit über der
+Kappe Luft bleibt.
 
 **Die Bildreihe auf „Über uns" erscheint erst mit allen vier Fotos** — `r-l1`,
 `r-l2`, `r-l4` und `r-l5`. Bis dahin steht dort eine einzelne breite Markenfläche, die
 gewollt aussieht. Die Fotos lassen sich also einzeln einbauen, ohne dass eine Seite
-zwischendurch halb fertig wirkt: `r-l1` und `r-detail` erscheinen sofort auf der
-Startseite, die Reihe auf „Über uns" kommt mit dem vierten Bild. (Bis September 2026
+zwischendurch halb fertig wirkt: `r-l1` und `r-detail` erschienen sofort auf der
+Startseite, die Reihe auf „Über uns" kam mit dem vierten Bild. (Bis September 2026
 zeigte die Reihe jedes belegte Bild einzeln, und das erste wäre allein in einer Zeile
 für vier gestanden. `tests/smoke.spec.ts` hält das jetzt fest.) Seit dem Fotosatz vom
 September 2026 sind alle vier da, und die Reihe steht.
@@ -55,14 +60,17 @@ die heutigen Seiten nicht — gemessen im Browser, Breite × Höhe des Bildrahme
 
 | Bildschirm | `r-hero` | große Kachel Start | kleine Kachel Start | `r-detail` | Bildreihe „Über uns" | Zeile `/leistungen` |
 |---|---|---|---|---|---|---|
-| Handy, 390 px | 370 × 697 · **0,53 : 1** | 370 × 340 · 1,09 : 1 | 370 × 260 · 1,42 : 1 | 326 × 240 · 1,36 : 1 | 370 × 170 · 2,18 : 1 | 326 × 204 · 1,60 : 1 |
-| Tablet, 768 px | 747 × 594 · 1,26 : 1 | 747 × 340 · 2,20 : 1 | 368 × 260 · 1,41 : 1 | 685 × 240 · 2,85 : 1 | 368 × 170 · 2,16 : 1 | 685 × 428 · 1,60 : 1 |
-| Laptop, 1024 px | 995 × 640 · 1,55 : 1 | 654 × 348 · 1,88 : 1 | 327 × 348 · 0,94 : 1 | 913 × 266 · **3,43 : 1** | 491 × 205 · 2,40 : 1 | 386 × 241 · 1,60 : 1 |
-| Desktop, 1440 px | 1400 × 770 · 1,82 : 1 | 682 × 461 · 1,48 : 1 | 341 × 461 · **0,74 : 1** | 606 × 360 · 1,68 : 1 | 338 × 260 · 1,30 : 1 | 565 × 353 · 1,60 : 1 |
+| Handy, 390 px | 346 × 260 · 1,33 : 1 | 370 × 340 · 1,09 : 1 | 370 × 260 · 1,42 : 1 | 326 × 240 · 1,36 : 1 | 370 × 170 · 2,18 : 1 | 326 × 204 · 1,60 : 1 |
+| Tablet, 768 px | 747 × 594 · 1,26 : 1 | 747 × 340 · 2,20 : 1 | 368 × 260 · 1,41 : 1 | 685 × 420 · 1,63 : 1 | 368 × 170 · 2,16 : 1 | 685 × 428 · 1,60 : 1 |
+| Laptop, 1024 px | 995 × 640 · 1,56 : 1 | 654 × 348 · 1,88 : 1 | 327 × 348 · 0,94 : 1 | 913 × 420 · 2,17 : 1 | 491 × 205 · 2,40 : 1 | 386 × 241 · 1,60 : 1 |
+| Desktop, 1440 px | 1400 × 770 · 1,82 : 1 | 682 × 461 · 1,48 : 1 | 341 × 461 · **0,74 : 1** | 606 × 379 · 1,60 : 1 | 338 × 260 · 1,30 : 1 | 565 × 353 · 1,60 : 1 |
 
-Die Rahmen haben kein festes Seitenverhältnis, außer auf `/leistungen` (16 : 10): die
+(Gemessen im Oktober 2026, nach dem neuen Handy-Hero und dem neuen `r-detail`-Rahmen.)
+
+Die Rahmen haben kein festes Seitenverhältnis, außer auf `/leistungen` (16 : 10), in
+`r-detail` (16 : 10 mit Mindest- und Höchsthöhe) und im Hero auf dem Handy (4 : 3): die
 Bilder werden mittig zugeschnitten, je nach Platz und Bildschirm zwischen 0,74 : 1 und
-3,4 : 1. Ein Hochformat 3:4 in einem 2,4 : 1-Rahmen behält nur ein knappes Drittel
+2,4 : 1. Ein Hochformat 3:4 in einem 2,4 : 1-Rahmen behält nur ein knappes Drittel
 seiner Höhe; ein 16:9-Foto in der schmalen Kachel am Desktop behält 42 % seiner
 Breite, und zwar die Mitte.
 
@@ -72,11 +80,13 @@ Daraus folgt für jedes Foto:
 - **Motiv in die Mitte, Luft drumherum.** Oben und unten fällt in den breiten Rahmen
   am meisten weg, links und rechts in den schmalen Kacheln — nichts Wichtiges ins
   obere und untere Fünftel oder an die Seitenränder legen.
-- **`r-hero` ist der Sonderfall.** Auf dem Handy ist der Rahmen hochkant (0,53 : 1),
-  am Desktop breit (1,82 : 1), und links steht die Überschrift. Ideal ist ein Motiv im
-  **rechten Drittel** mit ruhiger Fläche links. Siehe „Das Hero-Foto" unten.
-- **`r-detail` wird am Laptop sehr flach** (3,43 : 1). Gesucht ist ein Podest oder Flur
-  *der Länge nach*, nicht der Blick ein Treppenhaus hinauf.
+- **`r-hero` ist der Sonderfall.** Am Desktop ist der Rahmen breit (1,82 : 1) und
+  links steht die Überschrift; ideal ist ein Motiv im **rechten Drittel** mit ruhiger
+  Fläche links. Auf dem Handy steht das Foto als eigenes Bild unter dem Text (4 : 3).
+  Siehe „Das Hero-Foto" unten.
+- **Steht das Motiv nicht in der Mitte**, kann `focus` in `src/data/photos.ts` den
+  Ausschnitt verschieben (eine CSS-`object-position`, etwa `'50% 30%'`), wie bei
+  `r-detail`.
 
 ## Anforderungen
 

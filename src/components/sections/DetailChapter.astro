@@ -172,10 +172,22 @@ const Heading = level === 1 ? 'h1' : 'h2';
     margin-top: 12px;
   }
   .detail__aside { display: grid; gap: var(--co-grid-gap); }
+  /* 16:10, held between 240 and 420px tall. This was a fixed clamp(240px, 26vw,
+     360px) height, drawn while the slot held a BrandPanel, which has no subject to
+     lose. Below 1180px the aside wraps under the text and runs the card's full width,
+     and that height made the frame 2.85:1 on a tablet and 3.43:1 on a laptop: a
+     photograph of a man climbing stairs kept either his head or the basket he
+     carries, never both. Now the flattest the frame gets is 2.2:1, at 1024px.
+     The explicit width matters: a grid item with an aspect-ratio is not stretched,
+     so without it the 420px cap narrowed the frame and the 240px floor pushed it
+     past the card's edge on a phone. */
   .detail__photo {
     position: relative;
     overflow: hidden;
-    height: clamp(240px, 26vw, 360px);
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    min-height: 240px;
+    max-height: 420px;
     border-radius: var(--co-radius-photo);
     box-shadow: var(--co-shadow-card);
   }

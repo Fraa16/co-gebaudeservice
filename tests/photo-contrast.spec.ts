@@ -66,9 +66,9 @@ test('the hero headline and lead keep their contrast over the photograph at ever
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await page.evaluate(() =>
-      Promise.all([...document.images].map((i) => i.decode().catch(() => undefined))),
-    );
+    // The hero photo only. decode() on every image hung once r-detail became a real
+    // photo: lazy, far below the fold, it never starts loading, so it never decodes.
+    await page.locator('.hero img').evaluate((i: HTMLImageElement) => i.decode().catch(() => undefined));
     const hero = page.locator('.hero');
     const origin = (await hero.boundingBox())!;
     const parts = await page.evaluate(() =>

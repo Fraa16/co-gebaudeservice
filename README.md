@@ -22,7 +22,7 @@ src/
   layouts/        BaseLayout, LegalLayout
   components/     ui/ (reusable) · sections/ (page sections) · seo/ · scripts/
   pages/          the seven routes + robots.txt endpoint + the OG source
-  assets/photos/  photographs (one of seven so far — see PHOTOS.md)
+  assets/photos/  the nine photographs behind the ten slots — see PHOTOS.md
 design/           the original handoff: prototypes, screenshots, tokens.json, the PDF
 scripts/          the two design-rule gates + the brand-asset generator
 brand/            the delivered logo vectors — source for everything in public/
@@ -153,12 +153,7 @@ Still open, in the order it costs something:
    TODO, FIXME or lorem ipsum a visitor could read.
 3. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap-index.xml`.
    Indexing does not start on its own just because `robots.txt` now allows it.
-4. **One photograph** — `PHOTOS.md`. The eight service photos are in and shown on the
-   home page, `/leistungen` and `/ueber-uns`, and the hero shows the Hausmeisterdienst
-   photo. `r-detail` still needs a second, different stairwell shot, which the client
-   is supplying. The empty slot renders a branded `BrandPanel`, so nothing looks
-   broken meanwhile.
-5. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
+4. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
    and, if wanted, `priceRange`. Each is gated, so the graph stays silent rather than
    guessing.
 
@@ -170,6 +165,9 @@ Settled:
   `openingHoursSpecification`, and shown as "erreichbar Mo–Fr, 8–12 Uhr" under the
   phone number wherever it appears — `tests/seo.spec.ts` holds the two together.
 - All copy in `CONTENT-REVIEW.md` approved (30 Sep 2026), including the ten towns.
+- All ten photo slots filled: the eight service photos (September 2026), the
+  Hausmeisterdienst photo in the hero, and a second stairwell shot for `r-detail`
+  (3 Oct 2026). See `PHOTOS.md`.
 - `www` redirects to the apex (confirmed 30 Sep 2026). It must stay that way round:
   the canonical URLs, the sitemap, the OG tags and the printed QR code on the business
   card all name `co-gebaeudeservice.de` without `www`.

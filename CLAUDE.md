@@ -131,9 +131,10 @@ kickers, roughly 8:1.
 
 ## Known placeholders
 
-- **Photography**: `PHOTOS.md` has the brief. All ten slots are shown and nine are
-  filled with the client's eight service photos, which arrived in September 2026 and
-  live in `src/assets/photos/` under the service's name. The hero shows the
+- **Photography**: `PHOTOS.md` has the brief. All ten slots are shown and all are
+  filled: the client's eight service photos, which arrived in September 2026 and
+  live in `src/assets/photos/` under the service's name, plus a second stairwell shot
+  for `r-detail` (October 2026, `treppenhausreinigung-detail.png`). The hero shows the
   Hausmeisterdienst photo at the client's request; its subject stands left of centre
   where the headline is, so `Hero.astro` enlarges it from the left edge from 720px up.
   Below 720px it is not behind the text at all but a framed image under it (4:3, 16:10
@@ -141,14 +142,16 @@ kickers, roughly 8:1.
   on phones. Both are tuned to that photo, and a new hero photo must be re-checked
   (the contrast test sweeps eight widths). Each service shows its photo on its
   home tile (the first five), in its `/leistungen` row and, for four, in the
-  `/ueber-uns` band. Only `r-detail` is open — the client is supplying a second
-  stairwell shot, because r-l1's sits in the section directly above — and it renders
-  a branded `BrandPanel` meanwhile. Alt text describes the frame, never implies staff.
+  `/ueber-uns` band. `r-detail` is deliberately a different shot from r-l1, whose
+  tile sits directly above it; its frame is 16:10 between 240 and 420px tall, and its
+  `focus` in photos.ts lifts the crop so his cap keeps some air. An empty slot would
+  render a branded `BrandPanel`. Alt text describes the frame, never implies staff —
+  file names too, since they end up in the image URL.
   `src/data/photos.ts` is the only file that changes when a photo arrives. **Text over
   a photo** is guarded by `tests/photo-contrast.spec.ts` (4.5:1 against the pixels
   behind it); `--co-card-scrim` is deliberately darker than the design token for that
   reason, and photo tiles put their number and chip in an opaque white pill. **Every frame is landscape** — the
-  brief once asked for 3:4 portrait, which the measured frames (1.1:1 to 3.4:1) would
+  brief once asked for 3:4 portrait, which the measured frames (0.74:1 to 2.4:1) would
   have cropped to a third. The /ueber-uns band appears only with all four photos.
 - **Contact details**: all real and confirmed — Oguz Cakir, Schietinger Str. 28,
   72202 Nagold, 0172 3001489, `info@co-gebaeudeservice.de` (mailbox confirmed on the

@@ -7,9 +7,11 @@ import winterdienst from '../assets/photos/winterdienst.png';
 import kellerreinigung from '../assets/photos/kellerreinigung.png';
 import aussenreinigung from '../assets/photos/aussenreinigung.png';
 import muelltonnendienst from '../assets/photos/muelltonnendienst.png';
+import treppenhausreinigungDetail from '../assets/photos/treppenhausreinigung-detail.png';
 
 /** Slot → photograph. A null slot renders a branded BrandPanel instead, so an
- *  outstanding shot drops in here with no component change. Every slot is shown:
+ *  outstanding shot drops in here with no component change. All ten are filled since
+ *  October 2026. Every slot is shown:
  *  r-hero on the home page, the eight service photos in the home tiles (the first
  *  five), in each row on /leistungen and in the /ueber-uns band, and r-detail in the
  *  home page's Treppenhaus chapter. Briefs, measured frame sizes and the reason every
@@ -24,6 +26,10 @@ export interface PhotoEntry {
   /** German alt text. Only meaningful when `image` is set — a BrandPanel is presentational. */
   alt: string;
   tone: 'ice' | 'pale' | 'blue';
+  /** Where the crop centres, as an object-position. Omitted means the middle, which
+   *  suits every photo framed with its subject centred. Set it for a photo whose
+   *  frame is much flatter than the shot, so the crop keeps what matters. */
+  focus?: string;
 }
 
 export const photos: Record<string, PhotoEntry> = {
@@ -76,12 +82,20 @@ export const photos: Record<string, PhotoEntry> = {
     alt: 'Mülltonne wird über eine gepflasterte Einfahrt gezogen',
     tone: 'blue',
   },
-  /* Still open; the client is supplying a separate shot. This is the
-     Treppenhausreinigung chapter on the home page, directly below the service grid
-     whose feature tile is r-l1 — the Treppenhaus photo again here would stand twice in
-     two adjacent sections. Until the second stairwell shot arrives the BrandPanel
-     stands in, which reads as intended. */
-  'r-detail': { image: null, alt: 'Treppenhaus nach der Reinigung', tone: 'pale' },
+  /* The Treppenhausreinigung chapter on the home page, directly below the service grid
+     whose feature tile is r-l1, so it needed a different shot: r-l1 again would stand
+     twice in adjacent sections. The client supplied this second stairwell photo in
+     October 2026 (uploaded as "Mitarbeiter-im-Treppenhaus"), same 1672 × 941 set.
+     He stands tall in the frame, cap at 13% of its height, basket down to 80%. The
+     chapter's frame reaches 2.2:1 on a laptop (DetailChapter.astro), where a centred
+     crop keeps the middle 82% and his cap sat about 20px under the top edge; the
+     focus moves the crop up to give him twice that, and the basket stays in. */
+  'r-detail': {
+    image: treppenhausreinigungDetail,
+    alt: 'Mann in dunkelblauer Arbeitskleidung trägt einen Korb mit Reinigungsmitteln eine helle Steintreppe hinauf',
+    tone: 'pale',
+    focus: '50% 30%',
+  },
 };
 
 export function getPhoto(slot: string): PhotoEntry {

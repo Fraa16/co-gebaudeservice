@@ -142,3 +142,22 @@ test('the photo band on /ueber-uns is four photographs or none', async ({ page }
     await expect(page.locator('.about__band img'), 'every tile a real photograph').toHaveCount(4);
   }
 });
+
+test('the Treppenhaus chapter does not repeat the photo of the tile above it', async ({ page }) => {
+  /* The chapter sits directly under the service grid, whose first tile is the
+     Treppenhausreinigung photo. The same shot twice in adjacent sections reads as a
+     mistake, which is why r-detail stayed a BrandPanel until a second stairwell photo
+     arrived. Compared by source file, since each is served at several widths. */
+  await page.goto('/');
+  const source = (selector: string) =>
+    page.locator(selector).first().evaluate((img: HTMLImageElement) => {
+      const url = new URL(img.currentSrc || img.src, location.href);
+      // /_astro/<name>.<hash>_<variant>.webp, or /_image?href=…<name>.<hash>.png in dev
+      const path = decodeURIComponent(url.searchParams.get('href') ?? url.pathname);
+      return path.split('/').pop()!.split('.')[0];
+    });
+  const tile = await source('#treppenhausreinigung img');
+  const chapter = await source('.detail__photo img');
+  expect(chapter, 'the chapter shows a photograph').toBeTruthy();
+  expect(chapter, 'the chapter repeats the tile photo').not.toBe(tile);
+});

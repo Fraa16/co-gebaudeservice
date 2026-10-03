@@ -479,8 +479,9 @@ Bildbeschreibung soll das nicht nebenbei tun.
 
 | Bild | Alt-Text |
 |---|---|
-| Kopfbereich Startseite | Glasfassade wird mit Sprühflasche und Mikrofasertuch gereinigt |
+| Kopfbereich Startseite | Hausmeister mit Reinigungswagen im Eingangsbereich eines Gebäudes *(seit dem Wechsel auf das Hausmeister-Foto, wie die Kachel)* |
 | Treppenhausreinigung | Mann in dunkelblauer Arbeitskleidung wischt die Stufen eines hellen Treppenhauses |
+| Startseite, Abschnitt Treppenhausreinigung *(neu, 3. Oktober 2026)* | Mann in dunkelblauer Arbeitskleidung trägt einen Korb mit Reinigungsmitteln eine helle Steintreppe hinauf |
 | Fensterreinigung | Fensterscheibe wird mit dem Abzieher gereinigt, im Vordergrund ein Rücken mit dem CO-Logo |
 | Hausmeisterdienst | Hausmeister mit Reinigungswagen im Eingangsbereich eines Gebäudes |
 | Gartenpflege | Hecke vor einem Wohngebäude wird mit der Heckenschere geschnitten |
@@ -489,5 +490,8 @@ Bildbeschreibung soll das nicht nebenbei tun.
 | Außenreinigung | Sockel einer Hauswand wird mit dem Hochdruckreiniger gereinigt |
 | Mülltonnendienst | Mülltonne wird über eine gepflasterte Einfahrt gezogen |
 
-Der Text zum Kopfbild hieß vorher „Mitarbeiter reinigt eine Glasfassade …" und ist aus
-demselben Grund umformuliert.
+Der Text zum früheren Kopfbild hieß „Mitarbeiter reinigt eine Glasfassade …" und war
+aus demselben Grund umformuliert. Aus demselben Grund heißt auch die Datei des zweiten
+Treppenhausfotos, hochgeladen als „Mitarbeiter-im-Treppenhaus", im Projekt
+`treppenhausreinigung-detail.png`: der Dateiname steht in der Bildadresse, die
+Suchmaschinen sehen.
