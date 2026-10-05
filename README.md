@@ -161,8 +161,9 @@ Still open, in the order it costs something:
    pages any more: **working notes belong here, not in page copy**. The Impressum went
    live reading "USt-IdNr.: TODO(client)"; `tests/smoke.spec.ts` now fails on any
    TODO, FIXME or lorem ipsum a visitor could read.
-3. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap.xml`.
-   Indexing does not start on its own just because `robots.txt` now allows it.
+3. **Google Business Profile** (Google Maps) with exactly the name, address, phone
+   number and website the site shows. For local searches such as
+   "Treppenhausreinigung Nagold" it matters more than anything on the site.
 4. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
    and, if wanted, `priceRange`. Each is gated, so the graph stays silent rather than
    guessing.
@@ -178,6 +179,9 @@ Settled:
 - All ten photo slots filled: the eight service photos (September 2026), the
   Hausmeisterdienst photo in the hero, and a second stairwell shot for `r-detail`
   (3 Oct 2026). See `PHOTOS.md`.
+- Search Console set up and `sitemap.xml` submitted, every page requested for
+  indexing (5 Oct 2026). Impressum and Datenschutz will show there as excluded by
+  their noindex tag; that is intended, not an error.
 - `www` redirects to the apex (confirmed 30 Sep 2026). It must stay that way round:
   the canonical URLs, the sitemap, the OG tags and the printed QR code on the business
   card all name `co-gebaeudeservice.de` without `www`.
