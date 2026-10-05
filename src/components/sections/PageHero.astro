@@ -1,5 +1,6 @@
 ---
 import Button from '../ui/Button.astro';
+import { fitStyle } from '../../lib/fit';
 
 /** Inner-page opening. Variants exist so the three inner pages do not all begin the
  *  same way: /leistungen opens pale and factual with a meta row, /ueber-uns opens on
@@ -32,7 +33,7 @@ const {
     {pill}
   </p>
 
-  <h1 class:list={['page-hero__title', size === 'display' && 'is-display']}>{heading}</h1>
+  <h1 class:list={['page-hero__title', 'co-fit', size === 'display' && 'is-display']} style={fitStyle(heading)}>{heading}</h1>
 
   {lead && <p class="page-hero__lead">{lead}</p>}
 
@@ -61,7 +62,10 @@ const {
     padding: var(--co-hero-padding);
   }
   .page-hero__title {
-    font: 700 var(--co-h1-size) / 1.02 var(--co-font-heading);
+    /* The page gutter and this card's own padding, both sides: what the column is
+       short of the viewport. See .co-fit in global.css. */
+    --co-fit-inset: calc(2 * (var(--co-page-padding) + var(--co-hero-padding)));
+    font: 700 min(var(--co-h1-size), var(--co-fit)) / 1.02 var(--co-font-heading);
     letter-spacing: var(--co-h1-tracking);
     /* min(…, 100%): a bare max-width beats the global max-width:100% on specificity,
        and "Datenschutzerklärung" is wider than a 320px screen at the clamp floor.
@@ -70,7 +74,7 @@ const {
     hyphens: auto;
   }
   .page-hero__title.is-display {
-    font-size: var(--co-display-size);
+    font-size: min(var(--co-display-size), var(--co-fit));
     line-height: var(--co-display-lh);
     letter-spacing: var(--co-display-tracking);
     max-width: min(15ch, 100%);

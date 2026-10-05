@@ -114,11 +114,17 @@ const hasPhoto = Boolean(getPhoto(service.photoSlot).image);
     flex: 1 1 min(420px, 100%);
     min-width: 0;
   }
+  /* Two slopes, because one cannot do both jobs. This was clamp(24px, 2.8vw, 38px):
+     a bare vw that sat on its 24px floor up to an 857px viewport (CLAUDE.md rule 6),
+     and at 24px "Treppenhausreinigung" plus its icon is 276px wide, which overran its
+     column by 20px on a 320px iPhone SE and pushed a folded 280px Galaxy Z Fold
+     sideways. Now 18px at 280, meeting the old 24px at 380 and growing from there to
+     38px at 1440, so the longest name fits from the narrowest phone up. */
   .service-row__title {
     display: flex;
     align-items: center;
     gap: 14px;
-    font: 600 clamp(24px, 2.8vw, 38px) / 1.08 var(--co-font-heading);
+    font: 600 clamp(18px, min(6vw + 1.2px, 19px + 1.321vw), 38px) / 1.08 var(--co-font-heading);
     letter-spacing: var(--co-h3-tracking);
   }
   /* The lead sat at 42ch while the paragraph under it runs to 62, so the summary broke
@@ -204,6 +210,9 @@ const hasPhoto = Boolean(getPhoto(service.photoSlot).image);
     font: 400 16px/1.45 var(--co-font-body);
     color: var(--co-ink);
   }
+  /* A flex item will not shrink below its longest word, so "Grünschnittentsorgung"
+     ran 3px past the box at 280px. Allowed to shrink, it hyphenates instead. */
+  .service-row__item > :last-child { min-width: 0; }
   .service-row__dot {
     flex: none;
     width: 6px;

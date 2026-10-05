@@ -47,20 +47,35 @@ const { services } = Astro.props;
   /* A grid with named places rather than a wrapping flex row. Wrapped, the turnus and
      the arrow fell onto a second line as a pair, so on a phone the arrow sat wherever
      that row's turnus happened to end: 60px in on one row, 290px on the next, on a
-     line of its own on a third. Now the arrow has its own column at the right edge of
-     every row, centred against the two lines beside it. */
+     line of its own on a third.
+     Narrowest first: number and arrow share the top line, and the name gets the full
+     width beneath them. With the number and arrow beside it instead, the name had
+     159px on a 320px phone and "Treppenhausreinigung" needs 207, so it broke as
+     "Treppenhausrein | igung". */
   .index__link {
     display: grid;
-    grid-template-columns: 3.4ch minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
-      'num title  arrow'
-      '.   turnus arrow';
-    align-items: baseline;
+      'num    arrow'
+      'title  title'
+      'turnus turnus';
+    align-items: center;
     gap: 6px clamp(12px, 2vw, 28px);
     padding: clamp(16px, 1.8vw, 26px) clamp(8px, 1vw, 16px);
     color: var(--co-ink);
     border-radius: var(--co-radius-m);
     transition: background-color 260ms ease, padding-left 260ms ease;
+  }
+  /* From about a 380px phone up the name fits beside them: number left, arrow in a
+     column of its own at the right edge, centred against the two lines. */
+  @container main (min-width: 360px) {
+    .index__link {
+      grid-template-columns: 3.4ch minmax(0, 1fr) auto;
+      grid-template-areas:
+        'num title  arrow'
+        '.   turnus arrow';
+      align-items: baseline;
+    }
   }
   .index__link:hover {
     background: var(--co-mist);
@@ -80,7 +95,9 @@ const { services } = Astro.props;
   .index__title {
     grid-area: title;
     min-width: 0;
-    font: 600 clamp(21px, 2.4vw, 32px) / 1.1 var(--co-font-heading);
+    /* 21px at a 390px phone to 32px at 1440, with an intercept (CLAUDE.md rule 6):
+       clamp(21px, 2.4vw, 32px) sat on its floor up to an 875px viewport. */
+    font: 600 clamp(19px, 16.92px + 1.048vw, 32px) / 1.1 var(--co-font-heading);
     letter-spacing: var(--co-h3-tracking);
   }
   .index__turnus {

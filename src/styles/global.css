@@ -138,6 +138,18 @@ button, input, textarea, select { font: inherit; color: inherit; }
   inset: min(0px, (100% - 44px) / 2) 0;
 }
 
+/* Headings that must fit their longest word.
+   --co-fit is the largest font-size at which a word of --co-longest-word letters
+   (counted at build time, src/lib/fit.ts) still fits the column: the viewport less
+   the insets the component declares in --co-fit-inset, over the word's width in em.
+   0.53em a letter is Archivo bold at its tight tracking, measured at 0.49 to 0.50,
+   plus a margin. A heading uses min(<its token>, var(--co-fit)), so the cap only
+   bites on screens too narrow for its word: at 320px "Datenschutzerklärung" broke
+   as "Datenschutzerklä | rung", and at 390px and up nothing changes. */
+.co-fit {
+  --co-fit: calc((100vw - var(--co-fit-inset, 64px)) / (var(--co-longest-word, 1) * 0.53));
+}
+
 /* Every button reaches 44px. The ink-ground variant's 14px padding made it 43. */
 .co-btn { min-block-size: 44px; }
 

@@ -32,7 +32,8 @@ wins** — several literals in the prototype (the header's 28px radius among the
 dead CSS, overridden by the tweak layer that does not ship.
 
 The production site is **Astro 7, static output, TypeScript, deployed on Vercel.** It
-lives in `src/`. Client JS is deliberately tiny: a header scroll state, and the chip
+lives in `src/`. Client JS is deliberately tiny: a header scroll state (a solid ground once scrolled,
+and on a short screen such as a phone held sideways it tucks away while scrolling down), and the chip
 toggle plus form handling in `src/components/scripts/contact-form.ts`. The zod validator
 is loaded on first interaction with the form, not with the page — it is 19 kB and most
 visitors never touch the form.
@@ -100,7 +101,12 @@ kickers, roughly 8:1.
    not overtake its own floor until a 704px viewport, so every phone and small tablet
    got identical, desktop-tuned type. Interpolate between two viewports instead —
    `clamp(30px, 16px + 4.444vw, 80px)`. `tests/responsive.spec.ts` asserts the display
-   size actually grows from 360px to 768px.
+   size actually grows from 360px to 768px. A heading that can hold a long German
+   compound ("Datenschutzerklärung", "Treppenhausreinigung") also takes
+   `min(<token>, var(--co-fit))` with the `.co-fit` class and `fitStyle()` from
+   `src/lib/fit.ts`: the word is counted at build time and the size capped only where
+   it would not fit, so it never breaks mid-syllable. The test that every heading is
+   wider than its longest word runs from 280px (a folded Galaxy Z Fold) up.
 7. **Keep `text-wrap: pretty`** on headings and paragraphs.
 8. **Form inputs stay at 16px** font-size (prevents iOS zoom-on-focus).
 9. Visible `:focus-visible` ring on every interactive element (the prototype sets

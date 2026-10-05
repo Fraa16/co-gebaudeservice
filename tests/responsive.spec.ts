@@ -7,7 +7,8 @@ import { ROUTES } from './routes';
  *  that stranded a lone item at tablet widths, and prose running past 100 characters.
  *  These run once, at the reference viewport, and drive the browser themselves. */
 
-const WIDTHS = [320, 360, 390, 414, 480, 540, 600, 667, 720, 768, 834, 900, 1024, 1180, 1280, 1440, 1600, 1920];
+// 280 is the cover screen of a folded Galaxy Z Fold, the narrowest phone in use.
+const WIDTHS = [280, 320, 360, 390, 414, 480, 540, 600, 667, 720, 768, 834, 900, 1024, 1180, 1280, 1440, 1600, 1920];
 
 test('the type scale is fluid, not flat, across the phone-to-tablet band', async ({ page }) => {
   const sizes: number[] = [];
@@ -433,9 +434,13 @@ test('no heading is narrower than its longest word', async ({ page }) => {
      it needs a hyphenation dictionary the browser may not carry. */
   const bad: string[] = [];
 
-  for (const width of [380, 924, 1440]) {
+  /* 280 and 320 since October 2026: at 320 the Leistungen index broke
+     "Treppenhausrein | igung" and the Datenschutz heading "Datenschutzerklä | rung",
+     and none of the widths here was narrow enough to see it. The legal pages and the
+     index titles, which are headings in all but tag, are in now too. */
+  for (const width of [280, 320, 380, 924, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ['/', '/leistungen', '/ueber-uns', '/kontakt']) {
+    for (const route of ROUTES) {
       await page.goto(route);
       const hits = await page.evaluate(() => {
         const probe = document.createElement('span');
@@ -443,7 +448,7 @@ test('no heading is narrower than its longest word', async ({ page }) => {
         document.body.appendChild(probe);
 
         const out: string[] = [];
-        for (const el of document.querySelectorAll<HTMLElement>('h1, h2, h3')) {
+        for (const el of document.querySelectorAll<HTMLElement>('h1, h2, h3, .index__title')) {
           const text = (el.textContent ?? '').trim();
           if (!text) continue;
           const rect = el.getBoundingClientRect();
@@ -474,6 +479,30 @@ test('no heading is narrower than its longest word', async ({ page }) => {
   }
 
   expect(bad).toEqual([]);
+});
+
+test('on a phone held sideways the header steps aside while scrolling down', async ({ browser }) => {
+  /* A phone held sideways is 320 to 430px tall and the sticky header 66 to 80px, so it
+     covered a fifth of the screen on every scroll. On a short screen it now slides
+     out on the way down and comes back on the way up; on an upright phone, where it
+     is 8% of the height, it stays put. */
+  const ctx = await browser.newContext({ viewport: { width: 734, height: 343 }, reducedMotion: 'reduce', hasTouch: true });
+  const page = await ctx.newPage();
+  await page.goto('/');
+  const headerBottom = () => page.locator('.site-header').evaluate((h) => h.getBoundingClientRect().bottom);
+
+  for (let i = 0; i < 6; i++) await page.mouse.wheel(0, 200);
+  await expect.poll(headerBottom, { message: 'tucked away after scrolling down' }).toBeLessThanOrEqual(0);
+
+  await page.mouse.wheel(0, -120);
+  await expect.poll(headerBottom, { message: 'back after scrolling up' }).toBeGreaterThan(40);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  for (let i = 0; i < 6; i++) await page.mouse.wheel(0, 200);
+  await page.waitForTimeout(150);
+  expect(await headerBottom(), 'an upright phone keeps its header').toBeGreaterThan(40);
+  await ctx.close();
 });
 
 test('no two sections on a page claim the same number', async ({ page }) => {

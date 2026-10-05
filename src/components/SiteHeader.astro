@@ -53,6 +53,8 @@ const cta = primaryNav.find((i) => i.primary)!;
             </a>
           ))
         }
+        <!-- The CTA moves in here only where the header itself has no room for it. -->
+        <a class="site-header__panel-link site-header__panel-cta" href={cta.href}>{cta.label}</a>
       </nav>
     </details>
   </div>
@@ -72,11 +74,16 @@ const cta = primaryNav.find((i) => i.primary)!;
     background: var(--co-glass-bg);
     border: 1px solid var(--co-glass-border);
     backdrop-filter: var(--co-glass-blur);
-    transition: box-shadow 300ms ease, background-color 300ms ease;
+    transition: box-shadow 300ms ease, background-color 300ms ease, transform 260ms ease;
   }
   .site-header:global(.is-stuck) {
     background: var(--co-white);
     box-shadow: var(--co-shadow-card);
+  }
+  /* Set by scripts/reveal.ts on a short screen while scrolling down: out past the
+     top edge, its own gutter included. Reduced motion drops the slide (tokens.css). */
+  .site-header:global(.is-tucked) {
+    transform: translateY(calc(-100% - var(--co-page-padding) - 2px));
   }
 
   .site-header__end {
@@ -164,6 +171,25 @@ const cta = primaryNav.find((i) => i.primary)!;
   .site-header__panel-link[aria-current='page'] {
     background: var(--co-pale);
     color: var(--co-ink);
+  }
+  .site-header__panel-cta {
+    display: none;
+    justify-content: center;
+    border-radius: var(--co-radius-pill);
+    background: var(--co-ink);
+    color: var(--co-white);
+    font-weight: 600;
+  }
+  .site-header__panel-cta:hover { background: var(--co-blue); color: var(--co-white); }
+
+  /* The cover screen of a folded Galaxy Z Fold is 280px wide. Logo, "Angebot
+     anfordern" and the menu button need 256px between the header's paddings and
+     there were 232, so the button hung 3px off the screen and every page scrolled
+     sideways. Below 300px of page column the CTA steps into the menu, as its last
+     and only filled item, rather than shrinking into something hard to read. */
+  @container page (max-width: 299px) {
+    .site-header__cta { display: none; }
+    .site-header__panel-cta { display: flex; }
   }
 
   /* Once the header has room, swap the disclosure for inline pills. A container query,

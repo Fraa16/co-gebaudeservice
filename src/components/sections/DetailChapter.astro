@@ -4,6 +4,7 @@ import Photo from '../ui/Photo.astro';
 import InfoCard from './InfoCard.astro';
 import { detail } from '../../data/content';
 import { resolveHref } from '../../data/routes';
+import { fitStyle } from '../../lib/fit';
 
 interface Props {
   /** Was how the homepage showed one paragraph while the deep service page showed all
@@ -26,7 +27,7 @@ const Heading = level === 1 ? 'h1' : 'h2';
   <div class="detail__head">
     <div class="detail__head-main">
       <p class="co-kicker"><span class="co-kicker__num">02</span> {detail.pill}</p>
-      <Heading class:list={['detail__heading', level === 1 && 'is-h1']}>{detail.h2}</Heading>
+      <Heading class:list={['detail__heading', 'co-fit', level === 1 && 'is-h1']} style={fitStyle(detail.h2)}>{detail.h2}</Heading>
     </div>
     <p class="detail__lede">{paragraphs[0]}</p>
   </div>
@@ -151,12 +152,15 @@ const Heading = level === 1 ? 'h1' : 'h2';
   }
   .detail__para:first-of-type { margin-top: 0; }
   .detail__heading {
-    font: 700 var(--co-h2-size) / 1.1 var(--co-font-heading);
+    /* Gutter plus card padding, both sides; see .co-fit in global.css. At 280px
+       "Treppenhausreinigung" was 8px wider than the column at the h2 floor. */
+    --co-fit-inset: calc(2 * (var(--co-page-padding) + var(--co-section-padding)));
+    font: 700 min(var(--co-h2-size), var(--co-fit)) / 1.1 var(--co-font-heading);
     letter-spacing: var(--co-h2-tracking);
     margin-bottom: 4px;
   }
   .detail__heading.is-h1 {
-    font-size: var(--co-h1-size);
+    font-size: min(var(--co-h1-size), var(--co-fit));
     line-height: 1.06;
     letter-spacing: var(--co-h1-tracking);
   }
