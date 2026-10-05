@@ -495,3 +495,20 @@ aus demselben Grund umformuliert. Aus demselben Grund heißt auch die Datei des 
 Treppenhausfotos, hochgeladen als „Mitarbeiter-im-Treppenhaus", im Projekt
 `treppenhausreinigung-detail.png`: der Dateiname steht in der Bildadresse, die
 Suchmaschinen sehen.
+
+## 15. Datenschutzerklärung: Grundlage der Übermittlung an Resend, 5. Oktober 2026
+
+Art. 13 DSGVO verlangt, dass die Datenschutzerklärung bei einem Dienstleister in einem
+Drittland die Grundlage der Übermittlung nennt. Der Absatz „Versand der Anfrage" nannte
+Resend, aber nicht die Grundlage. Neu angefügt:
+
+> Resend ist nach dem EU-US Data Privacy Framework zertifiziert; die Übermittlung in die
+> USA stützt sich auf den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO). Mit
+> Resend besteht zudem ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO, der die
+> EU-Standardvertragsklauseln enthält. Die Zustellung erfolgt über Server von Resend in
+> der EU (Irland).
+
+Der Vertrag zur Auftragsverarbeitung gilt bei Resend automatisch mit dem Konto; das von
+Resend unterschriebene PDF liegt im Dashboard unter *Settings → Documents*. Der Stand
+der Seite steht jetzt auf Oktober 2026. Die anwaltliche Prüfung (siehe README) sollte
+diesen Absatz mit ansehen.

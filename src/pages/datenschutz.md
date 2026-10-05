@@ -5,7 +5,7 @@ description: Informationen zur Verarbeitung personenbezogener Daten nach Art. 13
 pill: Rechtliches
 heading: Datenschutzerklärung
 path: /datenschutz
-updated: September 2026
+updated: Oktober 2026
 ---
 
 ## Verantwortlicher
@@ -79,7 +79,11 @@ kommt insbesondere kein reCAPTCHA zum Einsatz.
 
 **Versand der Anfrage:** Für die Zustellung der Formularanfragen an unser Postfach setzen
 wir den Dienst Resend (Resend, Inc., USA) als Auftragsverarbeiter ein. Dabei werden die
-von Ihnen angegebenen Daten an diesen Dienst übermittelt.
+von Ihnen angegebenen Daten an diesen Dienst übermittelt. Resend ist nach dem EU-US Data
+Privacy Framework zertifiziert; die Übermittlung in die USA stützt sich auf den
+Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO). Mit Resend besteht zudem ein
+Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO, der die EU-Standardvertragsklauseln
+enthält. Die Zustellung erfolgt über Server von Resend in der EU (Irland).
 
 ## Kontaktaufnahme über WhatsApp
 

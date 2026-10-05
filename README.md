@@ -112,11 +112,20 @@ sending and points at Telefon and WhatsApp. Both are deliberate: the one thing i
 never do is confirm *"wir melden uns innerhalb von zwei Werktagen"* while dropping the
 enquiry.
 
-The Datenschutzerklärung's Resend paragraph relies on two things still to settle: the
-Art. 28 DSGVO contract with Resend, and the basis for the transfer to the USA
-(Art. 44 ff. DSGVO) — sending runs through the EU region, but Resend, Inc. is a US
-company. The paragraph itself is on the page; the note that said so used to be on the
-page too, which is how the next section's first item came about.
+The Datenschutzerklärung's Resend paragraph names both things a US processor needs,
+settled in October 2026:
+
+- **The Art. 28 DSGVO contract.** Resend's Data Processing Addendum applies to every
+  account; Resend pre-signs it and it counts as executed on sign-up, so there is
+  nothing to counter-sign. The signed PDF is in the Resend dashboard under
+  *Settings → Documents* and belongs with the business records.
+- **The transfer basis (Art. 44 ff. DSGVO).** Sending runs through the EU region
+  (Ireland), but Resend, Inc. is a US company. It is certified under the EU-US Data
+  Privacy Framework (since February 2025, recertification due March 2027), so the
+  transfer rests on the Commission's adequacy decision, Art. 45 DSGVO; the DPA adds
+  the EU Standard Contractual Clauses as a second safeguard. If the certification
+  ever lapses — check "Resend" on dataprivacyframework.gov/list — the paragraph must
+  drop the Art. 45 sentence and rely on the SCCs alone.
 
 Nothing else changes; every other page stays static.
 
@@ -144,8 +153,9 @@ Still open, in the order it costs something:
    IONOS. And the API key first posted during setup should be deleted in Resend.
 2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
    Steuerberater. The Impressum's facts are settled — no USt-IdNr., no
-   Handwerkskammer entry, both confirmed and recorded in `company.ts`. What the review
-   still has to answer: the Resend contract and transfer basis (above), whether the
+   Handwerkskammer entry, both confirmed and recorded in `company.ts`, and the Resend
+   contract and transfer basis are on the page (see *Contact form*). What the review
+   still has to answer: whether the
    business use of WhatsApp is described sufficiently, and whether the AI-generated
    photographs need labelling under Art. 50 KI-VO. None of these is written on the
    pages any more: **working notes belong here, not in page copy**. The Impressum went
