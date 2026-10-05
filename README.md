@@ -181,6 +181,11 @@ Settled:
   phone, website and hours as on the site. Once it is verified, its Maps URL belongs
   in the graph's `sameAs` (`src/lib/jsonld.ts`); no AI-generated photos on the profile,
   Google requires photos to show the real business.
+- Listed with the same name, address, phone and website in Bing Places (synced from
+  Google), Apple Business Connect (organisation verification by Apple pending, the
+  location follows once it clears), Gelbe Seiten, Das Örtliche, Das Telefonbuch,
+  11880, meinestadt.de and the Stadt Nagold's company directory (Oct 2026). If any
+  contact detail ever changes, every one of these needs the same change.
 - Search Console set up and `sitemap.xml` submitted, every page requested for
   indexing (5 Oct 2026). Impressum and Datenschutz will show there as excluded by
   their noindex tag; that is intended, not an error.
