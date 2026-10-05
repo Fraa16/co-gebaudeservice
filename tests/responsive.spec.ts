@@ -505,6 +505,18 @@ test('on a phone held sideways the header steps aside while scrolling down', asy
   await ctx.close();
 });
 
+test('the Schriftband shows on large screens only', async ({ page }) => {
+  /* The client's call: on a phone the slanted strip of service names sat between the
+     stat band and the tiles that name the same services, and did not look good. From
+     a laptop or an iPad held sideways up it stays. */
+  for (const [width, shown] of [[390, false], [768, false], [1024, true], [1440, true]] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const box = await page.locator('.schriftband').boundingBox();
+    expect(box !== null && box.height > 0, `${width}px: Schriftband shown`).toBe(shown);
+  }
+});
+
 test('no two sections on a page claim the same number', async ({ page }) => {
   /* /kontakt counted 01, 02, 02: the enquiry card and the Timeline both claimed 02,
      because Timeline hard-coded its own kicker instead of taking it from the page.

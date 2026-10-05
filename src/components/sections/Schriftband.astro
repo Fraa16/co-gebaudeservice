@@ -41,10 +41,19 @@ const band = Array.from({ length: 6 }, () => marquee).join(' · ');
 </div>
 
 <style>
+  /* Large screens only, at the client's request (October 2026). On a phone the strip
+     is 96px of slanted 13px type between the stat band and the services, repeating
+     the names the tiles below show anyway. 960px of content column is a laptop or an
+     iPad held sideways; phones and tablets held upright go straight on to the
+     services. */
   .schriftband {
+    display: none;
     position: relative;
     overflow: hidden;
     height: clamp(96px, 11vw, 150px);
+  }
+  @container main (min-width: 960px) {
+    .schriftband { display: block; }
   }
   .schriftband__svg {
     position: absolute;

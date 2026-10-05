@@ -84,6 +84,12 @@ const RECIPE = [
     grid-template-columns: minmax(0, 1fr);
     gap: clamp(22px, 3vw, 40px);
   }
+  /* Below 960px the Schriftband is hidden (Schriftband.astro), and this section, which
+     is not a card, would start one 10px gutter under the stat band, its kicker pressed
+     against the card above. The air the band used to give comes back as padding. */
+  @container main (max-width: 959px) {
+    .leistungen { padding-top: clamp(18px, 3vw, 30px); }
+  }
   /* Heading left, CTA right on one baseline. */
   .leistungen__head {
     display: flex;
