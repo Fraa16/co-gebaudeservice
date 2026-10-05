@@ -156,16 +156,7 @@ Still open, in the order it costs something:
    pages any more: **working notes belong here, not in page copy**. The Impressum went
    live reading "USt-IdNr.: TODO(client)"; `tests/smoke.spec.ts` now fails on any
    TODO, FIXME or lorem ipsum a visitor could read.
-2. **Google Business Profile** (Google Maps) with exactly the name, phone number and
-   website the site shows. For local searches such as "Treppenhausreinigung Nagold"
-   it matters more than anything on the site. Set up as a *service-area business*:
-   customers are served at their buildings, not at Schietinger Str. 28, and Google's
-   rules require the address to be hidden then (a shown home address on such a
-   profile is a common suspension reason); the ten towns of `company.areaServed` are
-   the service area. No AI-generated photos on the profile — Google requires photos
-   to show the real business, unlike the website. Once the profile is live, its
-   Maps URL belongs in the graph's `sameAs` (`src/lib/jsonld.ts`).
-3. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
+2. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
    and, if wanted, `priceRange`. Each is gated, so the graph stays silent rather than
    guessing.
 
@@ -184,6 +175,12 @@ Settled:
   `info@` (tested by the client, 5 Oct 2026). Should one ever land in spam, the fix is
   a DMARC record at IONOS (`_dmarc`, `v=DMARC1; p=none;`). The Resend API key first
   posted in chat during setup should be deleted in Resend if that has not happened.
+- Google Business Profile set up (Oct 2026) as a service-area business: address
+  hidden, the ten towns of `company.areaServed` as the service area, primary category
+  "Reinigungsdienst" (Google offers no building-cleaning category in German), name,
+  phone, website and hours as on the site. Once it is verified, its Maps URL belongs
+  in the graph's `sameAs` (`src/lib/jsonld.ts`); no AI-generated photos on the profile,
+  Google requires photos to show the real business.
 - Search Console set up and `sitemap.xml` submitted, every page requested for
   indexing (5 Oct 2026). Impressum and Datenschutz will show there as excluded by
   their noindex tag; that is intended, not an error.
