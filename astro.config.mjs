@@ -1,24 +1,6 @@
 // @ts-check
-import { execSync } from 'node:child_process';
 import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
-
-/**
- * lastmod for the sitemap: the date of the last commit, not the build time.
- *
- * Build time would claim every page changed on every deploy, including deploys that
- * changed nothing — which teaches Google to ignore the field. The commit date is the
- * date the content actually last moved. Falls back to the build date only where git is
- * unavailable, which on Vercel it is not.
- */
-const LAST_MODIFIED = (() => {
-  try {
-    return new Date(execSync('git log -1 --format=%cI', { encoding: 'utf8' }).trim());
-  } catch {
-    return new Date();
-  }
-})();
 
 /**
  * The canonical origin. Baked into canonical URLs, the sitemap and OG tags.
@@ -39,14 +21,7 @@ export default defineConfig({
      HTML for all nine pages. */
   output: 'static',
   adapter: vercel(),
-  integrations: [
-    sitemap({
-      // The OG source route and the 404 are real pages but must not be indexed.
-      filter: (page) => !page.includes('/og/') && !page.includes('/404'),
-      i18n: undefined,
-      lastmod: LAST_MODIFIED,
-    }),
-  ],
+  // The sitemap is src/pages/sitemap.xml.ts, not @astrojs/sitemap: see that file.
   image: { responsiveStyles: true },
 
   build: {

@@ -85,8 +85,44 @@ test('the launch gate is open and both halves of it agree', async ({ page, reque
   expect(robots).toContain('Allow: /');
   expect(robots, 'robots.txt must not still disallow the site').not.toContain('Disallow: /');
   expect(robots, 'robots.txt names the sitemap once indexing is on').toContain(
-    '/sitemap-index.xml',
+    'Sitemap: https://co-gebaeudeservice.de/sitemap.xml',
   );
+});
+
+test('the sitemap lists exactly the pages that ask to be indexed', async ({ page, request }) => {
+  /* @astrojs/sitemap listed every built page, Impressum and Datenschutz included —
+     both noindex by design, which Search Console reports as "Submitted URL marked
+     noindex". The sitemap is now a hand-kept list, so this holds it to the pages
+     themselves: every page whose robots tag says index is in it, nothing else is, and
+     each entry is the page's own canonical URL. */
+  const res = await request.get('/sitemap.xml');
+  expect(res.status()).toBe(200);
+  expect(res.headers()['content-type']).toContain('xml');
+  const xml = await res.text();
+
+  const entries = [...xml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(([, body]) => ({
+    loc: body!.match(/<loc>(.*?)<\/loc>/)?.[1] ?? '',
+    lastmod: body!.match(/<lastmod>(.*?)<\/lastmod>/)?.[1] ?? '',
+    priority: Number(body!.match(/<priority>(.*?)<\/priority>/)?.[1]),
+  }));
+  for (const e of entries) {
+    expect(e.lastmod, `${e.loc}: lastmod`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(e.priority, `${e.loc}: priority`).toBeGreaterThan(0);
+    expect(e.priority, `${e.loc}: priority`).toBeLessThanOrEqual(1);
+  }
+
+  const indexable: string[] = [];
+  for (const route of ROUTES) {
+    await page.goto(route);
+    const robots = (await page.locator('meta[name="robots"]').getAttribute('content')) ?? '';
+    if (robots.includes('noindex')) continue;
+    indexable.push((await page.locator('link[rel="canonical"]').getAttribute('href')) ?? route);
+  }
+
+  // Normalised: the home page's canonical is written without the slash, and for an
+  // origin "https://host" and "https://host/" are the same URL.
+  const norm = (u: string) => new URL(u).href;
+  expect(entries.map((e) => norm(e.loc)).sort()).toEqual(indexable.map(norm).sort());
 });
 
 test('the pages that must stay out of the index still say so', async ({ page }) => {

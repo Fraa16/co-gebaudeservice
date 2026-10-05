@@ -161,7 +161,7 @@ Still open, in the order it costs something:
    pages any more: **working notes belong here, not in page copy**. The Impressum went
    live reading "USt-IdNr.: TODO(client)"; `tests/smoke.spec.ts` now fails on any
    TODO, FIXME or lorem ipsum a visitor could read.
-3. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap-index.xml`.
+3. **Submit the sitemap in Search Console** — `https://co-gebaeudeservice.de/sitemap.xml`.
    Indexing does not start on its own just because `robots.txt` now allows it.
 4. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
    and, if wanted, `priceRange`. Each is gated, so the graph stays silent rather than
