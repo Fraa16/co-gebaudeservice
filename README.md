@@ -146,12 +146,7 @@ is invisible in a way nobody notices for weeks.
 
 Still open, in the order it costs something:
 
-1. **Confirm a live enquiry arrives.** The form is configured (see *Contact form*
-   above) but has not been seen to deliver from here: this repo's sandbox cannot
-   reach the live domain. One test through `/kontakt`, landing in `info@` and not in
-   spam. If it lands in spam, add a DMARC record (`_dmarc`, `v=DMARC1; p=none;`) at
-   IONOS. And the API key first posted during setup should be deleted in Resend.
-2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
+1. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
    Steuerberater. The Impressum's facts are settled — no USt-IdNr., no
    Handwerkskammer entry, both confirmed and recorded in `company.ts`, and the Resend
    contract and transfer basis are on the page (see *Contact form*). What the review
@@ -161,10 +156,16 @@ Still open, in the order it costs something:
    pages any more: **working notes belong here, not in page copy**. The Impressum went
    live reading "USt-IdNr.: TODO(client)"; `tests/smoke.spec.ts` now fails on any
    TODO, FIXME or lorem ipsum a visitor could read.
-3. **Google Business Profile** (Google Maps) with exactly the name, address, phone
-   number and website the site shows. For local searches such as
-   "Treppenhausreinigung Nagold" it matters more than anything on the site.
-4. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
+2. **Google Business Profile** (Google Maps) with exactly the name, phone number and
+   website the site shows. For local searches such as "Treppenhausreinigung Nagold"
+   it matters more than anything on the site. Set up as a *service-area business*:
+   customers are served at their buildings, not at Schietinger Str. 28, and Google's
+   rules require the address to be hidden then (a shown home address on such a
+   profile is a common suspension reason); the ten towns of `company.areaServed` are
+   the service area. No AI-generated photos on the profile — Google requires photos
+   to show the real business, unlike the website. Once the profile is live, its
+   Maps URL belongs in the graph's `sameAs` (`src/lib/jsonld.ts`).
+3. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
    and, if wanted, `priceRange`. Each is gated, so the graph stays silent rather than
    guessing.
 
@@ -179,6 +180,10 @@ Settled:
 - All ten photo slots filled: the eight service photos (September 2026), the
   Hausmeisterdienst photo in the hero, and a second stairwell shot for `r-detail`
   (3 Oct 2026). See `PHOTOS.md`.
+- The contact form delivers in Production: a live enquiry through `/kontakt` reached
+  `info@` (tested by the client, 5 Oct 2026). Should one ever land in spam, the fix is
+  a DMARC record at IONOS (`_dmarc`, `v=DMARC1; p=none;`). The Resend API key first
+  posted in chat during setup should be deleted in Resend if that has not happened.
 - Search Console set up and `sitemap.xml` submitted, every page requested for
   indexing (5 Oct 2026). Impressum and Datenschutz will show there as excluded by
   their noindex tag; that is intended, not an error.
