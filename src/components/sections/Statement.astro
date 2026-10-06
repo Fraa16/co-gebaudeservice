@@ -14,11 +14,13 @@ const { kicker, kickerNum = '01', statement, paragraphs } = Astro.props;
 
 <section class="co-card co-card--white statement">
   <div class="statement__lead co-reveal">
-    <div class="statement__lead-top">
-      <p class="co-kicker"><span class="co-kicker__num">{kickerNum}</span> {kicker}</p>
-      <p class="statement__quote">{statement}</p>
+    <div class="statement__lead-inner co-sticky">
+      <div class="statement__lead-top">
+        <p class="co-kicker"><span class="co-kicker__num">{kickerNum}</span> {kicker}</p>
+        <p class="statement__quote">{statement}</p>
+      </div>
+      <slot name="foot" />
     </div>
-    <slot name="foot" />
   </div>
 
   <div class="statement__body co-reveal">
@@ -35,17 +37,19 @@ const { kicker, kickerNum = '01', statement, paragraphs } = Astro.props;
     align-items: flex-start;
   }
   /* The quote is short and the paragraphs beside it are not, so this column ended
-     level with the card's top and left the whole lower half of it blank. Anything in
-     the foot slot is pushed to the base of the column instead, which closes the gap
-     with something to read rather than with padding. */
+     level with the card's top and left the whole lower half of it blank. It then
+     pushed the foot slot to the base of the column, which left the blank between the
+     quote and the foot instead. Now the column is stretched to the row and its content,
+     foot included, rides along beside the paragraphs (.co-sticky in global.css). */
   .statement__lead {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 22px;
     flex: 1 1 min(480px, 100%);
     min-width: 0;
     align-self: stretch;
+  }
+  .statement__lead-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
   }
   .statement__lead-top {
     display: grid;

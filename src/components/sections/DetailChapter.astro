@@ -22,19 +22,19 @@ const Heading = level === 1 ? 'h1' : 'h2';
 ---
 
 <section class="co-card co-card--white detail" id={id}>
-  <!-- Heading large in a left column, running text right — the references' "Meet USD
-       Halo." split, instead of a symmetric 1fr 1fr. -->
-  <div class="detail__head">
-    <div class="detail__head-main">
-      <p class="co-kicker"><span class="co-kicker__num">02</span> {detail.pill}</p>
-      <Heading class:list={['detail__heading', 'co-fit', level === 1 && 'is-h1']} style={fitStyle(detail.h2)}>{detail.h2}</Heading>
-    </div>
-    <p class="detail__lede">{paragraphs[0]}</p>
-  </div>
+  <!-- Two columns, not two rows. Kicker, heading, running text and buttons make up the
+       left one and ride along together (.co-sticky in global.css); the lede, photo and
+       card make up the right. It used to be a heading row with the lede beside it,
+       then a row of text beside the photo: only the text could ride along, and the
+       heading scrolled away from it (client's request, October 2026). -->
+  <div class="detail__main">
+    <div class="detail__main-inner co-sticky">
+      <div class="detail__head-main">
+        <p class="co-kicker"><span class="co-kicker__num">02</span> {detail.pill}</p>
+        <Heading class:list={['detail__heading', 'co-fit', level === 1 && 'is-h1']} style={fitStyle(detail.h2)}>{detail.h2}</Heading>
+      </div>
 
-  <div class:list={['detail__grid', condensed && 'is-condensed']}>
-    <div class="detail__text">
-      <div class="detail__text-inner co-sticky">
+      <div class="detail__text">
         {paragraphs.slice(1).map((p) => <p class="detail__para">{p}</p>)}
 
         {
@@ -69,6 +69,10 @@ const Heading = level === 1 ? 'h1' : 'h2';
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="detail__side">
+    <p class="detail__lede">{paragraphs[0]}</p>
 
     <div class="detail__aside">
       <div class="detail__photo">
@@ -88,47 +92,59 @@ const Heading = level === 1 ? 'h1' : 'h2';
 </section>
 
 <style>
+  /* One column until the content column has room for two; the threshold is a container
+     query (CLAUDE.md: no media queries), and an explicit one, because the left column
+     rides along and must never do so above the right one.
+
+     Stacked, the two column wrappers step aside (display: contents) and their pieces
+     are ordered in the sequence the chapter has always had on a phone: heading, lede,
+     text and buttons, photo and card. */
   .detail {
+    --detail-gap: clamp(30px, 4vw, 54px);
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(30px, 4vw, 54px);
+    gap: var(--detail-gap);
   }
-  .detail__head {
-    display: flex;
-    flex-wrap: wrap;
-    gap: clamp(24px, 4vw, 64px);
-    align-items: flex-end;
+  .detail__main,
+  .detail__main-inner,
+  .detail__side { display: contents; }
+  .detail__head-main { order: 1; }
+  .detail__lede { order: 2; }
+  .detail__text { order: 3; }
+  .detail__aside { order: 4; }
+
+  @container main (min-width: 1100px) {
+    .detail {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--co-two-col-gap);
+    }
+    /* A grid item stretches to the row by default, which is what gives the block
+       inside it room to ride along. */
+    .detail__main { display: block; min-width: 0; }
+    .detail__main-inner,
+    .detail__side {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-content: start;
+      gap: var(--detail-gap);
+    }
   }
+
   .detail__head-main {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 18px;
-    flex: 1 1 min(520px, 100%);
     min-width: 0;
   }
   .detail__lede {
-    flex: 1 1 min(400px, 100%);
     min-width: 0;
     /* Ran to ~100ch at 900px without this. */
     max-width: 52ch;
     font: 400 clamp(16px, 1.35vw, 19px) / 1.55 var(--co-font-body);
     color: var(--co-muted);
   }
-  .detail__grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--co-two-col-gap);
-    align-items: flex-start;
-  }
-  /* Stretched to the row, so the block inside can ride along beside the photo and
-     the card (.co-sticky in global.css). */
-  .detail__text { flex: 1 1 min(460px, 100%); min-width: 0; align-self: stretch; }
-  .detail__aside { flex: 1 1 min(440px, 100%); min-width: 0; }
-
-  /* Condensed (home): the text column carries the scope list, so both sides have
-     weight and the row aligns at the top rather than centring two buttons in a void. */
-  .is-condensed .detail__text { flex: 1 1 min(380px, 100%); }
-  .is-condensed .detail__aside { flex: 1 1 min(480px, 100%); }
+  .detail__text,
+  .detail__aside { min-width: 0; }
 
   .detail__scope {
     display: grid;
@@ -148,7 +164,7 @@ const Heading = level === 1 ? 'h1' : 'h2';
     color: var(--co-ink);
   }
   .detail__scope-item:first-child { border-top: 0; padding-top: 0; }
-  .detail__text-inner {
+  .detail__text {
     display: flex;
     flex-direction: column;
     align-items: flex-start;

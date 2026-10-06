@@ -615,13 +615,15 @@ test('the FAQ answers are reachable without JavaScript', async ({ browser }) => 
   await ctx.close();
 });
 
-/** The three short columns that ride along beside a taller neighbour (.co-sticky in
- *  global.css): the Treppenhaus text and the contact intro on the home page, and the
- *  FAQ heading on /leistungen. */
+/** The short columns that ride along beside a taller neighbour (.co-sticky in
+ *  global.css): on the home page the Treppenhaus chapter's heading, text and buttons
+ *  and the contact intro, the FAQ heading on /leistungen, and the statement with the
+ *  owner's name on /ueber-uns. */
 const STICKY = [
-  { route: '/', row: '.detail__grid' },
+  { route: '/', row: '.detail' },
   { route: '/', row: '.contact-section__grid' },
   { route: '/leistungen', row: '.faq' },
+  { route: '/ueber-uns', row: '.statement' },
 ];
 
 test('a short column rides along beside a taller one', async ({ page }) => {
@@ -636,6 +638,9 @@ test('a short column rides along beside a taller one', async ({ page }) => {
       const column = [...rowEl.children].find((c) => c.contains(block))!;
       const top = parseFloat(getComputedStyle(block).top);
       const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      // The section's kicker and heading ride along with the text, not just the text:
+      // the Treppenhaus chapter first shipped with its heading scrolling away.
+      const withKicker = block.querySelector('.co-kicker') !== null;
 
       // The column's top 200px above where the block comes to rest.
       scrollTo(0, column.getBoundingClientRect().top + scrollY - top + 200);
@@ -647,8 +652,10 @@ test('a short column rides along beside a taller one', async ({ page }) => {
       scrollTo(0, column.getBoundingClientRect().bottom + scrollY - top);
       await frame();
       const footGap = column.getBoundingClientRect().bottom - block.getBoundingClientRect().bottom;
-      return { top, held, columnTop, footGap };
+      return { top, held, columnTop, footGap, withKicker };
     }, row);
+
+    if (!result.withKicker) bad.push(`${route} ${row}: the kicker does not ride along with the text`);
 
     if (Math.abs(result.held - result.top) > 2) {
       bad.push(`${route} ${row}: held at ${Math.round(result.held)}px, not ${Math.round(result.top)}px`);
