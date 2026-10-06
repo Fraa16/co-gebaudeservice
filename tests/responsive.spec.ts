@@ -711,3 +711,37 @@ test('a sticky column never covers its neighbour', async ({ page }) => {
   }
   expect(bad).toEqual([]);
 });
+
+test('the home mosaic keeps its two rows on large screens', async ({ page }) => {
+  /* The tiles sat in a wrapping row, so every extra pixel of width could pull another
+     one into the first line: from about 1650px a fourth tile joined it and the second
+     row was a wide tile and the card, and on a 2560 monitor before the page frame was
+     capped all five stood in one line with the card alone under them. The order the
+     design draws (wide, narrow, narrow, then narrow, wide, card) is the most it may
+     ever show. */
+  const bad: string[] = [];
+  for (const width of [1440, 1680, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto('/');
+    const rows = await page.evaluate(() => {
+      const byTop = new Map<number, { wide: boolean; width: number }[]>();
+      for (const cell of document.querySelector('.leistungen__grid')!.children) {
+        const r = cell.getBoundingClientRect();
+        const top = Math.round(r.top);
+        byTop.set(top, [...(byTop.get(top) ?? []), { wide: cell.classList.contains('is-wide'), width: r.width }]);
+      }
+      return [...byTop.entries()].sort(([a], [b]) => a - b).map(([, cells]) => cells);
+    });
+    const shape = rows.map((row) => row.map((c) => (c.wide ? '2' : '1')).join('+')).join(' / ');
+    if (shape !== '2+1+1 / 1+2+1') bad.push(`${width}px: ${shape}`);
+
+    const gap = await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.leistungen__grid')!).columnGap));
+    const narrow = rows.flat().find((c) => !c.wide)?.width ?? 0;
+    for (const c of rows.flat().filter((c) => c.wide)) {
+      if (Math.abs(c.width - (2 * narrow + gap)) > 2) {
+        bad.push(`${width}px: a wide tile is ${Math.round(c.width)}px beside ${Math.round(narrow)}px narrow ones`);
+      }
+    }
+  }
+  expect(bad).toEqual([]);
+});

@@ -138,4 +138,19 @@ const RECIPE = [
   /* Sized like a narrow tile, but without a tile's minimum height: it has no photo to
      show, so alone on a row it should be as tall as its text and no taller. */
   .is-cta { flex: 1 1 min(310px, 100%); }
+
+  /* From here up the mosaic keeps the order it was drawn in, a feature tile and two
+     beside it, then a narrow, a wide and the closing card, and grows wider rather than
+     re-flowing. The wrapping row above pulled a fourth tile into the first line from
+     about 1600px of content and left the second half empty; on a 2560 monitor, before
+     the page frame was capped, all five sat in one line with the card alone below
+     (client's request, October 2026). 1296px is where four columns first hold the
+     310px of a narrow tile. Below it the wrapping row stays in charge, unchanged. */
+  @container main (min-width: 1296px) {
+    .leistungen__grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .is-wide { grid-column: span 2; }
+  }
 </style>
