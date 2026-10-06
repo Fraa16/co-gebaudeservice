@@ -21,15 +21,17 @@ const {
 
 <section class="co-card co-card--white faq">
   <div class="faq__head co-reveal">
-    <div class="faq__head-top">
-      <p class="co-kicker"><span class="co-kicker__num">{kickerNum}</span> {kicker}</p>
-      <h2 class="faq__title">{heading}</h2>
-    </div>
+    <div class="faq__head-inner co-sticky">
+      <div class="faq__head-top">
+        <p class="co-kicker"><span class="co-kicker__num">{kickerNum}</span> {kicker}</p>
+        <h2 class="faq__title">{heading}</h2>
+      </div>
 
-    <p class="faq__more">
-      {faqFooter.text}{' '}
-      <a class="faq__more-link co-link-sweep" href={faqFooter.link.href}>{faqFooter.link.label}</a>
-    </p>
+      <p class="faq__more">
+        {faqFooter.text}{' '}
+        <a class="faq__more-link co-link-sweep" href={faqFooter.link.href}>{faqFooter.link.label}</a>
+      </p>
+    </div>
   </div>
 
   <div class="faq__list">
@@ -58,19 +60,22 @@ const {
     align-items: flex-start;
   }
   /* The editorial split the rest of the site uses: heading in one column, the running
-     content in the other. space-between so the closing line sits at the foot of that
-     column rather than leaving its lower half blank beside a long list. */
+     content in the other. The column is stretched to the list, and its content rides
+     along beside it (.co-sticky in global.css), the closing line included.
+     This used to push that line to the foot of the column with space-between, which
+     worked beside eight questions. Beside twelve, some of them open, it left 600px of
+     blank between the heading and the line, and the way to ask a thirteenth question
+     out of sight wherever the reader was in the list. */
   .faq__head {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 18px;
     flex: 1 1 min(300px, 100%);
     min-width: 0;
     align-self: stretch;
   }
-  /* The kicker and the heading travel together at the top; only the closing line is
-     pushed to the foot. Without this, space-between stranded the heading mid-column. */
+  .faq__head-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
   .faq__head-top {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

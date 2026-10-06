@@ -97,6 +97,9 @@ kickers, roughly 8:1.
    width band where exactly three fit, stranding the fourth with its divider still
    attached. `.co-row-4` steps 1 → 2 → 4 via **container queries**, which respond to the
    content column rather than the device, so "no media queries" still holds.
+   A short column that rides along beside a taller one is a `.co-sticky` block
+   **inside** a column set to `align-self: stretch`, never the column itself: once the
+   row wraps, a sticky column hangs at the top while the one below slides over it.
 6. **Type scales need an intercept, not a bare `vw`.** `clamp(38px, 5.4vw, 80px)` does
    not overtake its own floor until a 704px viewport, so every phone and small tablet
    got identical, desktop-tuned type. Interpolate between two viewports instead —

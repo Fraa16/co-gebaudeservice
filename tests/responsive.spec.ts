@@ -614,3 +614,93 @@ test('the FAQ answers are reachable without JavaScript', async ({ browser }) => 
 
   await ctx.close();
 });
+
+/** The three short columns that ride along beside a taller neighbour (.co-sticky in
+ *  global.css): the Treppenhaus text and the contact intro on the home page, and the
+ *  FAQ heading on /leistungen. */
+const STICKY = [
+  { route: '/', row: '.detail__grid' },
+  { route: '/', row: '.contact-section__grid' },
+  { route: '/leistungen', row: '.faq' },
+];
+
+test('a short column rides along beside a taller one', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const bad: string[] = [];
+  for (const { route, row } of STICKY) {
+    await page.goto(route);
+    const result = await page.evaluate(async (sel) => {
+      const rowEl = document.querySelector(sel)!;
+      const block = rowEl.querySelector<HTMLElement>('.co-sticky')!;
+      const column = [...rowEl.children].find((c) => c.contains(block))!;
+      const top = parseFloat(getComputedStyle(block).top);
+      const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      // The column's top 200px above where the block comes to rest.
+      scrollTo(0, column.getBoundingClientRect().top + scrollY - top + 200);
+      await frame();
+      const held = block.getBoundingClientRect().top;
+      const columnTop = column.getBoundingClientRect().top;
+
+      // The column's foot at the block's resting place: the block has run out of room.
+      scrollTo(0, column.getBoundingClientRect().bottom + scrollY - top);
+      await frame();
+      const footGap = column.getBoundingClientRect().bottom - block.getBoundingClientRect().bottom;
+      return { top, held, columnTop, footGap };
+    }, row);
+
+    if (Math.abs(result.held - result.top) > 2) {
+      bad.push(`${route} ${row}: held at ${Math.round(result.held)}px, not ${Math.round(result.top)}px`);
+    }
+    if (result.columnTop > result.top - 150) {
+      bad.push(`${route} ${row}: the column did not scroll on (${Math.round(result.columnTop)}px)`);
+    }
+    if (Math.abs(result.footGap) > 2) {
+      bad.push(`${route} ${row}: at the foot the block ends ${Math.round(result.footGap)}px from its column`);
+    }
+  }
+  expect(bad).toEqual([]);
+});
+
+test('a sticky column never covers its neighbour', async ({ page }) => {
+  /* The failure this guards against: once the row wraps and the columns stack, a sticky
+     column would hang at the top of the screen while the one below slides over it.
+     Stretching the column and sticking a block inside it means a stacked column has no
+     room to travel; this scrolls each section through at widths either side of the
+     wrap and checks the block never intersects a sibling column. */
+  const bad: string[] = [];
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const width of [360, 768, 1024, 1180, 1440]) {
+    await page.setViewportSize({ width, height: 800 });
+    for (const { route, row } of STICKY) {
+      await page.goto(route);
+      const hits = await page.evaluate(async (sel) => {
+        // From the row down, not from the block up: a block put on the wrong element
+        // still has neighbours to be checked against.
+        const s = document.querySelector(sel)!;
+        const block = s.querySelector<HTMLElement>('.co-sticky')!;
+        const column = [...s.children].find((c) => c.contains(block))!;
+        const siblings = [...s.children].filter((c) => c !== column);
+        const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        const start = s.getBoundingClientRect().top + scrollY - innerHeight;
+        const end = s.getBoundingClientRect().bottom + scrollY;
+        const out: string[] = [];
+        for (let y = Math.max(0, start); y <= end; y += 100) {
+          scrollTo(0, y);
+          await frame();
+          const b = block.getBoundingClientRect();
+          for (const sib of siblings) {
+            const r = sib.getBoundingClientRect();
+            const ox = Math.min(b.right, r.right) - Math.max(b.left, r.left);
+            const oy = Math.min(b.bottom, r.bottom) - Math.max(b.top, r.top);
+            if (ox > 1 && oy > 1) out.push(`covers .${[...sib.classList][0] ?? sib.tagName} at scroll ${Math.round(y)}`);
+          }
+        }
+        return [...new Set(out)].slice(0, 2);
+      }, row);
+      for (const h of hits) bad.push(`${width}px ${route} ${row}: ${h}`);
+    }
+  }
+  expect(bad).toEqual([]);
+});

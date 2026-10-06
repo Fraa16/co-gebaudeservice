@@ -82,9 +82,9 @@ export const faq: readonly FaqEntry[] = [
   },
 ] as const;
 
-/** Sits at the foot of the heading column. An FAQ that answers a dozen questions should
- *  say what to do with the thirteenth — and the column would otherwise run out half a metre
- *  above the list beside it. */
+/** Sits under the heading and rides along beside the list (Faq.astro). An FAQ that
+ *  answers a dozen questions should say what to do with the thirteenth, wherever in the
+ *  list the reader has got to. */
 export const faqFooter = {
   text: 'Ihre Frage ist nicht dabei?',
   link: { label: 'Fragen Sie uns direkt', href: '/kontakt' },

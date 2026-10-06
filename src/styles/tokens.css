@@ -127,6 +127,10 @@
      on the page ground. */
   --co-page-max: 1920px;
   --co-page-padding: clamp(10px, 1.4vw, 20px);
+  /* Where a column that rides along (.co-sticky, global.css) comes to rest: below the
+     sticky header, which ends at the page gutter plus its 80px, with 16 to 32px of air.
+     Not in tokens.json: the design is a static page and has nothing that scrolls. */
+  --co-sticky-top: calc(var(--co-page-padding) + 80px + clamp(16px, 2vw, 32px));
   --co-card-gap: clamp(10px, 1.4vw, 18px);
   --co-grid-gap: clamp(10px, 1.4vw, 16px);
   --co-section-padding: clamp(22px, 4vw, 56px);

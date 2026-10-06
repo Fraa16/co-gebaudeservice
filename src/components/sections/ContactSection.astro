@@ -13,13 +13,15 @@ const { level = 2, id = 'kontakt' } = Astro.props;
 <section class="co-card co-card--white contact-section" id={id}>
   <div class="contact-section__grid">
     <div class="contact-section__intro">
-      <p class="co-kicker"><span class="co-kicker__num">04</span> {contact.pill}</p>
-      {level === 1
-        ? <h1 class="co-display contact-section__heading">{contact.h2}</h1>
-        : <h2 class="co-display contact-section__heading">{contact.h2}</h2>}
-      <p class="contact-section__text">{contact.text}</p>
-      <ContactRows />
-      <slot name="extras" />
+      <div class="contact-section__intro-inner co-sticky">
+        <p class="co-kicker"><span class="co-kicker__num">04</span> {contact.pill}</p>
+        {level === 1
+          ? <h1 class="co-display contact-section__heading">{contact.h2}</h1>
+          : <h2 class="co-display contact-section__heading">{contact.h2}</h2>}
+        <p class="contact-section__text">{contact.text}</p>
+        <ContactRows />
+        <slot name="extras" />
+      </div>
     </div>
 
     <ContactForm />
@@ -33,12 +35,18 @@ const { level = 2, id = 'kontakt' } = Astro.props;
     gap: var(--co-two-col-gap);
     align-items: flex-start;
   }
+  /* Stretched to the row beside the taller form; the block inside rides along
+     (.co-sticky in global.css). The grid is on the inner block, because a stretched
+     grid would spread its rows over the extra height. */
   .contact-section__intro {
+    flex: 1 1 min(460px, 100%);
+    min-width: 0;
+    align-self: stretch;
+  }
+  .contact-section__intro-inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
-    flex: 1 1 min(460px, 100%);
-    min-width: 0;
   }
   .contact-section__heading {
     font-size: clamp(30px, 3.4vw, 52px);

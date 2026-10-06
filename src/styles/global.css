@@ -508,6 +508,21 @@ button, input, textarea, select { font: inherit; color: inherit; }
 }
 .co-card--ink .co-row-4--divided > * { border-color: var(--co-on-dark-divider); }
 
+/* A short column that rides along beside a taller one, so its foot is not a blank
+ * beside the photo and card next to it (October 2026, at the client's request).
+ *
+ * Two parts, and the split is what makes it safe without a breakpoint. The column, a
+ * flex item, is set to `align-self: stretch` in its component, so beside a taller
+ * neighbour it is as tall as the row. This block sits inside it and sticks. Once the
+ * row wraps and the columns stack, the column is only as tall as this block, there is
+ * no room to travel, and nothing can slide over the column below. Sticking the column
+ * itself would do exactly that: its containing block is the whole wrapped row.
+ * tests/responsive.spec.ts checks both halves. */
+.co-sticky {
+  position: sticky;
+  top: var(--co-sticky-top);
+}
+
 /* Motion ---------------------------------------------------------------- */
 
 /* Scroll reveals, CSS-only.
