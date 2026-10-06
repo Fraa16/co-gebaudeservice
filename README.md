@@ -149,8 +149,8 @@ Still open, in the order it costs something:
 1. **Sign-off of `CONTENT-REVIEW.md` section 16** (6 Oct 2026): the search terms worked
    into the text, four new FAQ answers (Kehrwoche, Hausmeisterservice, Umlage,
    Streupflicht), shorter meta descriptions, the phone button in the mobile header and
-   `/llms.txt`. They are on the branch `claude/hopeful-fermi-d3svg7` and its Vercel
-   preview, not on `main`. The Umlage and Streupflicht answers state the general legal
+   `/llms.txt`. Released and live since 6 Oct 2026; what is still open is the client's
+   sign-off of the wording. The Umlage and Streupflicht answers state the general legal
    position and belong in the review under item 2.
 2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
    Steuerberater. The Impressum's facts are settled — no USt-IdNr., no
@@ -192,7 +192,7 @@ Settled:
   location follows once it clears), Gelbe Seiten, Das Örtliche, Das Telefonbuch,
   11880, meinestadt.de and the Stadt Nagold's company directory (Oct 2026). If any
   contact detail ever changes, every one of these needs the same change.
-- `/llms.txt` (on the branch above until it is merged) is the site in one Markdown file
+- `/llms.txt` (live since 6 Oct 2026) is the site in one Markdown file
   for assistants that fetch a page rather than search, in the format proposed at
   llmstxt.org. `src/pages/llms.txt.ts` builds it from the data files; the only prose
   of its own is `llms` in `src/data/seo.ts`. `tests/seo.spec.ts` holds it to the

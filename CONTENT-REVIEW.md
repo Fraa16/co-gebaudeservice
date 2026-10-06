@@ -515,8 +515,8 @@ diesen Absatz mit ansehen.
 
 ## 16. Suchbegriffe, vier neue Fragen, Anruf-Knopf und llms.txt, 6. Oktober 2026
 
-**Entwurf, wartet auf Freigabe.** Steht auf dem Branch `claude/hopeful-fermi-d3svg7`
-und ist in der Vercel-Vorschau zu sehen, noch nicht auf co-gebaeudeservice.de.
+**Entwurf, wartet auf Freigabe des Wortlauts.** Seit 6. Oktober 2026 auf
+co-gebaeudeservice.de veröffentlicht.
 
 Anlass ist die Suchmaschinen-Prüfung vom 5. Oktober 2026. Die Wörter, nach denen
 Hausverwaltungen suchen, standen nur im Seitentitel, nicht im Text: „Gebäudereinigung"
