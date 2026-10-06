@@ -1,6 +1,7 @@
 ---
 import Logo from './ui/Logo.astro';
-import { primaryNav } from '../data/nav';
+import { callLabel, primaryNav } from '../data/nav';
+import { company } from '../data/company';
 
 interface Props {
   currentPath: string;
@@ -34,6 +35,24 @@ const cta = primaryNav.find((i) => i.primary)!;
 
   <div class="site-header__end">
     <a class="co-nav-pill co-nav-pill--primary site-header__cta" href={cta.href}>{cta.label}</a>
+
+    <!-- On a phone the number is one tap from the top of every page; the audit of
+         5 Oct 2026 found it only in the footer and on /kontakt. Wide screens keep the
+         pills and no button: a desktop rarely places the call itself. Gated like every
+         other tel: link (CLAUDE.md rule 12). -->
+    {
+      company.phone.verified && (
+        <a
+          class="site-header__call"
+          href={`tel:${company.phone.e164}`}
+          aria-label={`${callLabel}: ${company.phone.display}`}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+        </a>
+      )
+    }
 
     <!-- Narrow: the links collapse behind a disclosure. <details> needs no JavaScript,
          so the menu still opens if the script never runs (CLAUDE.md rule 10). -->
@@ -109,6 +128,29 @@ const cta = primaryNav.find((i) => i.primary)!;
     padding: 0 16px;
   }
 
+  /* The phone button: the menu button's twin, so the two read as one pair of tools. */
+  .site-header__call {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--co-line);
+    border-radius: var(--co-radius-pill);
+    background: var(--co-white);
+    color: var(--co-ink);
+  }
+  .site-header__call:hover { background: var(--co-mist); color: var(--co-ink); }
+  .site-header__call svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
   /* Disclosure -------------------------------------------------------- */
 
   .site-header__menu { position: relative; flex: none; }
@@ -182,12 +224,14 @@ const cta = primaryNav.find((i) => i.primary)!;
   }
   .site-header__panel-cta:hover { background: var(--co-blue); color: var(--co-white); }
 
-  /* The cover screen of a folded Galaxy Z Fold is 280px wide. Logo, "Angebot
-     anfordern" and the menu button need 256px between the header's paddings and
-     there were 232, so the button hung 3px off the screen and every page scrolled
-     sideways. Below 300px of page column the CTA steps into the menu, as its last
-     and only filled item, rather than shrinking into something hard to read. */
-  @container page (max-width: 299px) {
+  /* Where the header has no room for it, the CTA steps into the menu, as its last and
+     only filled item, rather than shrinking into something hard to read. Logo, CTA,
+     phone and menu need 338px of header, paddings and border included: a 360px phone
+     has 340. Below that (a 320px phone, the 280px cover screen of a folded Galaxy
+     Z Fold) the CTA goes, and the phone button stays, since on a phone it is the
+     quicker route of the two. This was 300px before the phone button arrived; at 280px
+     the CTA had hung the menu button 3px off the screen. */
+  @container page (max-width: 337px) {
     .site-header__cta { display: none; }
     .site-header__panel-cta { display: flex; }
   }
@@ -202,7 +246,8 @@ const cta = primaryNav.find((i) => i.primary)!;
       align-items: center;
       gap: 8px;
     }
-    .site-header__menu { display: none; }
+    .site-header__menu,
+    .site-header__call { display: none; }
     /* Back to the nav pills' own size, so the CTA lines up with them; global.css
        gives every pill its 44px hit area. */
     .site-header__cta {

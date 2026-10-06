@@ -19,7 +19,8 @@ for (const route of ROUTES) {
 
     const desc = await page.locator('meta[name="description"]').getAttribute('content');
     expect(desc?.length ?? 0).toBeGreaterThan(70);
-    expect(desc?.length ?? 0).toBeLessThan(200);
+    // Google cuts a snippet at roughly 155 to 160 characters (SEO_LIMITS in seo.ts).
+    expect(desc?.length ?? 0, `${route} description length`).toBeLessThan(161);
 
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
     expect(canonical).toContain(route === '/' ? '' : route);

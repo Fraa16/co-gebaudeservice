@@ -22,9 +22,11 @@ import { company } from './company';
 
 export const pages = {
   home: {
-    /** The design's line. It stays here and only here — it used to be repeated verbatim
-     *  as the h1 of /leistungen, so two pages competed for the same phrase. */
-    servicesHeading: 'Alles rund ums Objekt, aus einer Hand.',
+    /** Was the design's line, "Alles rund ums Objekt, aus einer Hand." The audit of
+     *  5 Oct 2026 found that the two terms Hausverwaltungen search for appeared only in
+     *  the <title>, never in the page text; this h2 is the most prominent place after
+     *  the h1 to name them. */
+    servicesHeading: 'Gebäudereinigung und Hausmeisterservice aus einer Hand.',
   },
 
   leistungen: {
@@ -32,7 +34,7 @@ export const pages = {
     /** Was "Alles rund ums Objekt, aus einer Hand." — a duplicate of the homepage h2,
      *  and like every other h1 on the site it named no place. */
     h1: 'Acht Leistungen für Objekte in Nagold und im Kreis Calw.',
-    lead: 'Einzeln beauftragbar oder als Paket im Dauerauftrag. Turnus, Umfang und Erreichbarkeit halten wir vorab im Leistungsverzeichnis fest.',
+    lead: 'Gebäudereinigung, Hausmeisterservice und Außenanlagen, einzeln beauftragbar oder als Paket im Dauerauftrag. Turnus, Umfang und Erreichbarkeit halten wir vorab im Leistungsverzeichnis fest.',
     meta: [
       { label: 'Einsatzgebiet', value: company.areaLong },
       { label: 'Abrechnung', value: 'Festpreis pro Monat' },

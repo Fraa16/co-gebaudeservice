@@ -105,7 +105,11 @@ const RECIPE = [
     gap: 16px;
     flex: 1 1 min(520px, 100%);
     min-width: 0;
-    max-width: min(46ch, 100%);
+    /* Measured in the heading's own size. This was 46ch, which is 368px at the body's
+       16px whatever the heading does: enough for "Alles rund ums Objekt, aus einer
+       Hand." but not for "Hausmeisterservice" at 46px, which needs 413px and was set
+       five lines deep. Thirteen heading-ems keep it to three lines on a desktop. */
+    max-width: min(calc(var(--co-h2-size) * 13), 100%);
   }
   .leistungen__title {
     font: 700 var(--co-h2-size) / 1.02 var(--co-font-heading);

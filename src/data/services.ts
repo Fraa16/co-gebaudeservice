@@ -38,7 +38,7 @@ const slugify = (s: string) =>
 const EXTRA: Record<string, Pick<Service, 'detail' | 'scope' | 'turnus' | 'icon'>> = {
   Treppenhausreinigung: {
     detail:
-      'Die Unterhaltsreinigung im Treppenhaus entscheidet, wie ein Objekt wahrgenommen wird, und sie ist der häufigste Anlass für Beschwerden. Gereinigt werden Treppen, Podeste und Flure feucht, dazu Handläufe, Geländer, Lichtschalter und der Eingangsbereich mit Fußmatten. Arbeiten wie Treppenhausfenster, Lampen und Sockelleisten fallen ein- bis zweimal im Jahr an und stehen mit im Leistungsverzeichnis.',
+      'Die Unterhaltsreinigung im Treppenhaus entscheidet, wie ein Objekt wahrgenommen wird, und sie ist der häufigste Anlass für Beschwerden. Gereinigt werden Treppen, Podeste und Flure feucht, dazu Handläufe, Geländer, Lichtschalter und der Eingangsbereich mit Fußmatten. Für die Mieter entfällt damit die Kehrwoche im Haus. Arbeiten wie Treppenhausfenster, Lampen und Sockelleisten fallen ein- bis zweimal im Jahr an und stehen mit im Leistungsverzeichnis.',
     scope: detail.infoCard.items, // verbatim
     turnus: detail.infoCard.facts[0]?.value ?? '',
     icon: 'treppe',
@@ -57,7 +57,7 @@ const EXTRA: Record<string, Pick<Service, 'detail' | 'scope' | 'turnus' | 'icon'
   },
   Hausmeisterdienst: {
     detail:
-      'Der Hausmeisterdienst hält das Objekt zwischen den Reinigungsterminen im Blick. Dazu gehören Kontrollgänge durch Keller, Technikräume und Außenbereich, Kleinreparaturen wie der Lampenwechsel, das Stellen und Zurückführen der Tonnen sowie Ablesungen und die Begleitung von Handwerkern. Was auffällt, wird gemeldet, bevor daraus ein Schaden wird.',
+      'Der Hausmeisterservice hält das Objekt zwischen den Reinigungsterminen im Blick. Dazu gehören Kontrollgänge durch Keller, Technikräume und Außenbereich, Kleinreparaturen wie der Lampenwechsel, das Stellen und Zurückführen der Tonnen sowie Ablesungen und die Begleitung von Handwerkern. Was auffällt, wird gemeldet, bevor daraus ein Schaden wird.',
     scope: [
       'Regelmäßige Kontrollgänge im Objekt',
       'Kleinreparaturen und Lampenwechsel',
@@ -81,7 +81,7 @@ const EXTRA: Record<string, Pick<Service, 'detail' | 'scope' | 'turnus' | 'icon'
   },
   Winterdienst: {
     detail:
-      'Räumen und Streuen auf Gehwegen, Zufahrten und Eingängen. Wann geräumt werden muss, regelt die Satzung der jeweiligen Gemeinde, und sie unterscheidet sich von Ort zu Ort. Die Saison läuft von November bis März, mit Bereitschaft an Werk- und Feiertagen. Jeder Einsatz wird mit Datum und Uhrzeit dokumentiert, damit die Verwaltung einen Nachweis hat.',
+      'Räumen und Streuen auf Gehwegen, Zufahrten und Eingängen. Die Räum- und Streupflicht auf Gehwegen legt die Satzung der jeweiligen Gemeinde fest, und sie unterscheidet sich von Ort zu Ort. Die Saison läuft von November bis März, mit Bereitschaft an Werk- und Feiertagen. Jeder Einsatz wird mit Datum und Uhrzeit dokumentiert, damit die Verwaltung einen Nachweis hat.',
     scope: [
       'Räumen und Streuen nach Gemeindesatzung',
       'Gehwege, Zufahrten und Eingänge',

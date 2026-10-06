@@ -334,7 +334,7 @@ Wohneinheiten und Turnus. Frage 6 sagt, dass die Dokumentation jedes Winterdiens
 Einsatzes der Verwaltung als Nachweis dient. Beides ist branchenüblich, aber es sind
 Aussagen über Ihre Arbeitsweise.
 
-### Seitentitel und Beschreibungen
+### Seitentitel und Beschreibungen *(Beschreibungen von Start, Leistungen, Über uns und Kontakt überholt, siehe Abschnitt 16)*
 
 An jeden Titel wird „ | CO Gebäudeservice" angehängt.
 
@@ -512,3 +512,98 @@ Der Vertrag zur Auftragsverarbeitung gilt bei Resend automatisch mit dem Konto; 
 Resend unterschriebene PDF liegt im Dashboard unter *Settings → Documents*. Der Stand
 der Seite steht jetzt auf Oktober 2026. Die anwaltliche Prüfung (siehe README) sollte
 diesen Absatz mit ansehen.
+
+## 16. Suchbegriffe, vier neue Fragen, Anruf-Knopf und llms.txt, 6. Oktober 2026
+
+**Entwurf, wartet auf Freigabe.** Steht auf dem Branch `claude/hopeful-fermi-d3svg7`
+und ist in der Vercel-Vorschau zu sehen, noch nicht auf co-gebaeudeservice.de.
+
+Anlass ist die Suchmaschinen-Prüfung vom 5. Oktober 2026. Die Wörter, nach denen
+Hausverwaltungen suchen, standen nur im Seitentitel, nicht im Text: „Gebäudereinigung"
+und „Hausmeisterservice" kamen im sichtbaren Text nicht vor, „Kehrwoche",
+„Betriebskosten" und „Streupflicht" gar nicht. Die Beschreibungen in den
+Suchergebnissen waren 170 bis 191 Zeichen lang, Google zeigt etwa 155. Jede Zeile
+unten ist aus vorhandenem Text abgeleitet oder gibt die allgemeine Rechtslage wieder;
+es gibt keine neuen Angaben zu Preisen, Rechnungen, Laufzeiten oder Haftung.
+
+### Suchbegriffe im Text
+
+| Wo | Bisher | Neu |
+|---|---|---|
+| Startseite, Überschrift über den Leistungen | Alles rund ums Objekt, aus einer Hand. | Gebäudereinigung und Hausmeisterservice aus einer Hand. |
+| Fußzeile, jede Seite | Reinigung, Hausmeisterdienst und Außenanlagen für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Fester Turnus, ein Ansprechpartner. | Gebäudereinigung, Hausmeisterservice und Außenanlagen für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Fester Turnus, ein Ansprechpartner. |
+| Leistungen, Einleitung | Einzeln beauftragbar oder als Paket im Dauerauftrag. … | Gebäudereinigung, Hausmeisterservice und Außenanlagen, einzeln beauftragbar oder als Paket im Dauerauftrag. … |
+| Leistungen, Hausmeisterdienst | Der Hausmeisterdienst hält das Objekt … | Der Hausmeisterservice hält das Objekt … (der Name der Leistung bleibt „Hausmeisterdienst") |
+| Startseite und Leistungen, Treppenhausreinigung | (neuer Satz) | Für die Mieter entfällt damit die Kehrwoche im Haus. |
+| Leistungen, Winterdienst | Wann geräumt werden muss, regelt die Satzung der jeweiligen Gemeinde, … | Die Räum- und Streupflicht auf Gehwegen legt die Satzung der jeweiligen Gemeinde fest, … |
+
+### Häufige Fragen: vier neue
+
+Die Fragen stehen auf „Leistungen" und gehen wie die übrigen in die strukturierten
+Daten für Google.
+
+**Können Sie die Kehrwoche übernehmen?**
+> Ja. Was in der Kehrwoche reihum anfällt, übernehmen wir im festen Turnus: die kleine
+> Kehrwoche mit Treppen, Podesten und Fluren über die Treppenhausreinigung, die große
+> Kehrwoche mit Gehweg, Hof und Keller über Außenreinigung und Kellerreinigung, die
+> Tonnen über den Mülltonnendienst. Die Mieter müssen sich dann nicht mehr abwechseln.
+
+**Was kostet ein Hausmeisterservice?**
+> Auch den Hausmeisterservice bieten wir zum Festpreis pro Monat an, kalkuliert nach
+> der Besichtigung. Der Aufwand hängt davon ab, was im Leistungsverzeichnis steht: wie
+> oft Kontrollgänge anfallen, ob Tonnen, Außenanlagen und Winterdienst dazugehören und
+> wie groß das Objekt ist. Die Besichtigung dauert etwa eine halbe Stunde, das Angebot
+> folgt danach.
+
+*Ohne Zahlen, wie besprochen. Die Frage nach der Treppenhausreinigung gab es schon;
+diese nimmt den zweiten gesuchten Begriff auf, statt die erste zu wiederholen.*
+
+**Können die Kosten auf die Mieter umgelegt werden?**
+> In der Regel ja, sofern der Mietvertrag es vorsieht. Die Betriebskostenverordnung
+> (§ 2 BetrKV) zählt Gebäudereinigung, Gartenpflege, Straßenreinigung und
+> Müllbeseitigung sowie den Hauswart zu den umlagefähigen Betriebskosten. Beim Hauswart
+> sind Reparaturen, Instandhaltung und Verwaltungsaufgaben ausgenommen. Im
+> Leistungsverzeichnis steht jede Leistung einzeln mit Umfang und Turnus.
+
+*Allgemeine Rechtslage, keine Aussage über die Rechnung, wie besprochen. Bitte bei der
+anwaltlichen Prüfung (README) mit ansehen.*
+
+**Wer muss im Winter räumen und streuen?**
+> In Baden-Württemberg übertragen die Gemeinden die Räum- und Streupflicht auf
+> Gehwegen in aller Regel per Satzung auf die Anlieger, das sind meist die Eigentümer.
+> Zu welchen Zeiten und in welcher Breite geräumt werden muss, steht in der Satzung der
+> jeweiligen Gemeinde. Die Arbeit selbst können Eigentümer oder Verwaltung an einen
+> Winterdienst vergeben. Wir räumen nach dieser Satzung und dokumentieren jeden Einsatz.
+
+*Bewusst ohne Uhrzeiten (sie unterscheiden sich von Gemeinde zu Gemeinde) und ohne
+Aussage zur Haftung.*
+
+### Beschreibungen in den Suchergebnissen
+
+Höchstens 155 Zeichen; `npm run lint:seo` lässt jetzt höchstens 160 zu. Titel
+unverändert.
+
+| Seite | Beschreibung | Zeichen |
+|---|---|---|
+| Start | Gebäudereinigung, Hausmeisterservice, Gartenpflege und Winterdienst für Wohn- und Gewerbeobjekte in Nagold und im Kreis Calw. Festpreis nach Besichtigung. | 154 |
+| Leistungen | Treppenhausreinigung, Hausmeisterservice, Gartenpflege, Winterdienst und vier weitere Leistungen in Nagold und im Kreis Calw. Einzeln oder als Paket. | 149 |
+| Über uns | Inhabergeführter Gebäudeservice aus Nagold für Altensteig, Wildberg, Haiterbach und das Gäu bis Herrenberg. Feste Objektbetreuung, ein Ansprechpartner. | 151 |
+| Kontakt | Angebot für Gebäudereinigung oder Hausmeisterservice in Nagold und im Kreis Calw anfordern: Besichtigung vor Ort, Festpreis, Rückmeldung in zwei Werktagen. | 155 |
+
+### Anruf-Knopf in der Kopfzeile, nur am Handy
+
+Ein runder Knopf mit Telefonsymbol neben dem Menü, der die Nummer wählt. Vorgelesen
+wird er als „Anrufen: 0172 3001489". Auf Tablet und Computer erscheint er nicht. Auf
+sehr schmalen Handys (unter 360 Pixel) rückt „Angebot anfordern" dafür ins Menü.
+
+### llms.txt
+
+Neue Datei unter co-gebaeudeservice.de/llms.txt für KI-Assistenten, die eine Website
+abrufen statt eine Suchmaschine zu fragen. Sie wird aus denselben Daten gebaut wie die
+Seiten: Fußzeilentext, Kontakt, Einsatzgebiet, alle acht Leistungen, die Beschreibungen
+oben und alle Fragen mit Antwort. Neu geschrieben ist nur dieser Satz:
+
+> Inhabergeführter Gebäudeservice aus Nagold für Hausverwaltungen,
+> Eigentümergemeinschaften und Gewerbeobjekte. Jede Leistung ist einzeln beauftragbar
+> oder als Paket im Dauerauftrag. Abgerechnet wird ein Festpreis pro Monat, kalkuliert
+> nach einer Besichtigung vor Ort.

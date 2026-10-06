@@ -170,6 +170,49 @@ test('the header stays compact on a phone and its menu works without JS', async 
   await ctx.close();
 });
 
+test('on a phone the header carries the phone number, and the request stays one tap away', async ({ browser }) => {
+  /* The number was in the footer and on /kontakt only, so on a phone a call took a
+     scroll to the bottom of the page. The header now has a phone button beside the
+     menu. Where the row has no room for the CTA as well (below a 360px phone), the CTA
+     moves into the menu rather than pushing the menu button off the screen. */
+  for (const [width, ctaInHeader] of [[280, false], [320, false], [360, true], [390, true]] as const) {
+    const ctx = await browser.newContext({ viewport: { width, height: 740 }, javaScriptEnabled: false });
+    const page = await ctx.newPage();
+    await page.goto('/');
+
+    const call = page.locator('.site-header__call');
+    await expect(call, `${width}px: phone button`).toBeVisible();
+    await expect(call).toHaveAttribute('href', 'tel:+491723001489');
+    await expect(call).toHaveAccessibleName('Anrufen: 0172 3001489');
+
+    const header = (await page.locator('.site-header').boundingBox())!;
+    const shown = ['.site-header__call', '.site-header__toggle', ...(ctaInHeader ? ['.site-header__cta'] : [])];
+    for (const sel of shown) {
+      const b = (await page.locator(sel).boundingBox())!;
+      expect(b.x + b.width, `${width}px: ${sel} stays inside the header`).toBeLessThanOrEqual(
+        header.x + header.width,
+      );
+    }
+
+    if (ctaInHeader) {
+      await expect(page.locator('.site-header__cta'), `${width}px: CTA in the header`).toBeVisible();
+    } else {
+      await expect(page.locator('.site-header__cta'), `${width}px: CTA in the header`).toBeHidden();
+      await page.locator('.site-header__toggle').click();
+      await expect(page.locator('.site-header__panel-cta'), `${width}px: CTA in the menu`).toBeVisible();
+    }
+    await ctx.close();
+  }
+
+  // A desktop keeps its pills; the phone number is in the footer and on /kontakt.
+  const ctx = await browser.newContext({ viewport: { width: 1024, height: 800 } });
+  const page = await ctx.newPage();
+  await page.goto('/');
+  await expect(page.locator('.site-header__call')).toBeHidden();
+  await expect(page.locator('.site-header__cta')).toBeVisible();
+  await ctx.close();
+});
+
 test('interactive targets meet the WCAG 2.5.8 minimum of 24px', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const small: string[] = [];

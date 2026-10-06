@@ -125,6 +125,49 @@ test('the sitemap lists exactly the pages that ask to be indexed', async ({ page
   expect(entries.map((e) => norm(e.loc)).sort()).toEqual(indexable.map(norm).sort());
 });
 
+test('llms.txt describes the site from the same data the pages show', async ({ page, request }) => {
+  /* Written for assistants that answer from a fetched file rather than a search index.
+     It is generated from the data files, so this holds it to the rendered pages: every
+     service and every FAQ question on /leistungen is in it, the phone number is the one
+     the site links, and every link in it lands on a page and an anchor that exist. */
+  const res = await request.get('/llms.txt');
+  expect(res.status()).toBe(200);
+  expect(res.headers()['content-type']).toContain('text/plain');
+  const txt = await res.text();
+  expect(txt.startsWith('# CO Gebäudeservice\n'), 'an H1 with the business name first').toBe(true);
+  expect(txt, 'a one-line summary as a blockquote').toMatch(/^> .{40,}$/m);
+  expect(txt, 'no working note leaks into it').not.toMatch(/TODO|FIXME/);
+
+  await page.goto('/leistungen');
+  const services = (await page.locator('.service-row__main h2').allTextContents()).map((t) => t.trim());
+  expect(services.length).toBe(8);
+  for (const title of services) {
+    expect(txt, `service "${title}" is on /leistungen but not in llms.txt`).toContain(`- [${title}](`);
+  }
+  const questions = (await page.locator('.faq__q-text').allTextContents()).map((t) => t.trim());
+  expect(questions.length).toBeGreaterThan(8);
+  for (const q of questions) {
+    expect(txt, `FAQ "${q}" is on /leistungen but not in llms.txt`).toContain(`### ${q}`);
+  }
+
+  await page.goto('/kontakt');
+  // The footer's link, not the first one: the header's phone button is an icon.
+  const tel = (await page.locator('footer a[href^="tel:"]').first().textContent())?.trim() ?? '';
+  expect(tel.length).toBeGreaterThan(6);
+  expect(txt, 'the phone number the site links').toContain(tel);
+
+  const links = [...txt.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)].map((m) => new URL(m[1]!));
+  expect(links.length).toBeGreaterThan(10);
+  for (const url of links) {
+    expect(url.origin, `${url.href} names the canonical origin`).toBe('https://co-gebaeudeservice.de');
+    const r = await page.goto(url.pathname);
+    expect(r?.status(), `${url.pathname} answers`).toBe(200);
+    if (url.hash) {
+      await expect(page.locator(url.hash), `${url.href} has its anchor`).toHaveCount(1);
+    }
+  }
+});
+
 test('the pages that must stay out of the index still say so', async ({ page }) => {
   /* Opening the gate flips a default, so every page that relies on an explicit
      noindex has to be re-checked against it — the legal pages pass the flag by hand
@@ -159,8 +202,12 @@ test('a linked contact detail matches the text shown for it', async ({ page }) =
   for (const route of ROUTES) {
     await page.goto(route);
 
+    // An icon link (the header's phone button) is held to the number in its name.
     const links = await page.locator('a[href^="tel:"], a[href^="mailto:"]').evaluateAll((els) =>
-      els.map((e) => ({ href: e.getAttribute('href')!, text: (e.textContent ?? '').trim() })),
+      els.map((e) => ({
+        href: e.getAttribute('href')!,
+        text: (e.textContent ?? '').trim() || (e.getAttribute('aria-label') ?? ''),
+      })),
     );
 
     for (const { href, text } of links) {

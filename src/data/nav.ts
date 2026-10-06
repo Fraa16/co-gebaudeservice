@@ -19,6 +19,11 @@ export const primaryNav: NavItem[] = [
   { label: 'Angebot anfordern', href: '/kontakt#anfrage', primary: true }, // verbatim, content.json nav[3]
 ];
 
+/** The phone button beside the menu on a phone (SiteHeader.astro): an icon, so this is
+ *  its accessible name, followed by the number. Written for this build on 6 Oct 2026,
+ *  awaits sign-off in CONTENT-REVIEW.md section 16. */
+export const callLabel = 'Anrufen';
+
 export const legalNav: NavItem[] = [
   { label: 'Impressum', href: '/impressum' }, // verbatim, content.json footer.links
   { label: 'Datenschutz', href: '/datenschutz' }, // verbatim

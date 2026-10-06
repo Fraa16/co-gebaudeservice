@@ -21,7 +21,7 @@ src/
   styles/         tokens.css (the design system) + global.css
   layouts/        BaseLayout, LegalLayout
   components/     ui/ (reusable) · sections/ (page sections) · seo/ · scripts/
-  pages/          the seven routes + robots.txt endpoint + the OG source
+  pages/          the seven routes + robots.txt, sitemap.xml and llms.txt endpoints + the OG source
   assets/photos/  the nine photographs behind the ten slots — see PHOTOS.md
 design/           the original handoff: prototypes, screenshots, tokens.json, the PDF
 scripts/          the two design-rule gates + the brand-asset generator
@@ -146,7 +146,13 @@ is invisible in a way nobody notices for weeks.
 
 Still open, in the order it costs something:
 
-1. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
+1. **Sign-off of `CONTENT-REVIEW.md` section 16** (6 Oct 2026): the search terms worked
+   into the text, four new FAQ answers (Kehrwoche, Hausmeisterservice, Umlage,
+   Streupflicht), shorter meta descriptions, the phone button in the mobile header and
+   `/llms.txt`. They are on the branch `claude/hopeful-fermi-d3svg7` and its Vercel
+   preview, not on `main`. The Umlage and Streupflicht answers state the general legal
+   position and belong in the review under item 2.
+2. **Impressum and Datenschutzerklärung reviewed** by a lawyer or the client's
    Steuerberater. The Impressum's facts are settled — no USt-IdNr., no
    Handwerkskammer entry, both confirmed and recorded in `company.ts`, and the Resend
    contract and transfer basis are on the page (see *Contact form*). What the review
@@ -156,7 +162,7 @@ Still open, in the order it costs something:
    pages any more: **working notes belong here, not in page copy**. The Impressum went
    live reading "USt-IdNr.: TODO(client)"; `tests/smoke.spec.ts` now fails on any
    TODO, FIXME or lorem ipsum a visitor could read.
-2. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
+3. **The remaining `TODO(client)` fields** in `src/data/company.ts`: exact coordinates
    and, if wanted, `priceRange`. Each is gated, so the graph stays silent rather than
    guessing.
 
@@ -186,6 +192,11 @@ Settled:
   location follows once it clears), Gelbe Seiten, Das Örtliche, Das Telefonbuch,
   11880, meinestadt.de and the Stadt Nagold's company directory (Oct 2026). If any
   contact detail ever changes, every one of these needs the same change.
+- `/llms.txt` (on the branch above until it is merged) is the site in one Markdown file
+  for assistants that fetch a page rather than search, in the format proposed at
+  llmstxt.org. `src/pages/llms.txt.ts` builds it from the data files; the only prose
+  of its own is `llms` in `src/data/seo.ts`. `tests/seo.spec.ts` holds it to the
+  rendered pages.
 - Search Console set up and `sitemap.xml` submitted, every page requested for
   indexing (5 Oct 2026). Impressum and Datenschutz will show there as excluded by
   their noindex tag; that is intended, not an error.
